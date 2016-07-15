@@ -188,7 +188,7 @@ public final class AjaxServlet extends HttpServlet {
     }
 
 
-    public static void search_tree(HttpServletResponse response, String node_id,
+    public void search_tree(HttpServletResponse response, String node_id,
         String ontology_display_name, String ontology_version, String namespace) {
         try {
             String jsonString = search_tree(node_id,
@@ -218,7 +218,7 @@ public final class AjaxServlet extends HttpServlet {
 		return Constants.MODE_COLLAPSE;
 	}
 
-    public static String search_tree(String node_id,
+    public String search_tree(String node_id,
         String ontology_display_name, String ontology_version, String namespace) throws Exception {
 
         if (node_id == null || ontology_display_name == null)
@@ -845,7 +845,7 @@ if (action.compareTo("xmldefinitions") == 0) {
     private static boolean _debug = false;
     private static StringBuffer _debugBuffer = null;
 
-    public static void println(PrintWriter out, String text) {
+    public void println(PrintWriter out, String text) {
         if (_debug) {
             _logger.debug("DBG: " + text);
             _debugBuffer.append(text + "\n");
@@ -854,7 +854,7 @@ if (action.compareTo("xmldefinitions") == 0) {
     }
 
 
-    public static void search_hierarchy(HttpServletRequest request, HttpServletResponse response, String node_id,
+    public void search_hierarchy(HttpServletRequest request, HttpServletResponse response, String node_id,
         String ontology_display_name, String ontology_version, String namespace) {
 
       Enumeration parameters = request.getParameterNames();
@@ -1497,16 +1497,18 @@ request.getSession().setAttribute("mode", mode);
 	    request.getSession().removeAttribute("dictionary");
 	    request.getSession().removeAttribute("version");
 
-
+/*
 String checked_valuesets = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("checked_vocabularies"));
+
 if (DataUtils.isNullOrBlank(checked_valuesets)) {
 	checked_valuesets = find_checked_value_sets(request);
 }
+*/
+String checked_valuesets = get_checked_vocabularies(request);//HTTPUtils.cleanXSS((String) request.getSession().getAttribute("checked_vocabularies"));
 Vector selected_valuesets = null;
 if (!DataUtils.isNullOrBlank(checked_valuesets)) {
 	request.getSession().setAttribute("checked_vocabularies", checked_valuesets);
 	selected_valuesets = DataUtils.parseData(checked_valuesets, ",");
-
 	stu.setSelectedNodes(selected_valuesets);
 }
 
@@ -1544,8 +1546,11 @@ if (!DataUtils.isNullOrBlank(checked_valuesets)) {
 		  return;
 	  }
 
-	  String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
+
+	  //String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
+	  String checked_vocabularies = get_checked_vocabularies(request);
 	  String partial_checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("partial_checked_vocabularies"));
+
 
 	  String message = (String) request.getSession().getAttribute("message");
       out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">");
@@ -2449,13 +2454,14 @@ String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getSession().get
 
 		String msg = null;
 		//request.getSession().removeAttribute("checked_vocabularies");
+/*
 String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
-
-
 if (checked_vocabularies == null || checked_vocabularies.length() == 0) {
-
 	checked_vocabularies = get_checked_vocabularies(request);
 }
+*/
+String checked_vocabularies = get_checked_vocabularies(request);
+request.getSession().removeAttribute("checked_vocabularies");
 
 /*
 if (checked_vocabularies != null) {
@@ -2536,7 +2542,8 @@ if (DataUtils.isNullOrBlank(checked_vocabularies)) {
 		while (parameterNames.hasMoreElements()) {
 			String paramName = parameterNames.nextElement();
 			if (paramName.indexOf("http://") != -1) {
-				String paramValue = (String) request.getParameter(paramName);
+				//String paramValue = (String) request.getParameter(paramName);
+				String paramValue = HTTPUtils.cleanXSS((String) request.getParameter(paramName));
 				if (paramValue.compareTo("on") == 0) {
 					buf.append(paramName).append(",");
 				}
@@ -2550,11 +2557,7 @@ if (DataUtils.isNullOrBlank(checked_vocabularies)) {
 		return checked_vocabularies;
 	}
 
-
-
     public String valueSetSearchAction(HttpServletRequest request) {
-
-
 		java.lang.String valueSetDefinitionRevisionId = null;
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 		String msg = null;
@@ -2563,7 +2566,7 @@ long ms = System.currentTimeMillis();
 
 
         String selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("selectValueSetSearchOption"));
-String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+		String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
 
         if (DataUtils.isNull(selectValueSetSearchOption)) {
 			selectValueSetSearchOption = "Name";
@@ -2681,14 +2684,15 @@ if (DataUtils.isNullOrBlank(checked_vocabularies)) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    public static void create_vs_tree(HttpServletRequest request, HttpServletResponse response, int view, String dictionary, String version) {
+    public void create_vs_tree(HttpServletRequest request, HttpServletResponse response, int view, String dictionary, String version) {
 	  request.getSession().removeAttribute("b");
 	  request.getSession().removeAttribute("m");
 
       response.setContentType("text/html");
       PrintWriter out = null;
 
-		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
+		//String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
+		String checked_vocabularies = get_checked_vocabularies(request);
 		String partial_checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("partial_checked_vocabularies"));
 
       try {
@@ -3440,14 +3444,14 @@ out.flush();
   }
 
 
-   public static void addHiddenForm(PrintWriter out, String checkedNodes, String partialCheckedNodes) {
+   public void addHiddenForm(PrintWriter out, String checkedNodes, String partialCheckedNodes) {
       out.println("   <form id=\"hidden_form\" enctype=\"application/x-www-form-urlencoded;charset=UTF-8\">");
       out.println("      <input type=\"hidden\" id=\"checkedNodes\" name=\"checkedNodes\" value=\"" + checkedNodes + "\" />");
       out.println("      <input type=\"hidden\" id=\"partialCheckedNodes\" name=\"partialCheckedNodes\" value=\"" + partialCheckedNodes + "\" />");
       out.println("   </form>");
    }
 
-   public static void writeInitialize(PrintWriter out) {
+   public void writeInitialize(PrintWriter out) {
       out.println("   function initialize() {");
       out.println("	     tree = new YAHOO.widget.TreeView(\"treecontainer\");");
       out.println("	     initializeNodeCheckState();");
@@ -3462,11 +3466,11 @@ out.flush();
       * @type int
 */
 
-   public static void initializeNodeCheckState(PrintWriter out) {
+   public void initializeNodeCheckState(PrintWriter out) {
 	   initializeNodeCheckState(out, Boolean.TRUE);
    }
 
-   public static void initializeNodeCheckState(PrintWriter out, Boolean value_set_tab) {
+   public void initializeNodeCheckState(PrintWriter out, Boolean value_set_tab) {
       out.println("   function initializeNodeCheckState(nodes) {");
       out.println("       nodes = nodes || tree.getRoot().children;");
       out.println("       var checkedNodes = document.forms[\"hidden_form\"].checkedNodes.value;");
@@ -3495,7 +3499,7 @@ out.flush();
    }
 
 
-    public static void addQuickLink(HttpServletRequest request, PrintWriter out) {
+    public void addQuickLink(HttpServletRequest request, PrintWriter out) {
 
 		String basePath = request.getContextPath();
 		//String ncim_url = new DataUtils().getNCImURL();
@@ -3942,7 +3946,7 @@ out.flush();
 	}
 
 /*
-    public static void value_set_home(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public void value_set_home(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		try {
 			response.setContentType("text/plain");
 			PrintWriter out = null;
@@ -4131,7 +4135,7 @@ out.flush();
 	}
 
 
-	public static int countEdges(HashMap relMap, String[] types) {
+	public int countEdges(HashMap relMap, String[] types) {
 		if (relMap == null || types == null) return 0;
 		int knt = 0;
 		List typeList = Arrays.asList(types);
@@ -4148,7 +4152,7 @@ out.flush();
 	}
 
 
-    public static void view_graph(HttpServletRequest request, HttpServletResponse response,
+    public void view_graph(HttpServletRequest request, HttpServletResponse response,
         String scheme, String version, String namespace, String code, String type) {
 	  LexBIGService lb_svc = RemoteServerUtil.createLexBIGService();
 	  HashMap hmap = (HashMap) request.getSession().getAttribute("RelationshipHashMap");
@@ -4568,7 +4572,8 @@ out.flush();
 			algorithm = Constants.DEFAULT_SEARCH_ALGORITHM;//"exactMatch";
 		}
 
-		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
+		//String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
+		String checked_vocabularies = get_checked_vocabularies(request);
 
 		if (checked_vocabularies != null) {
 			checked_vocabularies = checked_vocabularies.trim();
@@ -4690,7 +4695,7 @@ out.flush();
 
 	}
 
-	public static void dumpVector(Vector v) {
+	public void dumpVector(Vector v) {
 		for (int i=0; i<v.size(); i++) {
 			String t = (String) v.elementAt(i);
 			System.out.println(t);
