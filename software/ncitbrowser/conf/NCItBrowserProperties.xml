@@ -303,7 +303,7 @@
             <isExternalCode>true</isExternalCode>
        </DisplayItem>
        
-
+<!--
        <DisplayItem>
             <propertyName>NSC_Code</propertyName>
             <itemLabel>NSC Code</itemLabel>
@@ -311,6 +311,15 @@
             <hyperlinkText>see NCI DTP info</hyperlinkText>
             <isExternalCode>true</isExternalCode>
        </DisplayItem>
+-->
+       <DisplayItem>
+            <propertyName>NSC_Code</propertyName>
+            <itemLabel>NSC Code</itemLabel>
+            <url>https://dtp.cancer.gov/dtpstandard/servlet/dwindex?searchtype=NSC&searchlist=</url>
+            <hyperlinkText>see NCI DTP info</hyperlinkText>
+            <isExternalCode>true</isExternalCode>
+       </DisplayItem>
+
 
        <DisplayItem>
             <propertyName>PDQ_Closed_Trial_Search_ID</propertyName>
