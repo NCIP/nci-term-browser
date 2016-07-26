@@ -452,7 +452,7 @@ public class OntologyBean {
         return SortUtils.quickSort(v);
     }
 */
-	public boolean isAnnotationPropertyPCode(String t) {
+	public static boolean isAnnotationPropertyPCode(String t) {
 		if (t == null) return false;
 		if (t.length() <= 1) return false;
 		if (!t.startsWith("P")) return false;
@@ -463,7 +463,7 @@ public class OntologyBean {
 		return true;
 	}
 
-    public Vector<String> getSupportedPropertyNames(CodingScheme cs) {
+    public static Vector<String> getSupportedPropertyNames(CodingScheme cs) {
         Vector w = getSupportedProperties(cs);
 		if (w == null) return null;
         Vector<String> v = new Vector<String>();
