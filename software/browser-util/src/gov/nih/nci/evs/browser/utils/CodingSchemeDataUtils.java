@@ -143,7 +143,7 @@ public class CodingSchemeDataUtils {
         return v;
 	}
 
-
+/*
     public Vector<String> getSupportedPropertyNames(CodingScheme cs) {
         Vector w = getSupportedProperties(cs);
 		if (w == null) return null;
@@ -163,6 +163,41 @@ public class CodingSchemeDataUtils {
 		     v.add(sp.getLocalId());
 		}
         return v;
+	}
+*/
+
+    public Vector<String> getSupportedPropertyNames(CodingScheme cs) {
+        Vector w = getSupportedProperties(cs);
+		if (w == null) return null;
+        Vector<String> v = new Vector<String>();
+		for (int i=0; i<w.size(); i++)
+		{
+		     SupportedProperty sp = (SupportedProperty) w.elementAt(i);
+		     if (sp.getUri() != null) {
+				 if (!sp.getUri().endsWith(sp.getLocalId())) {
+					 v.add(sp.getLocalId());
+				 }
+			 } else {
+				 v.add(sp.getLocalId());
+			 }
+		}
+        return SortUtils.quickSort(v);
+	}
+
+    public HashMap getPropertyName2TypeHashMap(CodingScheme cs) {
+        Vector w = getSupportedProperties(cs);
+		if (w == null) return null;
+        HashMap hmap = new HashMap();
+		for (int i=0; i<w.size(); i++)
+		{
+		     SupportedProperty sp = (SupportedProperty) w.elementAt(i);
+		     if (sp.getUri() != null) {
+				 if (!sp.getUri().endsWith(sp.getLocalId())) {
+					 hmap.put(sp.getLocalId(), sp.getPropertyType().toString());
+				 }
+			 }
+		}
+        return hmap;
 	}
 
     public Vector getSupportedPropertyQualifier(CodingScheme cs) {

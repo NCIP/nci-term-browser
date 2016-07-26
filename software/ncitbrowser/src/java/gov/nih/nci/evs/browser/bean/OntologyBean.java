@@ -436,6 +436,7 @@ public class OntologyBean {
         return SortUtils.quickSort(v);
     }
 
+/*
     public static Vector<String> getSupportedPropertyNames(CodingScheme cs) {
         if (cs == null)
             return null;
@@ -450,6 +451,24 @@ public class OntologyBean {
         }
         return SortUtils.quickSort(v);
     }
+*/
+    public static Vector<String> getSupportedPropertyNames(CodingScheme cs) {
+        Vector w = getSupportedProperties(cs);
+		if (w == null) return null;
+        Vector<String> v = new Vector<String>();
+		for (int i=0; i<w.size(); i++)
+		{
+		     SupportedProperty sp = (SupportedProperty) w.elementAt(i);
+		     if (sp.getUri() != null) {
+				 if (!sp.getUri().endsWith(sp.getLocalId())) {
+					 v.add(sp.getLocalId());
+				 }
+			 } else {
+				 v.add(sp.getLocalId());
+			 }
+		}
+        return SortUtils.quickSort(v);
+	}
 
     public static Vector<String> getSupportedPropertyNames(
         String codingSchemeName) {
@@ -458,6 +477,8 @@ public class OntologyBean {
         CodingScheme cs = getCodingScheme(codingSchemeName, null);
         return getSupportedPropertyNames(cs);
     }
+
+
 
     public static Vector<String> getSupportedPropertyNames(
         String codingSchemeName, String version) {
