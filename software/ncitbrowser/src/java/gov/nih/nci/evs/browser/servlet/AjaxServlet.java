@@ -2160,7 +2160,7 @@ if (vsc != null && !DataUtils.isNullOrBlank(vsc.getReportURI())) {
 if (DataUtils.isNull(vsd_uri)) {
 
       out.println("            <tr class=\"textbody\">");
-      out.println("              <td class=\"textbody\" align=\"left\">");
+      out.println("              <td class=\"textbody\" align=\"left\" nowrap>");
       out.println("");
 
 //v2.9 modification;
