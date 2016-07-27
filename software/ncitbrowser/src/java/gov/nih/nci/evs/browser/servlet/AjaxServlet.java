@@ -1732,8 +1732,16 @@ if (algorithm.compareToIgnoreCase("contains") == 0) {
       out.println("");
 
 
-
+/*
 if (mode != null && mode.compareTo(Constants.MODE_COLLAPSE) == 0) {
+	// to be modified: -- collapse_all method
+	  out.println("<body onLoad=\"collapse_all();\">");
+} else {
+      out.println("<body onLoad=\"document.forms.valueSetSearchForm.matchText.focus();\">");
+}
+*/
+
+if (mode != null && (mode.compareTo("0") == 0 || mode.compareTo("2") == 0)) {
 	// to be modified: -- collapse_all method
 	  out.println("<body onLoad=\"collapse_all();\">");
 } else {
@@ -2155,7 +2163,13 @@ if (DataUtils.isNull(vsd_uri)) {
       out.println("              <td class=\"textbody\" align=\"left\">");
       out.println("");
 
+//v2.9 modification;
+    mode = (String) request.getParameter("mode");
+    if (mode == null) {
+		mode = (String) request.getSession().getAttribute("mode");
+	}
 
+/*
 if (view == Constants.STANDARD_VIEW) {
       out.println("                Standards View");
       out.println("                &nbsp;|");
@@ -2165,12 +2179,6 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("                &nbsp;|");
       out.println("                Terminology View");
 }
-
-//v2.9 modification;
-    mode = (String) request.getParameter("mode");
-    if (mode == null) {
-		mode = (String) request.getSession().getAttribute("mode");
-	}
 
 String alt_mode = get_alt_vs_tree_mode(mode);
 if (view == Constants.STANDARD_VIEW) {
@@ -2182,6 +2190,9 @@ out.println("&nbsp;&nbsp;(");
 out.println("<a href=\"" + contextPath + "/ajax?action=create_alt_cs_vs_tree&mode=" + alt_mode + "\" tabindex=\"100\"><font color=\"red\">Alt Terminology View</font></a>");
 out.println(")");
 }
+*/
+String tree_views = JSPUtils.getValueSetTreeViews(Integer.parseInt(mode), contextPath);
+out.println(tree_views);
 
       out.println("              </td>");
       out.println("");
@@ -2714,7 +2725,6 @@ if (DataUtils.isNullOrBlank(checked_vocabularies)) {
       out.println("");
 
       out.println("<body>");
-      //out.println("<body onload=\"collapse_all()\">");
 
       out.println("");
       out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css\" />");

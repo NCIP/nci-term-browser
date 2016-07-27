@@ -44,16 +44,11 @@ request.getSession().setAttribute("nav_type", nav_type);
 
 	if (mode == null) {
 	    //mode = Constants.MODE_EXPAND;
-	    mode = Constants.MODE_COLLAPSE;
+	    mode = "0";//Constants.MODE_COLLAPSE;
 	}
-
-	tab_valueset_link = request.getContextPath() + "/ajax2?action=create_src_vs_tree&nav_type=valuesets";      
-	if (mode.compareToIgnoreCase(Constants.MODE_EXPAND) == 0) {
-	      tab_valueset_link = request.getContextPath() + "/ajax?action=create_src_vs_tree&nav_type=valuesets&mode=1";
-	} else if (mode.compareToIgnoreCase(Constants.MODE_COLLAPSE) == 0) {
-	      tab_valueset_link = request.getContextPath() + "/ajax?action=create_src_vs_tree&nav_type=valuesets&mode=2";
-	} 
 	request.getSession().setAttribute("mode", mode);
+	tab_valueset_link = request.getContextPath() + "/ajax?action=create_src_vs_tree&nav_type=valuesets&mode=" + mode;
+
 
       String tab_mappings_image = nav_type.equalsIgnoreCase("mappings")
         ? "tab_map_clicked.gif" : "tab_map.gif";

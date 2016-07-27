@@ -61,6 +61,13 @@ public class JSPUtils {
     private static final String NCIT_URL =
         _ncitUrl + "/ConceptReport.jsp?dictionary=NCI%20Thesaurus&";
 
+    private static String STANDARDS_VIEW = "Standards View";
+    private static String ALT_STANDARDS_VIEW = "Alt Standards View";
+    private static String TERMINOLOGY_VIEW = "Terminology View";
+    private static String ALT_TERMINOLOGY_VIEW = "Alt Terminology View";
+
+    private static String[] VALUESET_TREE_VIEWS = new String[]{STANDARDS_VIEW, ALT_STANDARDS_VIEW, TERMINOLOGY_VIEW, ALT_TERMINOLOGY_VIEW};
+    private static String[] VALUESET_TREE_ACTIONS = new String[]{"create_src_vs_tree", "create_src_vs_tree", "create_cs_vs_tree", "create_cs_vs_tree"};
 
     public static boolean isNull(String text) {
         return text == null || text.equalsIgnoreCase("null");
@@ -675,6 +682,21 @@ public class JSPUtils {
         return t;
     }
 
+    public static String getValueSetTreeViews(int mode, String contextPath) {
+		StringBuffer buf = new StringBuffer();
+		for (int i=0; i<VALUESET_TREE_VIEWS.length; i++) {
+            if (mode == i) {
+				buf.append(VALUESET_TREE_VIEWS[i]);
+			} else {
+				String action = VALUESET_TREE_ACTIONS[i];
+                buf.append("<a href=\"" + contextPath + "/ajax?action=" + action + "&mode=" + i + "\" tabindex=\"100\">" + VALUESET_TREE_VIEWS[i] + "</font></a>");
+			}
+			if (i < VALUESET_TREE_VIEWS.length-1) {
+				buf.append("&nbsp;|&nbsp;");
+			}
+		}
+		return buf.toString();
+	}
 
     public static void main(String argv[]) {
 
@@ -687,4 +709,8 @@ public class JSPUtils {
         String t = test.reformatPDQDefinition(def);
         _logger.info(t);
     }
+
+
+
+
 }
