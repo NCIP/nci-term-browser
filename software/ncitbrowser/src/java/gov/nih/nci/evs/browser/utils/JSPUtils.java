@@ -62,9 +62,9 @@ public class JSPUtils {
         _ncitUrl + "/ConceptReport.jsp?dictionary=NCI%20Thesaurus&";
 
     private static String STANDARDS_VIEW = "Standards View";
-    private static String ALT_STANDARDS_VIEW = "Alt Standards View";
+    private static String ALT_STANDARDS_VIEW = "Accessible Standards View";
     private static String TERMINOLOGY_VIEW = "Terminology View";
-    private static String ALT_TERMINOLOGY_VIEW = "Alt Terminology View";
+    private static String ALT_TERMINOLOGY_VIEW = "Accessible Terminology View";
 
     private static String[] VALUESET_TREE_VIEWS = new String[]{STANDARDS_VIEW, ALT_STANDARDS_VIEW, TERMINOLOGY_VIEW, ALT_TERMINOLOGY_VIEW};
     private static String[] VALUESET_TREE_ACTIONS = new String[]{"create_src_vs_tree", "create_src_vs_tree", "create_cs_vs_tree", "create_cs_vs_tree"};
