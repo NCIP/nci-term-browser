@@ -2160,7 +2160,7 @@ if (vsc != null && !DataUtils.isNullOrBlank(vsc.getReportURI())) {
 if (DataUtils.isNull(vsd_uri)) {
 
       out.println("            <tr class=\"textbody\">");
-      out.println("              <td class=\"textbody\" align=\"left\" nowrap>");
+      out.println("              <td class=\"textbody\" align=\"left\"  width=\"700\" nowrap>");
       out.println("");
 
 //v2.9 modification;
@@ -2169,28 +2169,6 @@ if (DataUtils.isNull(vsd_uri)) {
 		mode = (String) request.getSession().getAttribute("mode");
 	}
 
-/*
-if (view == Constants.STANDARD_VIEW) {
-      out.println("                Standards View");
-      out.println("                &nbsp;|");
-      out.println("                <a href=\"" + contextPath + "/ajax?action=create_cs_vs_tree\" tabindex=\"99\" >Terminology View</a>");
-} else {
-      out.println("                <a href=\"" + contextPath + "/ajax?action=create_src_vs_tree\" tabindex=\"100\">Standards View</a>");
-      out.println("                &nbsp;|");
-      out.println("                Terminology View");
-}
-
-String alt_mode = get_alt_vs_tree_mode(mode);
-if (view == Constants.STANDARD_VIEW) {
-out.println("&nbsp;&nbsp;(");
-out.println("<a href=\"" + contextPath + "/ajax?action=create_alt_src_vs_tree&mode=" + alt_mode + "\" tabindex=\"100\"><font color=\"red\">Alt Standards View</font></a>");
-out.println(")");
-} else {
-out.println("&nbsp;&nbsp;(");
-out.println("<a href=\"" + contextPath + "/ajax?action=create_alt_cs_vs_tree&mode=" + alt_mode + "\" tabindex=\"100\"><font color=\"red\">Alt Terminology View</font></a>");
-out.println(")");
-}
-*/
 String tree_views = JSPUtils.getValueSetTreeViews(Integer.parseInt(mode), contextPath);
 out.println(tree_views);
 
