@@ -1336,7 +1336,7 @@ if (action.compareTo("xmldefinitions") == 0) {
       println(out, "    <div id=\"popupContainer\">");
       println(out, "      <!-- nci popup banner -->");
       println(out, "      <div class=\"ncipopupbanner\">");
-      println(out, "        <a href=\"http://www.cancer.gov\" target=\"_blank\" alt=\"National Cancer Institute\"><img src=\"/ncitbrowser/images/nci-banner-1.gif\" width=\"556\" height=\"39\" border=\"0\" alt=\"National Cancer Institute\" /></a>");
+      println(out, "        <a href=\"http://www.cancer.gov\" target=\"_blank\" alt=\"National Cancer Institute\"><img src=\"/ncitbrowser/images/banner-red.png\" width=\"680\" height=\"39\" border=\"0\" alt=\"National Cancer Institute\" /></a>");
       println(out, "        <a href=\"http://www.cancer.gov\" target=\"_blank\" alt=\"National Cancer Institute\"><img src=\"/ncitbrowser/images/spacer.gif\" width=\"60\" height=\"39\" border=\"0\" alt=\"National Cancer Institute\" class=\"print-header\" /></a>");
       println(out, "      </div>");
       println(out, "      <!-- end nci popup banner -->");
@@ -1760,6 +1760,14 @@ if (mode != null && (mode.compareTo("0") == 0 || mode.compareTo("2") == 0)) {
       out.println("");
       out.println("<!-- nci banner -->");
       out.println("<div class=\"ncibanner\">");
+
+      out.println("  <a href=\"http://www.cancer.gov\" target=\"_blank\">");
+      out.println("    <img src=\"/ncitbrowser/images/banner-red.png\"");
+      out.println("      width=\"955\" height=\"39\" border=\"0\"");
+      out.println("      alt=\"National Cancer Institute\"/>");
+      out.println("  </a>");
+
+      /*
       out.println("  <a href=\"http://www.cancer.gov\" target=\"_blank\">");
       out.println("    <img src=\"/ncitbrowser/images/logotype.gif\"");
       out.println("      width=\"556\" height=\"39\" border=\"0\"");
@@ -1780,6 +1788,7 @@ if (mode != null && (mode.compareTo("0") == 0 || mode.compareTo("2") == 0)) {
       out.println("      width=\"125\" height=\"39\" border=\"0\"");
       out.println("      alt=\"www.cancer.gov\"/>");
       out.println("  </a>");
+      */
       out.println("</div>");
       out.println("<!-- end nci banner -->");
       out.println("");
@@ -2262,6 +2271,7 @@ out.flush();
       out.println("    <li><a href=\"http://www.cancer.gov/policies/page3\" target=\"_blank\" alt=\"National Cancer Institute Accessibility\">Accessibility</a> |</li>");
       out.println("    <li><a href=\"http://www.cancer.gov/policies/page6\" target=\"_blank\" alt=\"National Cancer Institute FOIA\">FOIA</a></li>");
       out.println("  </ul>");
+      /*
       out.println("  <p>");
       out.println("    A Service of the National Cancer Institute<br />");
       out.println("    <img src=\"/ncitbrowser/images/external-footer-logos.gif\"");
@@ -2282,6 +2292,26 @@ out.flush();
       out.println("      href=\"http://www.usa.gov/\" target=\"_blank\"");
       out.println("      alt=\"USA.gov\" />");
       out.println("  </map>");
+      */
+
+      out.println("<center>");
+      out.println("<a href=\"http://www.hhs.gov/\" alt=\"U.S. Department of Health and Human Services\">");
+      out.println("U.S. Department of Health and Human Services");
+      out.println("</a>");
+      out.println("&nbsp;|&nbsp;");
+      out.println("<a href=\"https://www.nih.gov/about-nih\" alt=\"National Institutes of Health\">");
+      out.println("National Institutes of Health");
+      out.println("</a>");
+      out.println("&nbsp;|&nbsp;");
+      out.println("<a href=\"http://www.cancer.gov/\" alt=\"National Cancer Institute\">");
+      out.println("National Cancer Institute");
+      out.println("</a>");
+      out.println("&nbsp;|&nbsp;");
+      out.println("<a href=\"https://www.usa.gov/\" alt=\"USA.gov\">");
+      out.println("USA.gov");
+      out.println("</a>");
+      out.println("</center>");
+
       out.println("</div>");
       out.println("<!-- end footer -->");
       out.println("</div>");
@@ -2852,6 +2882,13 @@ if (algorithm.compareToIgnoreCase("contains") == 0) {
       out.println("<!-- nci banner -->");
       out.println("<div class=\"ncibanner\">");
       out.println("  <a href=\"http://www.cancer.gov\" target=\"_blank\">");
+      out.println("    <img src=\"/ncitbrowser/images/banner-red.png\"");
+      out.println("      width=\"955\" height=\"39\" border=\"0\"");
+      out.println("      alt=\"National Cancer Institute\"/>");
+      out.println("  </a>");
+
+      /*
+      out.println("  <a href=\"http://www.cancer.gov\" target=\"_blank\">");
       out.println("    <img src=\"/ncitbrowser/images/logotype.gif\"");
       out.println("      width=\"556\" height=\"39\" border=\"0\"");
       out.println("      alt=\"National Cancer Institute\"/>");
@@ -2871,6 +2908,7 @@ if (algorithm.compareToIgnoreCase("contains") == 0) {
       out.println("      width=\"125\" height=\"39\" border=\"0\"");
       out.println("      alt=\"www.cancer.gov\"/>");
       out.println("  </a>");
+      */
       out.println("</div>");
       out.println("<!-- end nci banner -->");
       out.println("");
@@ -3392,6 +3430,7 @@ out.flush();
       out.println("    <li><a href=\"http://www.cancer.gov/policies/page3\" target=\"_blank\" alt=\"National Cancer Institute Accessibility\">Accessibility</a> |</li>");
       out.println("    <li><a href=\"http://www.cancer.gov/policies/page6\" target=\"_blank\" alt=\"National Cancer Institute FOIA\">FOIA</a></li>");
       out.println("  </ul>");
+      /*
       out.println("  <p>");
       out.println("    A Service of the National Cancer Institute<br />");
       out.println("    <img src=\"/ncitbrowser/images/external-footer-logos.gif\"");
@@ -3412,6 +3451,26 @@ out.flush();
       out.println("      href=\"http://www.usa.gov/\" target=\"_blank\"");
       out.println("      alt=\"USA.gov\" />");
       out.println("  </map>");
+      */
+
+      out.println("<center>");
+      out.println("<a href=\"http://www.hhs.gov/\" alt=\"U.S. Department of Health and Human Services\">");
+      out.println("U.S. Department of Health and Human Services");
+      out.println("</a>");
+      out.println("&nbsp;|&nbsp;");
+      out.println("<a href=\"https://www.nih.gov/about-nih\" alt=\"National Institutes of Health\">");
+      out.println("National Institutes of Health");
+      out.println("</a>");
+      out.println("&nbsp;|&nbsp;");
+      out.println("<a href=\"http://www.cancer.gov/\" alt=\"National Cancer Institute\">");
+      out.println("National Cancer Institute");
+      out.println("</a>");
+      out.println("&nbsp;|&nbsp;");
+      out.println("<a href=\"https://www.usa.gov/\" alt=\"USA.gov\">");
+      out.println("USA.gov");
+      out.println("</a>");
+      out.println("</center>");
+
       out.println("</div>");
       out.println("<!-- end footer -->");
       out.println("</div>");
@@ -4396,6 +4455,12 @@ out.flush();
       out.println("<body onload=\"draw();\">");
 
       out.println("<div class=\"ncibanner\">");
+      out.println("  <a href=\"http://www.cancer.gov\" target=\"_blank\">");
+      out.println("    <img src=\"/ncitbrowser/images/banner-red.png\"");
+      out.println("      width=\"955\" height=\"39\" border=\"0\"");
+      out.println("      alt=\"National Cancer Institute\"/>");
+      out.println("  </a>");
+      /*
       out.println("  <a href=\"http://www.cancer.gov\" target=\"_blank\">     ");
       out.println("    <img src=\"/ncitbrowser/images/logotype.gif\"");
       out.println("      width=\"556\" height=\"39\" border=\"0\"");
@@ -4416,6 +4481,8 @@ out.flush();
       out.println("      width=\"125\" height=\"39\" border=\"0\"");
       out.println("      alt=\"www.cancer.gov\"/>");
       out.println("  </a>");
+      */
+
       out.println("</div>");
       out.println("<p></p>");
 

@@ -37,6 +37,14 @@
 
 
 <div class="ncibanner">
+
+  <a href="http://www.cancer.gov" target="_blank">
+    <img src="<%=request.getContextPath()%>/images/banner-red.png"
+      width="955" height="39" border="0"
+      alt="National Cancer Institute"/>
+  </a>
+  
+  <!--
   <a href="http://www.cancer.gov" target="_blank">
     <img src="/ncitbrowser/images/logotype.gif"
       width="556" height="39" border="0"
@@ -57,6 +65,8 @@
       width="125" height="39" border="0"
       alt="www.cancer.gov"/>
   </a>
+  -->
+  
 </div>
 
 
