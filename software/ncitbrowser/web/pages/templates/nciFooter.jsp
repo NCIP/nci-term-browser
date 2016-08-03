@@ -8,7 +8,7 @@
     <li><a href="http://www.cancer.gov/policies/page3" target="_blank" alt="National Cancer Institute Accessibility">Accessibility</a> |</li>
     <li><a href="http://www.cancer.gov/policies/page6" target="_blank" alt="National Cancer Institute FOIA">FOIA</a></li>
   </ul>
-  <center>
+<center>
 <a href="http://www.hhs.gov/" alt="U.S. Department of Health and Human Services">
 U.S. Department of Health and Human Services
 </a>
@@ -24,6 +24,6 @@ National Cancer Institute
 <a href="https://www.usa.gov/" alt="USA.gov">
 USA.gov
 </a>
-  </center>
+</center>
 </div>
 <!-- end footer -->
