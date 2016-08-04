@@ -33,7 +33,7 @@
 
      <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
 
-<div style='clear:both;margin-top:-5px;padding:8px;height:39px;color:white;background-color:#C31F40'>
+<div style='clear:both;margin-top:-5px;padding:8px;height:32px;color:white;background-color:#C31F40'>
   <a href="http://www.cancer.gov" target="_blank">
     <img src="<%=request.getContextPath()%>/images/banner-red.png"
       width="955" height="39" border="0"
