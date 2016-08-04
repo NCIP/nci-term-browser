@@ -1,14 +1,15 @@
 <% String basePath = request.getContextPath(); %>
-<!-- nci banner -->
+<!-- nci banner 
 <div class="ncibanner">
+-->
+<div style='clear:both;margin-top:-5px;padding:8px;height:39px;color:white;background-color:#C31F40'>
 
   <a href="http://www.cancer.gov" target="_blank">
     <img src="<%=request.getContextPath()%>/images/banner-red.png"
       width="955" height="39" border="0"
       alt="National Cancer Institute"/>
   </a>
-   
-  
+     
   <!--
   <a href="http://www.cancer.gov" target="_blank">     
     <img src="<%=request.getContextPath()%>/images/logotype.gif"

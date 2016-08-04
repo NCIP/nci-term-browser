@@ -1759,7 +1759,8 @@ if (mode != null && (mode.compareTo("0") == 0 || mode.compareTo("2") == 0)) {
       out.println("  <!-- End Skip Top Navigation -->");
       out.println("");
       out.println("<!-- nci banner -->");
-      out.println("<div class=\"ncibanner\">");
+      //out.println("<div class=\"ncibanner\">");
+      out.println("<div style='clear:both;margin-top:-5px;padding:8px;height:39px;color:white;background-color:#C31F40'>");
 
       out.println("  <a href=\"http://www.cancer.gov\" target=\"_blank\">");
       out.println("    <img src=\"/ncitbrowser/images/banner-red.png\"");
@@ -2880,7 +2881,9 @@ if (algorithm.compareToIgnoreCase("contains") == 0) {
       out.println("  <!-- End Skip Top Navigation -->");
       out.println("");
       out.println("<!-- nci banner -->");
-      out.println("<div class=\"ncibanner\">");
+      //out.println("<div class=\"ncibanner\">");
+      out.println("<div style='clear:both;margin-top:-5px;padding:8px;height:39px;color:white;background-color:#C31F40'>");
+
       out.println("  <a href=\"http://www.cancer.gov\" target=\"_blank\">");
       out.println("    <img src=\"/ncitbrowser/images/banner-red.png\"");
       out.println("      width=\"955\" height=\"39\" border=\"0\"");
@@ -4454,7 +4457,9 @@ out.flush();
       out.println("");
       out.println("<body onload=\"draw();\">");
 
-      out.println("<div class=\"ncibanner\">");
+      //out.println("<div class=\"ncibanner\">");
+      out.println("<div style='clear:both;margin-top:-5px;padding:8px;height:39px;color:white;background-color:#C31F40'>");
+
       out.println("  <a href=\"http://www.cancer.gov\" target=\"_blank\">");
       out.println("    <img src=\"/ncitbrowser/images/banner-red.png\"");
       out.println("      width=\"955\" height=\"39\" border=\"0\"");
