@@ -64,7 +64,10 @@
       }
       Vector headers = historyUtils.getTableHeader();
   %>
-    <div id="popupContainer">
+ <!--
+  <div id="popupContainer">
+  -->
+  <div style='clear:both;margin-top:-5px;padding:8px;height:32px;color:white;background-color:#C31F40'>
       <!-- nci popup banner -->
       <div class="ncipopupbanner">
         <a href="http://www.cancer.gov" target="_blank" alt="National Cancer Institute"><img src="<%=basePath%>/images/banner-red.png" width="680" height="39" border="0" alt="National Cancer Institute" /></a>

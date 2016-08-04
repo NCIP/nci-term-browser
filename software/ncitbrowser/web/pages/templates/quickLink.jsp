@@ -40,9 +40,8 @@
         dictionary_encoded2 = DataUtils.replaceAll(quicklink_dictionary, " ", "%20");
     }
 %>
-
-
 <div class="bluebar">
+
   <table border="0" cellspacing="0" cellpadding="0">
     <tr>
       <td><div class="quicklink-status">
