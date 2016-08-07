@@ -71,7 +71,7 @@ public class MetadataUtils {
     LexBIGService lbSvc = null;
     LexBIGServiceConvenienceMethods lbscm = null;
 
-    private static Vector getMetadataCodingSchemeNames(MetadataPropertyList mdpl) {
+    private Vector getMetadataCodingSchemeNames(MetadataPropertyList mdpl) {
         // List<MetadataProperty> metaDataProperties = new
         // ArrayList<MetadataProperty>();
         Vector v = new Vector();
@@ -111,7 +111,8 @@ public class MetadataUtils {
      * @return All of the Metadata Properties associated with the given Coding
      *         Scheme.
      */
-    private static List<MetadataProperty> getMetadataForCodingSchemes(
+    //private static List<MetadataProperty> getMetadataForCodingSchemes(
+	private List<MetadataProperty> getMetadataForCodingSchemes(
         MetadataPropertyList mdpl, String codingScheme) {
         List<MetadataProperty> metaDataProperties =
             new ArrayList<MetadataProperty>();
