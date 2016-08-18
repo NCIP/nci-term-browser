@@ -54,6 +54,7 @@ if (ns_curr == null || ns_curr.compareTo("null") == 0 || ns_curr.compareTo("unde
     HashMap hmap = null;
     String rel_key = (String) request.getSession().getAttribute("rel_key");
     if (rel_key == null || rel_key.compareTo(key) != 0) {
+    /*
 	    if (isMapping) {
 		    hmap = mappingSearchUtils.getMappingRelationshipHashMap(scheme_curr, version_curr, code_curr);
 	    } else {
@@ -62,6 +63,8 @@ if (ns_curr == null || ns_curr.compareTo("null") == 0 || ns_curr.compareTo("unde
 		}
 		hmap = relationshipUtils.getRelationshipHashMap(scheme_curr, version_curr, code_curr, ns_curr, true);
 	    }
+    */
+            hmap = relationshipUtils.getRelationshipHashMap(scheme_curr, version_curr, code_curr, ns_curr, true);
 	    request.getSession().setAttribute("RelationshipHashMap", hmap);
 	    request.getSession().setAttribute("rel_key", rel_key);
     } else {
