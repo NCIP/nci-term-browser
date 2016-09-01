@@ -57,7 +57,7 @@ import org.apache.log4j.*;
 public class VisitedConceptUtils {
     private static Logger _logger = Logger.getLogger(VisitedConceptUtils.class);
 
-    private static class VisitedConcept {
+    private static class VisitedConcept implements Serializable {
         public String scheme = "";
         public String version = "";
         public String namespace = "";
