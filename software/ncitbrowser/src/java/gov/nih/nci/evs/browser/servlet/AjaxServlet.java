@@ -3898,7 +3898,9 @@ out.flush();
 							url = url + "&version=" + ncit_production_version;
 						}
 						//[NCITERM-731] Concepts selected from a Value Sets' Released File: View Graph not viewable due to ns=null in the URL
-						url = url + "&ns=NCI%20Thesaurus";
+						//09082016
+						//url = url + "&ns=NCI%20Thesaurus";
+						url = url + "&ns=NCI_Thesaurus";
 						ResolvedValueSetIteratorHolder rvsi = new ResolvedValueSetIteratorHolder(excelfile, sheet, startIndex, col, code, url, cdisc);
 						request.getSession().setAttribute("rvsi", rvsi);
 					} catch (Exception ex) {
