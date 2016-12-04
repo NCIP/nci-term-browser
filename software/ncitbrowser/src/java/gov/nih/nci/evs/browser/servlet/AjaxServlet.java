@@ -360,6 +360,10 @@ if (display_name_vec == null) {
         // Determine request by attributes
         String action = HTTPUtils.cleanXSS(request.getParameter("action"));//
 
+        if (action.equals("export_vsdc")) {
+            export_vsdc(request, response);
+        }
+
         if (action.compareTo("show") == 0) {
             show_other_versions(request, true);
 
@@ -4030,6 +4034,7 @@ out.flush();
 		}
 	}
 */
+
     public void export_mapping_search(HttpServletRequest request, HttpServletResponse response) {
         String mapping_schema = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
         String mapping_version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
@@ -4755,6 +4760,10 @@ out.flush();
 			ex.printStackTrace();
 		}
 
+	}
+
+	public void export_vsdc(HttpServletRequest request, HttpServletResponse response) {
+		new VSDCExportUtils().exportValueSetDefinitionConfigToCSV(request, response);
 	}
 
 	public void dumpVector(Vector v) {
