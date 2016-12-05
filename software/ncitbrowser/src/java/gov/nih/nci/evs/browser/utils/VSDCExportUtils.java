@@ -72,37 +72,26 @@ import javax.servlet.http.HttpServletResponse;
  */
 
 public class VSDCExportUtils {
-    static String CSVFILE = "value_set_report_config.csv";
+    static String CSVFILE = "value_set_report_config.txt";
     public VSDCExportUtils() {
 
 	}
 
 	public void exportValueSetDefinitionConfigToCSV(HttpServletRequest request, HttpServletResponse response) {
 		String csvfile = CSVFILE;
-		StringBuffer sb = valueSetDefinitionConfig2StringBuffer(ValueSetDefinitionConfig.valueSetConfigHashMap);
+		//StringBuffer sb = valueSetDefinitionConfig2StringBuffer(ValueSetDefinitionConfig.valueSetConfigHashMap);
+		StringBuffer sb = valueSetDefinitionConfig2StringBuffer(ValueSetDefinitionConfig.valueSetConfigVector);
 		exportToCSV(request, response, sb, csvfile);
 	}
 
-/*
-NDFRT Mechanism of Action|http://ndfrt:MoA|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/ndfrt/MechanismOfAction.xls|1:all
-NDFRT Physiologic Effects|http://ndfrt:PE|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/ndfrt/PhysiologicEffect.xls|1:all
-NDFRT Structural Class|http://ndfrt:SC|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/ndfrt/StructuralClass.xls|1:all
-*/
-
-	public StringBuffer valueSetDefinitionConfig2StringBuffer(HashMap valueSetConfigHashMap) {
+	public StringBuffer valueSetDefinitionConfig2StringBuffer(Vector valueSetConfigVector) {
         StringBuffer sb = new StringBuffer();
-		Set<Map.Entry<String, String>> set = ValueSetDefinitionConfig.valueSetConfigHashMap.entrySet();
-		Vector w = new Vector();
-		for (Map.Entry entry : set) {
-			StringBuffer buf = new StringBuffer();
-			String uri = (String) entry.getKey();
-			ValueSetConfig vsc = (ValueSetConfig) entry.getValue();
-			buf.append(vsc.getName()).append("|");
-			buf.append(vsc.getUri()).append("|");
-        	buf.append(vsc.getReportURI()).append("|");
-        	buf.append(vsc.getExtractionRule());
-        	buf.append("\n");
-        	sb.append(buf.toString());
+        for (int i=0; i<valueSetConfigVector.size(); i++) {
+			String line = (String) valueSetConfigVector.elementAt(i);
+        	sb.append(line);
+        	if (i < valueSetConfigVector.size()-1) {
+        		sb.append("\n");
+			}
 		}
         return sb;
 	}

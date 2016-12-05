@@ -64,6 +64,7 @@ import gov.nih.nci.evs.browser.utils.*;
 
 public class ValueSetDefinitionConfig {
     public  static HashMap valueSetConfigHashMap = null;
+    public  static Vector valueSetConfigVector = null;
     private static String vsd_config_file_dir = null;
     private static String vsd_config_file = null;
     private static HashSet uriHset = null;
@@ -145,6 +146,7 @@ public class ValueSetDefinitionConfig {
 	}
 
     public static HashMap readValueSetDefinitionConfigFile(String file) {
+		valueSetConfigVector =new Vector();
 		HashMap hmap = new HashMap();
 		uriHset = new HashSet();
 		code2URIHashMap = new HashMap();
@@ -152,6 +154,7 @@ public class ValueSetDefinitionConfig {
 			BufferedReader in = new BufferedReader(new FileReader(file));
 			while (in.ready()) {
 			    String s = in.readLine();
+			    valueSetConfigVector.add(s);
 			    Vector v = parseData(s);
 			    String name = (String) v.elementAt(0);
 			    String uri = (String) v.elementAt(1);
