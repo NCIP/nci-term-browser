@@ -360,8 +360,8 @@ if (display_name_vec == null) {
         // Determine request by attributes
         String action = HTTPUtils.cleanXSS(request.getParameter("action"));//
 
-        if (action.equals("export_vsdc")) {
-            export_vsdc(request, response);
+        if (action.equals("export_vsrc")) {
+            export_vsrc(request, response);
         }
 
         if (action.compareTo("show") == 0) {
@@ -2560,6 +2560,27 @@ if (DataUtils.isNullOrBlank(checked_vocabularies)) {
 	    }
     }
 
+    private String get_checked_nodes(HttpServletRequest request) {
+		StringBuffer buf = new StringBuffer();
+		Enumeration<String> parameterNames = request.getParameterNames();
+		while (parameterNames.hasMoreElements()) {
+			String paramName = parameterNames.nextElement();
+			//if (paramName.indexOf("http://") != -1) {
+				//String paramValue = (String) request.getParameter(paramName);
+				String paramValue = HTTPUtils.cleanXSS((String) request.getParameter(paramName));
+				if (paramValue.compareTo("on") == 0) {
+					buf.append(paramName).append(",");
+				}
+			//}
+		}
+		String checked_vocabularies = buf.toString();
+		if (checked_vocabularies.length() > 0) {
+			checked_vocabularies = checked_vocabularies.substring(0, checked_vocabularies.length()-1);
+		}
+		//System.out.println(checked_vocabularies);
+		return checked_vocabularies;
+	}
+
     private String get_checked_vocabularies(HttpServletRequest request) {
 		StringBuffer buf = new StringBuffer();
 		Enumeration<String> parameterNames = request.getParameterNames();
@@ -2577,7 +2598,7 @@ if (DataUtils.isNullOrBlank(checked_vocabularies)) {
 		if (checked_vocabularies.length() > 0) {
 			checked_vocabularies = checked_vocabularies.substring(0, checked_vocabularies.length()-1);
 		}
-		System.out.println(checked_vocabularies);
+		//System.out.println(checked_vocabularies);
 		return checked_vocabularies;
 	}
 
@@ -2608,6 +2629,7 @@ long ms = System.currentTimeMillis();
 //String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
 
 String checked_vocabularies = get_checked_vocabularies(request);
+String checked_nodes = get_checked_nodes(request);
 
 
 if (checked_vocabularies != null) {
@@ -4762,8 +4784,8 @@ out.flush();
 
 	}
 
-	public void export_vsdc(HttpServletRequest request, HttpServletResponse response) {
-		new VSDCExportUtils().exportValueSetDefinitionConfigToCSV(request, response);
+	public void export_vsrc(HttpServletRequest request, HttpServletResponse response) {
+		new VSRCExportUtils().exportValueSetDefinitionConfigToCSV(request, response);
 	}
 
 	public void dumpVector(Vector v) {

@@ -71,20 +71,19 @@ import javax.servlet.http.HttpServletResponse;
  *
  */
 
-public class VSDCExportUtils {
+public class VSRCExportUtils {
     static String CSVFILE = "value_set_report_config.txt";
-    public VSDCExportUtils() {
+    public VSRCExportUtils() {
 
 	}
 
 	public void exportValueSetDefinitionConfigToCSV(HttpServletRequest request, HttpServletResponse response) {
 		String csvfile = CSVFILE;
-		//StringBuffer sb = valueSetDefinitionConfig2StringBuffer(ValueSetDefinitionConfig.valueSetConfigHashMap);
-		StringBuffer sb = valueSetDefinitionConfig2StringBuffer(ValueSetDefinitionConfig.valueSetConfigVector);
+		StringBuffer sb = valueSetReportConfig2StringBuffer(ValueSetDefinitionConfig.valueSetConfigVector);
 		exportToCSV(request, response, sb, csvfile);
 	}
 
-	public StringBuffer valueSetDefinitionConfig2StringBuffer(Vector valueSetConfigVector) {
+	public StringBuffer valueSetReportConfig2StringBuffer(Vector valueSetConfigVector) {
         StringBuffer sb = new StringBuffer();
         for (int i=0; i<valueSetConfigVector.size(); i++) {
 			String line = (String) valueSetConfigVector.elementAt(i);
