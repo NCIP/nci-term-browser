@@ -6737,7 +6737,9 @@ if (lbSvc == null) {
     //public OntologyInfo(String codingScheme, String displayName, String version, String tag, String label, String sortCategory) {
 		    String tag = null;
 		    String productionVersion = getProductionVersion(short_scheme_name);
-		    if (version.compareTo(productionVersion) == 0) {
+		    //KLO, 12/07/2016
+		    if (version != null && version.compareTo(productionVersion) == 0) {
+		    //if (version.compareTo(productionVersion) == 0) {
 				tag = "PRODUCTION";
 			}
 
