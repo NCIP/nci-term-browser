@@ -1508,12 +1508,28 @@ if (DataUtils.isNullOrBlank(checked_valuesets)) {
 	checked_valuesets = find_checked_value_sets(request);
 }
 */
+
+/*
 String checked_valuesets = get_checked_vocabularies(request);//HTTPUtils.cleanXSS((String) request.getSession().getAttribute("checked_vocabularies"));
 Vector selected_valuesets = null;
 if (!DataUtils.isNullOrBlank(checked_valuesets)) {
 	request.getSession().setAttribute("checked_vocabularies", checked_valuesets);
 	selected_valuesets = DataUtils.parseData(checked_valuesets, ",");
 	stu.setSelectedNodes(selected_valuesets);
+}
+*/
+
+
+//[NCITERM-745] Top node of value sets deselected after search.
+String checked_valuesets = get_checked_vocabularies(request);//HTTPUtils.cleanXSS((String) request.getSession().getAttribute("checked_vocabularies"));
+String checked_nodes = get_checked_nodes(request);//HTTPUtils.cleanXSS((String) request.getSession().getAttribute("checked_vocabularies"));
+Vector selected_valuesets = null;
+Vector selected_nodes = null;
+if (!DataUtils.isNullOrBlank(checked_nodes)) {
+	request.getSession().setAttribute("checked_vocabularies", checked_valuesets);
+	selected_valuesets = DataUtils.parseData(checked_valuesets, ",");
+	selected_nodes = DataUtils.parseData(checked_nodes, ",");
+	stu.setSelectedNodes(selected_nodes);
 }
 
 		String root_vsd_uri = vsd_uri;
