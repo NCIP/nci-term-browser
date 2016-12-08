@@ -59,7 +59,7 @@ import gov.nih.nci.evs.browser.common.*;
 
 public class ValueSetUtils {
 
-	private static Logger _logger = Logger.getLogger(DataUtils.class);
+	private static Logger _logger = Logger.getLogger(ValueSetUtils.class);
 	private static Random rand = new Random();
 
     public ValueSetUtils() {

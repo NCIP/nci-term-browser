@@ -3,6 +3,8 @@ package gov.nih.nci.evs.browser.utils;
 import java.util.*;
 import javax.servlet.http.*;
 import org.apache.log4j.*;
+import java.io.*;
+
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -57,7 +59,7 @@ import org.apache.log4j.*;
 public class VisitedConceptUtils {
     private static Logger _logger = Logger.getLogger(VisitedConceptUtils.class);
 
-    private static class VisitedConcept {
+    private static class VisitedConcept implements Serializable {
         public String scheme = "";
         public String version = "";
         public String namespace = "";

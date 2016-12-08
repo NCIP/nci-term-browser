@@ -421,14 +421,23 @@ if (show_rank_column) {
      upper_bound = pageSize;
      
  }
-               
-            
-                
+
+String source_ns = null;
+String target_ns = null;
+
+
   for (int lcv=0; lcv<list.size(); lcv++) {
-                    mappingData = (MappingData) list.get(lcv);
+        mappingData = (MappingData) list.get(lcv);
         source_code = mappingData.getSourceCode();
         source_name = mappingData.getSourceName();
         source_namespace = mappingData.getSourceCodeNamespace();
+        
+        target_code = mappingData.getTargetCode();
+        target_name = mappingData.getTargetName();
+        target_namespace = mappingData.getTargetCodeNamespace();
+         
+        source_ns = source_namespace;
+        target_ns = target_namespace;
 
         if (display_name_hmap.containsKey(source_namespace)) {
             source_namespace = (String) display_name_hmap.get(source_namespace);
@@ -440,9 +449,7 @@ if (show_rank_column) {
 
         rel = mappingData.getRel();
         score = Integer.valueOf(mappingData.getScore()).toString();
-        target_code = mappingData.getTargetCode();
-        target_name = mappingData.getTargetName();
-        target_namespace = mappingData.getTargetCodeNamespace();
+
 
         if (display_name_hmap.containsKey(target_namespace)) {
             target_namespace = (String) display_name_hmap.get(target_namespace);
@@ -459,7 +466,10 @@ if (show_rank_column) {
        
                 
 source_scheme = DataUtils.getCSName(source_scheme);        
-target_scheme = DataUtils.getCSName(target_scheme);        
+target_scheme = DataUtils.getCSName(target_scheme);   
+
+
+
 
             %>
 
@@ -467,7 +477,7 @@ target_scheme = DataUtils.getCSName(target_scheme);
                     <td class="datacoldark" scope="row"><%=source_namespace%></td>
         <td class="datacoldark">
 <a href="#"
-      onclick="javascript:window.location='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&ns=<%=source_scheme%>&code=<%=source_code%>&b=0&m=0'">
+      onclick="javascript:window.location='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&ns=<%=source_ns%>&code=<%=source_code%>&b=0&m=0'">
       <%=source_code%>
 </a>
 
@@ -491,7 +501,7 @@ if (show_rank_column) {
         <td class="datacoldark">
 
 <a href="#"
-      onclick="javascript:window.location='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&ns=<%=target_scheme%>&code=<%=target_code%>&b=0&m=0'">
+      onclick="javascript:window.location='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&ns=<%=target_ns%>&code=<%=target_code%>&b=0&m=0'">
       <%=target_code%>
 </a>
 

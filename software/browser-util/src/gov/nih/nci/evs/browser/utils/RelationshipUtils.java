@@ -57,7 +57,7 @@ import java.util.Map.Entry;
 
 import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
 import org.LexGrid.LexBIG.caCore.interfaces.LexEVSApplicationService;
-import org.lexevs.property.PropertyExtension;
+//import org.lexevs.property.PropertyExtension;
 
 import org.lexgrid.resolvedvalueset.LexEVSResolvedValueSetService;
 import org.lexgrid.resolvedvalueset.impl.LexEVSResolvedValueSetServiceImpl;

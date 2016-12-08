@@ -143,7 +143,7 @@ public class CodingSchemeDataUtils {
         return v;
 	}
 
-
+/*
     public Vector<String> getSupportedPropertyNames(CodingScheme cs) {
         Vector w = getSupportedProperties(cs);
 		if (w == null) return null;
@@ -163,6 +163,65 @@ public class CodingSchemeDataUtils {
 		     v.add(sp.getLocalId());
 		}
         return v;
+	}
+*/
+
+	public boolean isAnnotationPropertyPCode(String t) {
+		if (t == null) return false;
+		if (t.length() <= 1) return false;
+		if (!t.startsWith("P")) return false;
+		for (int i=1; i<t.length(); i++) {
+			char c = t.charAt(i);
+			if (!Character.isDigit(c)) return false;
+		}
+		return true;
+	}
+
+    public Vector<String> getSupportedPropertyNames(CodingScheme cs) {
+        Vector w = getSupportedProperties(cs);
+		if (w == null) return null;
+        Vector<String> v = new Vector<String>();
+		for (int i=0; i<w.size(); i++)
+		{
+		     SupportedProperty sp = (SupportedProperty) w.elementAt(i);
+		     if (sp.getUri() != null && isAnnotationPropertyPCode(sp.getLocalId())) {
+				 if (!sp.getUri().endsWith(sp.getLocalId())) {
+					 v.add(sp.getLocalId());
+				 }
+			 } else {
+				 v.add(sp.getLocalId());
+			 }
+		}
+        return SortUtils.quickSort(v);
+	}
+
+
+    public Vector<String> getSupportedPropertyData(CodingScheme cs) {
+        Vector w = getSupportedProperties(cs);
+		if (w == null) return null;
+        Vector<String> v = new Vector<String>();
+		for (int i=0; i<w.size(); i++)
+		{
+		     SupportedProperty sp = (SupportedProperty) w.elementAt(i);
+		     v.add(sp.getUri() + "|" + sp.getLocalId() + "|" + sp.getContent() + "|" + sp.getPropertyType());
+		}
+        return SortUtils.quickSort(v);
+	}
+
+    public HashMap getPropertyName2TypeHashMap(CodingScheme cs) {
+        Vector w = getSupportedProperties(cs);
+		if (w == null) return null;
+        HashMap hmap = new HashMap();
+		for (int i=0; i<w.size(); i++)
+		{
+		     SupportedProperty sp = (SupportedProperty) w.elementAt(i);
+		     if (sp.getUri() != null) {
+				 if (!sp.getUri().endsWith(sp.getLocalId())) {
+					 hmap.put(sp.getLocalId(), sp.getPropertyType().toString());
+				 }
+			 }
+		}
+        return hmap;
 	}
 
     public Vector getSupportedPropertyQualifier(CodingScheme cs) {
@@ -1101,7 +1160,6 @@ public class CodingSchemeDataUtils {
 		if (v == null) return false;
 		return v.contains(qualifier);
 	}
-
 
     public String getMappingSourceAndTarget(String scheme, String version) {
 		CodingScheme cs = resolveCodingScheme(scheme, version);

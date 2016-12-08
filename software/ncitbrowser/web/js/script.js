@@ -476,6 +476,81 @@ function show_concept_domain_combo() {
 }
 
 
+function on_node_clicked(code) {
+    var url = "https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=" + code;
+	window.open(url, '_blank', 'top=100, left=100, height=740, width=780, status=no, menubar=yes, resizable=yes, scrollbars=yes, toolbar=yes, location=no, directories=no');
+}
+
+function on_cui_clicked(code) {
+    var url = "https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI%20Metathesaurus&code=" + code;
+	window.open(url, '_blank', 'top=100, left=100, height=740, width=780, status=no, menubar=yes, resizable=yes, scrollbars=yes, toolbar=yes, location=no, directories=no');
+}
+
+function on_source_code_clicked(source, code) {
+    var url = "https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=" + source + "&code=" + code;
+	window.open(url, '_blank', 'top=100, left=100, height=740, width=780, status=no, menubar=yes, resizable=yes, scrollbars=yes, toolbar=yes, location=no, directories=no');
+}
+
+function on_vocabulary_home_clicked(source) {
+    var url = "https://nciterms.nci.nih.gov/ncitbrowser/pages/vocabulary.jsf?dictionary=" + source;
+	window.open(url, '_blank', 'top=100, left=100, height=740, width=780, status=no, menubar=yes, resizable=yes, scrollbars=yes, toolbar=yes, location=no, directories=no');
+}
+
+
+function submitSearchOnEnter(form, event)
+{
+	if (event.which){
+		if(event.which == 13){
+			if (validateSearchForm(form)) {
+				window.submitForm('search_form',1,{source:'search'});
+			}
+			return false;
+		}
+	} else
+	{
+		if(window.event.keyCode==13)
+		{
+			if (validateSearchForm(form)) {
+				window.submitForm('search_form',1,{source:'search'});
+			}
+			return false;
+		}
+	}
+}
+
+
+function validateSearchForm(form) {
+	errors = false;
+	errorMsg = "Form validate failures:";
+	if (form.search_string.value=="") {
+		errorMsg += "\nSearch Text - A value must be entered.";
+		errors = true;
+	}
+	else {
+		if (form.search_string.value.length < 3) {
+			errorMsg += "\nSearch Text - The search text must be at least 3 characters in length.";
+			errors = true;
+		}
+	}
+	if (typeof form.search_in != "undefined") {
+		var searchInCheckboxes = 0;
+		for (var i=0; i<form.search_in.length;i++) {
+			if (form.search_in[i].checked) {
+				searchInCheckboxes++;
+			}
+		}
+		if (searchInCheckboxes == 0) {
+			errorMsg += "\nSearch In - At least one value must be selected.";
+			errors = true;
+		}
+	}
+	if (errors == true) {
+		alert(errorMsg);
+		return false;
+	}
+	return true;
+}
+
 	
 if (window.addEventListener)
 	window.addEventListener("load", onloadfunction, false)

@@ -1579,6 +1579,8 @@ if (!retval) {
 					if (matchAlgorithm.compareTo("contains") == 0) {
 						matchTextStr = matchText.replaceAll(":", " ");
 					}
+
+
 					iterator = new SimpleSearchUtils(lbSvc).search(schemes, versions, matchTextStr, SimpleSearchUtils.BY_NAME, matchAlgorithm);
 
 				} catch (Exception ex) {
@@ -1589,6 +1591,7 @@ if (!retval) {
 				if (matchAlgorithm.compareTo("contains") == 0) {
 					matchTextStr = matchText.replaceAll(":", " ");
 				}
+
 				wrapper = new SearchUtils(lbSvc).searchByNameOrCode(
 						schemes, versions, matchTextStr,
 						source, matchAlgorithm, ranking, maxToReturn, SearchUtils.SEARCH_BY_NAME_ONLY);

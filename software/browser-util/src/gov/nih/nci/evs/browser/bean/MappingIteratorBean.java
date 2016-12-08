@@ -172,6 +172,7 @@ public class MappingIteratorBean extends Object {
         return _timeout;
     }
 
+/*
     public void initialize() {
 
 		MappingData mappingData = null;
@@ -346,6 +347,187 @@ public class MappingIteratorBean extends Object {
             ex.printStackTrace();
         }
     }
+*/
+
+
+    public void initialize() {
+
+		MappingData mappingData = null;
+
+		String sourceCode = null;
+		String sourceName = null;
+		String sourceCodingScheme = null;
+		String sourceCodingSchemeVesion = null;
+		String sourceCodeNamespace = null;
+		String associationName = null;
+		String rel = null;
+		int score = 0;
+		String targetCode = null;
+		String targetName = null;
+		String targetCodingScheme = null;
+		String targetCodingSchemeVesion = null;
+		String targetCodeNamespace = null;
+
+		String source_ns = null;
+		String target_ns = null;
+
+
+        try {
+            if (_iterator == null) {
+                _size = 0;
+            } else {
+				_list = new ArrayList();
+                _size = _iterator.numberRemaining();
+
+
+                //KLO, work-around #2
+                int knt = 0;
+                while (_iterator.hasNext()) {
+					knt++;
+					if (knt > INITIAL_ITERATOR_RESOLUTION) break;
+
+					ResolvedConceptReference ref = _iterator.next();
+
+					_lastResolved++;
+
+					//upper_bound = _lastResolved;
+
+					String description;
+
+					if(ref.getEntityDescription() == null) {
+						description = "NOT AVAILABLE";
+					} else {
+						description = ref.getEntityDescription().getContent();
+					}
+					sourceCode = ref.getCode();
+					sourceName = description;
+					sourceCodingScheme = ref.getCodingSchemeName();
+					sourceCodingSchemeVesion = ref.getCodingSchemeVersion();
+					sourceCodeNamespace = ref.getCodeNamespace();
+
+					rel = null;
+					score = 0;
+
+					AssociationList assocs = ref.getSourceOf();
+					if(assocs != null){
+						for(Association assoc : assocs.getAssociation()){
+							associationName = assoc.getAssociationName();
+							int lcv = 0;
+							for(AssociatedConcept ac : assoc.getAssociatedConcepts().getAssociatedConcept()){
+								lcv++;
+								if(ac.getEntityDescription() == null) {
+									description = "NOT AVAILABLE";
+								} else {
+									description = ac.getEntityDescription().getContent();
+								}
+								targetCode = ac.getCode();
+								targetName = description;
+								targetCodingScheme = ac.getCodingSchemeName();
+								targetCodingSchemeVesion = ac.getCodingSchemeVersion();
+								targetCodeNamespace = ac.getCodeNamespace();
+
+								if (ac.getAssociationQualifiers() != null && ac.getAssociationQualifiers().getNameAndValue() != null) {
+									for (NameAndValue qual : ac.getAssociationQualifiers().getNameAndValue()) {
+										String qualifier_name = qual.getName();
+										String qualifier_value = qual.getContent();
+										if (qualifier_name.compareTo("rel") == 0) {
+											rel = qualifier_value;
+										} else if (qualifier_name.compareTo("score") == 0) {
+											score = Integer.parseInt(qualifier_value);
+										}
+									}
+								}
+
+								mappingData = new MappingData(
+									sourceCode,
+									sourceName,
+									sourceCodingScheme,
+									sourceCodingSchemeVesion,
+									sourceCodeNamespace,
+									associationName,
+									rel,
+									score,
+									targetCode,
+									targetName,
+									targetCodingScheme,
+									targetCodingSchemeVesion,
+									targetCodeNamespace);
+
+								_list.add(mappingData);
+
+							}
+						}
+					}
+
+					assocs = ref.getTargetOf();
+					if(assocs != null){
+						for(Association assoc : assocs.getAssociation()){
+							associationName = assoc.getAssociationName();
+
+							int lcv = 0;
+							for(AssociatedConcept ac : assoc.getAssociatedConcepts().getAssociatedConcept()){
+								lcv++;
+								if(ac.getEntityDescription() == null) {
+									description = "NOT AVAILABLE";
+								} else {
+									description = ac.getEntityDescription().getContent();
+								}
+								targetCode = ac.getCode();
+								targetName = description;
+								targetCodingScheme = ac.getCodingSchemeName();
+								targetCodingSchemeVesion = ac.getCodingSchemeVersion();
+								targetCodeNamespace = ac.getCodeNamespace();
+
+								if (ac.getAssociationQualifiers() != null && ac.getAssociationQualifiers().getNameAndValue() != null) {
+									for (NameAndValue qual : ac.getAssociationQualifiers().getNameAndValue()) {
+										String qualifier_name = qual.getName();
+										String qualifier_value = qual.getContent();
+										if (qualifier_name.compareTo("rel") == 0) {
+											rel = qualifier_value;
+										} else if (qualifier_name.compareTo("score") == 0) {
+											score = Integer.parseInt(qualifier_value);
+										}
+									}
+								}
+
+								mappingData = new MappingData(
+									sourceCode,
+									sourceName,
+									sourceCodingScheme,
+									sourceCodingSchemeVesion,
+									sourceCodeNamespace,
+									associationName,
+									rel,
+									score,
+									targetCode,
+									targetName,
+									targetCodingScheme,
+									targetCodingSchemeVesion,
+									targetCodeNamespace);
+								_list.add(mappingData);
+							}
+						}
+					}
+
+				}
+                if (knt > _size) _size = knt;
+            }
+
+
+            _pageNumber = 1;
+            //_list = new ArrayList();
+
+            _pageSize = Constants.DEFAULT_PAGE_SIZE;
+            _numberOfPages = _size / _pageSize;
+            if (_pageSize * _numberOfPages < _size) {
+                _numberOfPages = _numberOfPages + 1;
+            }
+            _lastResolved = -1;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 
     public int getMumberOfPages() {
         return _numberOfPages;
@@ -381,21 +563,6 @@ public class MappingIteratorBean extends Object {
         return _endIndex;
     }
 
-
-/*
-    public List copyData(int idx1, int idx2) {
-		List arrayList = new ArrayList();
-		int upper = idx2;
-		int max = _list.size();
-		if (max < idx2) upper = max;
-
-		for (int i=idx1; i<upper; i++) {
-			MappingData mappingData = (MappingData) _list.get(i);
-			arrayList.add(mappingData);
-		}
-		return arrayList;
-	}
-*/
 
      public List copyData(int idx1, int idx2) {
 		List arrayList = new ArrayList();
@@ -601,25 +768,8 @@ public class MappingIteratorBean extends Object {
 								}
 							}
 						}
-
 					}
-
-				   // _list.set(_lastResolved, ref);
-				   //_list.add(ref);
-
 				}
-				/*
-				dt = System.currentTimeMillis() - ms;
-				ms = System.currentTimeMillis();
-				total_delay = total_delay + dt;
-				//if (total_delay > (long) (NCItBrowserProperties.getPaginationTimeOut() * 60 * 1000)) {
-				if (total_delay > Constants.MILLISECONDS_PER_MINUTE * NCItBrowserProperties.getPaginationTimeOut()) {
-					_timeout = true;
-					_logger.debug("Time out at: " + _lastResolved);
-					break;
-				}
-				*/
-
 			}
 
 
@@ -631,42 +781,6 @@ public class MappingIteratorBean extends Object {
 			_size = _list.size();
 		}
 		return copyData(idx1, idx2);
-		/*
-
-
-
-List rcr_list = new ArrayList();
-if (_list.size() == 0) return rcr_list;
-
-
-        //for (int i = idx1; i <= idx2; i++) {
-	    for (int i = idx1; i <= upper_bound; i++) {
-
-			if (i > _size) break;
-
-            MappingData rcr =
-                (MappingData) _list.get(i);
-
-            temp_vec.add(rcr);
-            //if (i > _lastResolved)
-            //    break;
-        }
-
-
-        for (int i = 0; i < temp_vec.size(); i++) {
-            MappingData rcr =
-                (MappingData) temp_vec.elementAt(i);
-            rcr_list.add(rcr);
-        }
-
-        _logger.debug("getData Run time (ms): "
-            + (System.currentTimeMillis() - ms));
-
-        return rcr_list;
-
-//return copyData(idx1, idx2);
-*/
-
     }
 
 

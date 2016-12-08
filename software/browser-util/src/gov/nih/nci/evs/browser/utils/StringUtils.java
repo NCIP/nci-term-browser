@@ -7,6 +7,7 @@ import java.net.URI;
 import java.text.*;
 import java.util.*;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 
 public class StringUtils {
 
@@ -238,4 +239,35 @@ public class StringUtils {
         if (u.size() <= index) return null;
         return (String) u.elementAt(index);
    }
+
+	public static boolean isNumeric(String str) {
+		try {
+			double d = Double.parseDouble(str);
+		} catch(NumberFormatException nfe) {
+			return false;
+		}
+		return true;
+	}
+
+    public static boolean isSmallIrrationalNumber(String t) {
+	    if (t == null) return false;
+	    String s = t.toLowerCase();
+	    if (!s.startsWith("e-")) return false;
+	    s = s.substring(1, s.length());
+	    return isNumeric(s);
+    }
+
+    public static String escapeHtml(String str) {
+		return StringEscapeUtils.escapeHtml4(str);
+	}
+
+	public static String getToday() {
+		return getToday("MM-dd-yyyy");
+	}
+
+	public static String getToday(String format) {
+		java.util.Date date = Calendar.getInstance().getTime();
+		SimpleDateFormat sdf = new SimpleDateFormat(format);
+		return sdf.format(date);
+	}
 }

@@ -7,7 +7,7 @@ import org.apache.log4j.*;
 import org.LexGrid.valueSets.ValueSetDefinition;
 import org.LexGrid.LexBIG.Impl.Extensions.tree.model.LexEvsTreeNode;
 
-
+import gov.nih.nci.evs.browser.bean.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -126,13 +126,17 @@ public class SortComparator implements Comparator<Object> {
             if (sort_option == SORT_BY_CODE)
                 return node.getCode();
             return node.getEntityDescription();
-        }
+
+        } else if (c instanceof DelimitedString) {
+			DelimitedString s = (DelimitedString) c;
+			int sortIndex = s.getSortIndex();
+			return (String) s.getValues().elementAt(sortIndex);
+		}
 
         else if (c instanceof String) {
             String s = (String) c;
             return s;
         }
-
 
         return c.toString();
     }

@@ -188,7 +188,7 @@ public final class AjaxServlet extends HttpServlet {
     }
 
 
-    public static void search_tree(HttpServletResponse response, String node_id,
+    public void search_tree(HttpServletResponse response, String node_id,
         String ontology_display_name, String ontology_version, String namespace) {
         try {
             String jsonString = search_tree(node_id,
@@ -209,7 +209,16 @@ public final class AjaxServlet extends HttpServlet {
         }
     }
 
-    public static String search_tree(String node_id,
+    public String get_alt_vs_tree_mode(String mode) {
+		if (mode.compareTo(Constants.MODE_EXPAND) == 0) {
+			return Constants.MODE_COLLAPSE;
+		} else if (mode.compareTo(Constants.MODE_COLLAPSE) == 0) {
+			return Constants.MODE_EXPAND;
+		}
+		return Constants.MODE_COLLAPSE;
+	}
+
+    public String search_tree(String node_id,
         String ontology_display_name, String ontology_version, String namespace) throws Exception {
 
         if (node_id == null || ontology_display_name == null)
@@ -351,6 +360,10 @@ if (display_name_vec == null) {
         // Determine request by attributes
         String action = HTTPUtils.cleanXSS(request.getParameter("action"));//
 
+        if (action.equals("export_vsrc")) {
+            export_vsrc(request, response);
+        }
+
         if (action.compareTo("show") == 0) {
             show_other_versions(request, true);
 
@@ -387,14 +400,13 @@ if (action == null) {
 }
 
 if (action.compareTo("create_alt_src_vs_tree") == 0) {
-    request.getSession().setAttribute("vs_tree_type", "v2.7");
 	action = "create_src_vs_tree";
 }
 
 if (action.compareTo("create_alt_cs_vs_tree") == 0) {
-    request.getSession().setAttribute("vs_tree_type", "v2.7");
 	action = "create_cs_vs_tree";
 }
+
 
 if (action.compareTo("values") == 0) {
 	resolveValueSetAction(request, response);
@@ -837,7 +849,7 @@ if (action.compareTo("xmldefinitions") == 0) {
     private static boolean _debug = false;
     private static StringBuffer _debugBuffer = null;
 
-    public static void println(PrintWriter out, String text) {
+    public void println(PrintWriter out, String text) {
         if (_debug) {
             _logger.debug("DBG: " + text);
             _debugBuffer.append(text + "\n");
@@ -846,7 +858,7 @@ if (action.compareTo("xmldefinitions") == 0) {
     }
 
 
-    public static void search_hierarchy(HttpServletRequest request, HttpServletResponse response, String node_id,
+    public void search_hierarchy(HttpServletRequest request, HttpServletResponse response, String node_id,
         String ontology_display_name, String ontology_version, String namespace) {
 
       Enumeration parameters = request.getParameterNames();
@@ -1328,7 +1340,7 @@ if (action.compareTo("xmldefinitions") == 0) {
       println(out, "    <div id=\"popupContainer\">");
       println(out, "      <!-- nci popup banner -->");
       println(out, "      <div class=\"ncipopupbanner\">");
-      println(out, "        <a href=\"http://www.cancer.gov\" target=\"_blank\" alt=\"National Cancer Institute\"><img src=\"/ncitbrowser/images/nci-banner-1.gif\" width=\"556\" height=\"39\" border=\"0\" alt=\"National Cancer Institute\" /></a>");
+      println(out, "        <a href=\"http://www.cancer.gov\" target=\"_blank\" alt=\"National Cancer Institute\"><img src=\"/ncitbrowser/images/banner-red.png\" width=\"680\" height=\"39\" border=\"0\" alt=\"National Cancer Institute\" /></a>");
       println(out, "        <a href=\"http://www.cancer.gov\" target=\"_blank\" alt=\"National Cancer Institute\"><img src=\"/ncitbrowser/images/spacer.gif\" width=\"60\" height=\"39\" border=\"0\" alt=\"National Cancer Institute\" class=\"print-header\" /></a>");
       println(out, "      </div>");
       println(out, "      <!-- end nci popup banner -->");
@@ -1456,12 +1468,6 @@ if (action.compareTo("xmldefinitions") == 0) {
 
 
     public void create_vs_tree(HttpServletRequest request, HttpServletResponse response, int view) {
-
-		//Object obj = request.getParameter("vsd_uri");
-		//String vsd_uri = null;
-		//if (obj != null) {
-		//	vsd_uri = HTTPUtils.cleanXSS((String) obj);
-		//}
 		String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
 		create_vs_tree(request, response, view, vsd_uri);
 	}
@@ -1476,9 +1482,18 @@ if (action.compareTo("xmldefinitions") == 0) {
 
 
     public void create_vs_tree(HttpServletRequest request, HttpServletResponse response, int view, String vsd_uri) {
-        //SimpleTreeUtils stu = new SimpleTreeUtils();
         SimpleTreeUtils stu = new SimpleTreeUtils(DataUtils.getVocabularyNameSet());
-        stu.setUrl(request.getContextPath() + "ajax?action=create_src_vs_tree");
+
+String mode = HTTPUtils.cleanXSS((String) request.getParameter("mode"));
+if (mode == null) {
+	mode = (String) request.getSession().getAttribute("mode");
+}
+//if (mode == null) {
+//	mode = Constants.MODE_COLLAPSE;
+//}
+request.getSession().setAttribute("mode", mode);
+
+        stu.setUrl(request.getContextPath() + "ajax?action=create_src_vs_tree&mode=" + mode);
 
 		String nav_type = HTTPUtils.cleanXSS((String) request.getParameter("nav_type"));
 		request.getSession().setAttribute("vs_nav_type", "valuesets");
@@ -1486,17 +1501,35 @@ if (action.compareTo("xmldefinitions") == 0) {
 	    request.getSession().removeAttribute("dictionary");
 	    request.getSession().removeAttribute("version");
 
-
+/*
 String checked_valuesets = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("checked_vocabularies"));
+
 if (DataUtils.isNullOrBlank(checked_valuesets)) {
 	checked_valuesets = find_checked_value_sets(request);
 }
+*/
+
+/*
+String checked_valuesets = get_checked_vocabularies(request);//HTTPUtils.cleanXSS((String) request.getSession().getAttribute("checked_vocabularies"));
 Vector selected_valuesets = null;
 if (!DataUtils.isNullOrBlank(checked_valuesets)) {
 	request.getSession().setAttribute("checked_vocabularies", checked_valuesets);
 	selected_valuesets = DataUtils.parseData(checked_valuesets, ",");
-
 	stu.setSelectedNodes(selected_valuesets);
+}
+*/
+
+
+//[NCITERM-745] Top node of value sets deselected after search.
+String checked_valuesets = get_checked_vocabularies(request);//HTTPUtils.cleanXSS((String) request.getSession().getAttribute("checked_vocabularies"));
+String checked_nodes = get_checked_nodes(request);//HTTPUtils.cleanXSS((String) request.getSession().getAttribute("checked_vocabularies"));
+Vector selected_valuesets = null;
+Vector selected_nodes = null;
+if (!DataUtils.isNullOrBlank(checked_nodes)) {
+	request.getSession().setAttribute("checked_vocabularies", checked_valuesets);
+	selected_valuesets = DataUtils.parseData(checked_valuesets, ",");
+	selected_nodes = DataUtils.parseData(checked_nodes, ",");
+	stu.setSelectedNodes(selected_nodes);
 }
 
 		String root_vsd_uri = vsd_uri;
@@ -1533,8 +1566,11 @@ if (!DataUtils.isNullOrBlank(checked_valuesets)) {
 		  return;
 	  }
 
-	  String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
+
+	  //String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
+	  String checked_vocabularies = get_checked_vocabularies(request);
 	  String partial_checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("partial_checked_vocabularies"));
+
 
 	  String message = (String) request.getSession().getAttribute("message");
       out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">");
@@ -1604,7 +1640,6 @@ if (DataUtils.isNull(vsd_uri)) {
       println(out, "  <script type=\"text/javascript\" src=\"/ncitbrowser/js/search.js\"></script>");
       println(out, "  <script type=\"text/javascript\" src=\"/ncitbrowser/js/dropdown.js\"></script>");
 
-      out.println("");
 
       out.println("  <script type=\"text/javascript\">");
       out.println("");
@@ -1674,7 +1709,6 @@ request.getSession().setAttribute("valueset_search_algorithm", algorithm);
         request.getSession().setAttribute("matchText", matchText);
         request.getSession().setAttribute("matchText_RVS", matchText);
 
-
 String option_code = "";
 String option_name = "";
 if (DataUtils.isNull(option)) {
@@ -1713,19 +1747,31 @@ if (algorithm.compareToIgnoreCase("contains") == 0) {
 	option_name = "checked";
 	option_code = "";
 }
-
       out.println("");
       out.println("</head>");
       out.println("");
 
+
+/*
+if (mode != null && mode.compareTo(Constants.MODE_COLLAPSE) == 0) {
+	// to be modified: -- collapse_all method
+	  out.println("<body onLoad=\"collapse_all();\">");
+} else {
       out.println("<body onLoad=\"document.forms.valueSetSearchForm.matchText.focus();\">");
+}
+*/
+
+if (mode != null && (mode.compareTo("0") == 0 || mode.compareTo("2") == 0)) {
+	// to be modified: -- collapse_all method
+	  out.println("<body onLoad=\"collapse_all();\">");
+} else {
+      out.println("<body onLoad=\"document.forms.valueSetSearchForm.matchText.focus();\">");
+}
 
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/wz_tooltip.js\"></script>");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/tip_centerwindow.js\"></script>");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/tip_followscroll.js\"></script>");
 
-	  out.println("<script type=\"text/javascript\" src=\"/ncitbrowser/js/event_simulate.js\"></script>");
-	  out.println("<script type=\"text/javascript\" src=\"/ncitbrowser/js/value_set_tree_navigation.js\"></script>");
 
 
       out.println("  <!-- Begin Skip Top Navigation -->");
@@ -1733,7 +1779,16 @@ if (algorithm.compareToIgnoreCase("contains") == 0) {
       out.println("  <!-- End Skip Top Navigation -->");
       out.println("");
       out.println("<!-- nci banner -->");
-      out.println("<div class=\"ncibanner\">");
+      //out.println("<div class=\"ncibanner\">");
+      out.println("<div style='clear:both;margin-top:-5px;padding:8px;height:32px;color:white;background-color:#C31F40'>");
+
+      out.println("  <a href=\"http://www.cancer.gov\" target=\"_blank\">");
+      out.println("    <img src=\"/ncitbrowser/images/banner-red.png\"");
+      out.println("      width=\"955\" height=\"39\" border=\"0\"");
+      out.println("      alt=\"National Cancer Institute\"/>");
+      out.println("  </a>");
+
+      /*
       out.println("  <a href=\"http://www.cancer.gov\" target=\"_blank\">");
       out.println("    <img src=\"/ncitbrowser/images/logotype.gif\"");
       out.println("      width=\"556\" height=\"39\" border=\"0\"");
@@ -1754,6 +1809,7 @@ if (algorithm.compareToIgnoreCase("contains") == 0) {
       out.println("      width=\"125\" height=\"39\" border=\"0\"");
       out.println("      alt=\"www.cancer.gov\"/>");
       out.println("  </a>");
+      */
       out.println("</div>");
       out.println("<!-- end nci banner -->");
       out.println("");
@@ -2134,33 +2190,17 @@ if (vsc != null && !DataUtils.isNullOrBlank(vsc.getReportURI())) {
 if (DataUtils.isNull(vsd_uri)) {
 
       out.println("            <tr class=\"textbody\">");
-      out.println("              <td class=\"textbody\" align=\"left\">");
+      out.println("              <td class=\"textbody\" align=\"left\"  width=\"700\" nowrap>");
       out.println("");
 
+//v2.9 modification;
+    mode = (String) request.getParameter("mode");
+    if (mode == null) {
+		mode = (String) request.getSession().getAttribute("mode");
+	}
 
-if (view == Constants.STANDARD_VIEW) {
-      out.println("                Standards View");
-      out.println("                &nbsp;|");
-      out.println("                <a href=\"" + contextPath + "/ajax?action=create_cs_vs_tree\" tabindex=\"99\" >Terminology View</a>");
-} else {
-      out.println("                <a href=\"" + contextPath + "/ajax?action=create_src_vs_tree\" tabindex=\"100\">Standards View</a>");
-      out.println("                &nbsp;|");
-      out.println("                Terminology View");
-}
-
-
-/*
-//v2.8 modification:
-if (view == Constants.STANDARD_VIEW) {
-out.println("&nbsp;&nbsp;(");
-out.println("<a href=\"" + contextPath + "/ajax2?action=create_alt_src_vs_tree\" tabindex=\"100\"><font color=\"red\">Alt Standards View</font></a>");
-out.println(")");
-} else {
-out.println("&nbsp;&nbsp;(");
-out.println("<a href=\"" + contextPath + "/ajax2?action=create_alt_cs_vs_tree\" tabindex=\"100\"><font color=\"red\">Alt Terminology View</font></a>");
-out.println(")");
-}
-*/
+String tree_views = JSPUtils.getValueSetTreeViews(Integer.parseInt(mode), contextPath);
+out.println(tree_views);
 
       out.println("              </td>");
       out.println("");
@@ -2252,6 +2292,7 @@ out.flush();
       out.println("    <li><a href=\"http://www.cancer.gov/policies/page3\" target=\"_blank\" alt=\"National Cancer Institute Accessibility\">Accessibility</a> |</li>");
       out.println("    <li><a href=\"http://www.cancer.gov/policies/page6\" target=\"_blank\" alt=\"National Cancer Institute FOIA\">FOIA</a></li>");
       out.println("  </ul>");
+      /*
       out.println("  <p>");
       out.println("    A Service of the National Cancer Institute<br />");
       out.println("    <img src=\"/ncitbrowser/images/external-footer-logos.gif\"");
@@ -2272,6 +2313,26 @@ out.flush();
       out.println("      href=\"http://www.usa.gov/\" target=\"_blank\"");
       out.println("      alt=\"USA.gov\" />");
       out.println("  </map>");
+      */
+
+      out.println("<center>");
+      out.println("<a href=\"http://www.hhs.gov/\" alt=\"U.S. Department of Health and Human Services\">");
+      out.println("U.S. Department of Health and Human Services");
+      out.println("</a>");
+      out.println("&nbsp;|&nbsp;");
+      out.println("<a href=\"https://www.nih.gov/about-nih\" alt=\"National Institutes of Health\">");
+      out.println("National Institutes of Health");
+      out.println("</a>");
+      out.println("&nbsp;|&nbsp;");
+      out.println("<a href=\"http://www.cancer.gov/\" alt=\"National Cancer Institute\">");
+      out.println("National Cancer Institute");
+      out.println("</a>");
+      out.println("&nbsp;|&nbsp;");
+      out.println("<a href=\"https://www.usa.gov/\" alt=\"USA.gov\">");
+      out.println("USA.gov");
+      out.println("</a>");
+      out.println("</center>");
+
       out.println("</div>");
       out.println("<!-- end footer -->");
       out.println("</div>");
@@ -2413,9 +2474,6 @@ String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getSession().get
 		request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
 
         String algorithm = HTTPUtils.cleanXSS((String) request.getParameter("valueset_search_algorithm"));
-
-
-
         request.getSession().setAttribute("valueset_search_algorithm", algorithm);
 
 		// check if any checkbox is checked.
@@ -2436,8 +2494,16 @@ String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getSession().get
 
 		String msg = null;
 		//request.getSession().removeAttribute("checked_vocabularies");
+/*
 String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
+if (checked_vocabularies == null || checked_vocabularies.length() == 0) {
+	checked_vocabularies = get_checked_vocabularies(request);
+}
+*/
+String checked_vocabularies = get_checked_vocabularies(request);
+request.getSession().removeAttribute("checked_vocabularies");
 
+/*
 if (checked_vocabularies != null) {
 	checked_vocabularies = checked_vocabularies.trim();
 }
@@ -2448,7 +2514,7 @@ if (DataUtils.isNullOrBlank(checked_vocabularies)) {
 if (DataUtils.isNullOrBlank(checked_vocabularies)) {
     checked_vocabularies = vsd_uri;
 }
-
+*/
 
 		request.getSession().removeAttribute("partial_checked_vocabularies");
         String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
@@ -2471,8 +2537,8 @@ if (DataUtils.isNullOrBlank(checked_vocabularies)) {
 			}
 			return;
 		}
-        if (DataUtils.isNullOrBlank(checked_vocabularies)) {
 
+        if (DataUtils.isNullOrBlank(checked_vocabularies)) {
 			msg = "No value set definition is selected.";
 			request.getSession().setAttribute("message", msg);
 			if (!DataUtils.isNull(ontology_display_name) && !DataUtils.isNull(ontology_version)) {
@@ -2510,7 +2576,47 @@ if (DataUtils.isNullOrBlank(checked_vocabularies)) {
 	    }
     }
 
+    private String get_checked_nodes(HttpServletRequest request) {
+		StringBuffer buf = new StringBuffer();
+		Enumeration<String> parameterNames = request.getParameterNames();
+		while (parameterNames.hasMoreElements()) {
+			String paramName = parameterNames.nextElement();
+			//if (paramName.indexOf("http://") != -1) {
+				//String paramValue = (String) request.getParameter(paramName);
+				String paramValue = HTTPUtils.cleanXSS((String) request.getParameter(paramName));
+				if (paramValue.compareTo("on") == 0) {
+					buf.append(paramName).append(",");
+				}
+			//}
+		}
+		String checked_vocabularies = buf.toString();
+		if (checked_vocabularies.length() > 0) {
+			checked_vocabularies = checked_vocabularies.substring(0, checked_vocabularies.length()-1);
+		}
+		//System.out.println(checked_vocabularies);
+		return checked_vocabularies;
+	}
 
+    private String get_checked_vocabularies(HttpServletRequest request) {
+		StringBuffer buf = new StringBuffer();
+		Enumeration<String> parameterNames = request.getParameterNames();
+		while (parameterNames.hasMoreElements()) {
+			String paramName = parameterNames.nextElement();
+			if (paramName.indexOf("http://") != -1) {
+				//String paramValue = (String) request.getParameter(paramName);
+				String paramValue = HTTPUtils.cleanXSS((String) request.getParameter(paramName));
+				if (paramValue.compareTo("on") == 0) {
+					buf.append(paramName).append(",");
+				}
+			}
+		}
+		String checked_vocabularies = buf.toString();
+		if (checked_vocabularies.length() > 0) {
+			checked_vocabularies = checked_vocabularies.substring(0, checked_vocabularies.length()-1);
+		}
+		//System.out.println(checked_vocabularies);
+		return checked_vocabularies;
+	}
 
     public String valueSetSearchAction(HttpServletRequest request) {
 		java.lang.String valueSetDefinitionRevisionId = null;
@@ -2521,7 +2627,7 @@ long ms = System.currentTimeMillis();
 
 
         String selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("selectValueSetSearchOption"));
-String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+		String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
 
         if (DataUtils.isNull(selectValueSetSearchOption)) {
 			selectValueSetSearchOption = "Name";
@@ -2536,8 +2642,11 @@ String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
         request.getSession().setAttribute("valueset_search_algorithm", algorithm);
 
 
+//String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
 
-String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
+String checked_vocabularies = get_checked_vocabularies(request);
+String checked_nodes = get_checked_nodes(request);
+
 
 if (checked_vocabularies != null) {
 	checked_vocabularies = checked_vocabularies.trim();
@@ -2549,9 +2658,12 @@ if (DataUtils.isNullOrBlank(checked_vocabularies)) {
 if (DataUtils.isNullOrBlank(checked_vocabularies)) {
     checked_vocabularies = vsd_uri;
 }
+
+/*
 		if (checked_vocabularies != null) {
 			request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
 		}
+*/
 
 		if (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0) {
 			msg = "No value set definition is selected.";
@@ -2634,14 +2746,15 @@ if (DataUtils.isNullOrBlank(checked_vocabularies)) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    public static void create_vs_tree(HttpServletRequest request, HttpServletResponse response, int view, String dictionary, String version) {
+    public void create_vs_tree(HttpServletRequest request, HttpServletResponse response, int view, String dictionary, String version) {
 	  request.getSession().removeAttribute("b");
 	  request.getSession().removeAttribute("m");
 
       response.setContentType("text/html");
       PrintWriter out = null;
 
-		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
+		//String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
+		String checked_vocabularies = get_checked_vocabularies(request);
 		String partial_checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("partial_checked_vocabularies"));
 
       try {
@@ -2663,7 +2776,6 @@ if (DataUtils.isNullOrBlank(checked_vocabularies)) {
       out.println("");
 
       out.println("<body>");
-      //out.println("<body onload=\"collapse_all()\">");
 
       out.println("");
       out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css\" />");
@@ -2720,6 +2832,10 @@ if (DataUtils.isNullOrBlank(checked_vocabularies)) {
 
       println(out, "  <script type=\"text/javascript\" src=\"/ncitbrowser/js/search.js\"></script>");
       println(out, "  <script type=\"text/javascript\" src=\"/ncitbrowser/js/dropdown.js\"></script>");
+
+	  out.println("<script type=\"text/javascript\"   src=\"/ncitbrowser/js/event_simulate.js\"></script>");
+	  out.println("<script type=\"text/javascript\"   src=\"/ncitbrowser/js/value_set_tree_navigation.js\"></script>");
+
 
       out.println("");
       out.println("  <script type=\"text/javascript\">");
@@ -2801,16 +2917,22 @@ if (algorithm.compareToIgnoreCase("contains") == 0) {
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/tip_centerwindow.js\"></script>");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/tip_followscroll.js\"></script>");
 
-	  out.println("<script type=\"text/javascript\"   src=\"/ncitbrowser/js/event_simulate.js\"></script>");
-	  out.println("<script type=\"text/javascript\"   src=\"/ncitbrowser/js/value_set_tree_navigation.js\"></script>");
-
 
       out.println("  <!-- Begin Skip Top Navigation -->");
       out.println("  <a href=\"#evs-content\" class=\"hideLink\" accesskey=\"1\" title=\"Skip repetitive navigation links\">skip navigation links</A>");
       out.println("  <!-- End Skip Top Navigation -->");
       out.println("");
       out.println("<!-- nci banner -->");
-      out.println("<div class=\"ncibanner\">");
+      //out.println("<div class=\"ncibanner\">");
+      out.println("<div style='clear:both;margin-top:-5px;padding:8px;height:32px;color:white;background-color:#C31F40'>");
+
+      out.println("  <a href=\"http://www.cancer.gov\" target=\"_blank\">");
+      out.println("    <img src=\"/ncitbrowser/images/banner-red.png\"");
+      out.println("      width=\"955\" height=\"39\" border=\"0\"");
+      out.println("      alt=\"National Cancer Institute\"/>");
+      out.println("  </a>");
+
+      /*
       out.println("  <a href=\"http://www.cancer.gov\" target=\"_blank\">");
       out.println("    <img src=\"/ncitbrowser/images/logotype.gif\"");
       out.println("      width=\"556\" height=\"39\" border=\"0\"");
@@ -2831,6 +2953,7 @@ if (algorithm.compareToIgnoreCase("contains") == 0) {
       out.println("      width=\"125\" height=\"39\" border=\"0\"");
       out.println("      alt=\"www.cancer.gov\"/>");
       out.println("  </a>");
+      */
       out.println("</div>");
       out.println("<!-- end nci banner -->");
       out.println("");
@@ -3302,16 +3425,7 @@ if (DataUtils.isNull(matchText)) {
       out.println("</style>");
       out.println("");
       out.println("");
-      /*
-      out.println("<div id=\"expandcontractdiv\">");
-      out.println("	<a id=\"expand_all\" href=\"#\" tabindex=\"101\" >Expand all</a>");
-      out.println("	<a id=\"collapse_all\" href=\"#\" tabindex=\"102\">Collapse all</a>");
-      out.println("	<a id=\"check_all\" href=\"#\" tabindex=\"103\">Check all</a>");
-      out.println("	<a id=\"uncheck_all\" href=\"#\" tabindex=\"104\">Uncheck all</a>");
-      out.println("</div>");
-      */
 
-      //SimpleTreeUtils stu = new SimpleTreeUtils();
       SimpleTreeUtils stu = new SimpleTreeUtils(DataUtils.getVocabularyNameSet());
 
       stu.printSelectAllOrNoneLinks(out);
@@ -3361,6 +3475,7 @@ out.flush();
       out.println("    <li><a href=\"http://www.cancer.gov/policies/page3\" target=\"_blank\" alt=\"National Cancer Institute Accessibility\">Accessibility</a> |</li>");
       out.println("    <li><a href=\"http://www.cancer.gov/policies/page6\" target=\"_blank\" alt=\"National Cancer Institute FOIA\">FOIA</a></li>");
       out.println("  </ul>");
+      /*
       out.println("  <p>");
       out.println("    A Service of the National Cancer Institute<br />");
       out.println("    <img src=\"/ncitbrowser/images/external-footer-logos.gif\"");
@@ -3381,6 +3496,26 @@ out.flush();
       out.println("      href=\"http://www.usa.gov/\" target=\"_blank\"");
       out.println("      alt=\"USA.gov\" />");
       out.println("  </map>");
+      */
+
+      out.println("<center>");
+      out.println("<a href=\"http://www.hhs.gov/\" alt=\"U.S. Department of Health and Human Services\">");
+      out.println("U.S. Department of Health and Human Services");
+      out.println("</a>");
+      out.println("&nbsp;|&nbsp;");
+      out.println("<a href=\"https://www.nih.gov/about-nih\" alt=\"National Institutes of Health\">");
+      out.println("National Institutes of Health");
+      out.println("</a>");
+      out.println("&nbsp;|&nbsp;");
+      out.println("<a href=\"http://www.cancer.gov/\" alt=\"National Cancer Institute\">");
+      out.println("National Cancer Institute");
+      out.println("</a>");
+      out.println("&nbsp;|&nbsp;");
+      out.println("<a href=\"https://www.usa.gov/\" alt=\"USA.gov\">");
+      out.println("USA.gov");
+      out.println("</a>");
+      out.println("</center>");
+
       out.println("</div>");
       out.println("<!-- end footer -->");
       out.println("</div>");
@@ -3401,14 +3536,14 @@ out.flush();
   }
 
 
-   public static void addHiddenForm(PrintWriter out, String checkedNodes, String partialCheckedNodes) {
+   public void addHiddenForm(PrintWriter out, String checkedNodes, String partialCheckedNodes) {
       out.println("   <form id=\"hidden_form\" enctype=\"application/x-www-form-urlencoded;charset=UTF-8\">");
       out.println("      <input type=\"hidden\" id=\"checkedNodes\" name=\"checkedNodes\" value=\"" + checkedNodes + "\" />");
       out.println("      <input type=\"hidden\" id=\"partialCheckedNodes\" name=\"partialCheckedNodes\" value=\"" + partialCheckedNodes + "\" />");
       out.println("   </form>");
    }
 
-   public static void writeInitialize(PrintWriter out) {
+   public void writeInitialize(PrintWriter out) {
       out.println("   function initialize() {");
       out.println("	     tree = new YAHOO.widget.TreeView(\"treecontainer\");");
       out.println("	     initializeNodeCheckState();");
@@ -3423,11 +3558,11 @@ out.flush();
       * @type int
 */
 
-   public static void initializeNodeCheckState(PrintWriter out) {
+   public void initializeNodeCheckState(PrintWriter out) {
 	   initializeNodeCheckState(out, Boolean.TRUE);
    }
 
-   public static void initializeNodeCheckState(PrintWriter out, Boolean value_set_tab) {
+   public void initializeNodeCheckState(PrintWriter out, Boolean value_set_tab) {
       out.println("   function initializeNodeCheckState(nodes) {");
       out.println("       nodes = nodes || tree.getRoot().children;");
       out.println("       var checkedNodes = document.forms[\"hidden_form\"].checkedNodes.value;");
@@ -3456,7 +3591,7 @@ out.flush();
    }
 
 
-    public static void addQuickLink(HttpServletRequest request, PrintWriter out) {
+    public void addQuickLink(HttpServletRequest request, PrintWriter out) {
 
 		String basePath = request.getContextPath();
 		//String ncim_url = new DataUtils().getNCImURL();
@@ -3805,7 +3940,9 @@ out.flush();
 							url = url + "&version=" + ncit_production_version;
 						}
 						//[NCITERM-731] Concepts selected from a Value Sets' Released File: View Graph not viewable due to ns=null in the URL
-						url = url + "&ns=NCI%20Thesaurus";
+						//09082016
+						//url = url + "&ns=NCI%20Thesaurus";
+						url = url + "&ns=NCI_Thesaurus";
 						ResolvedValueSetIteratorHolder rvsi = new ResolvedValueSetIteratorHolder(excelfile, sheet, startIndex, col, code, url, cdisc);
 						request.getSession().setAttribute("rvsi", rvsi);
 					} catch (Exception ex) {
@@ -3903,7 +4040,7 @@ out.flush();
 	}
 
 /*
-    public static void value_set_home(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public void value_set_home(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		try {
 			response.setContentType("text/plain");
 			PrintWriter out = null;
@@ -3935,6 +4072,7 @@ out.flush();
 		}
 	}
 */
+
     public void export_mapping_search(HttpServletRequest request, HttpServletResponse response) {
         String mapping_schema = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
         String mapping_version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
@@ -4092,7 +4230,7 @@ out.flush();
 	}
 
 
-	public static int countEdges(HashMap relMap, String[] types) {
+	public int countEdges(HashMap relMap, String[] types) {
 		if (relMap == null || types == null) return 0;
 		int knt = 0;
 		List typeList = Arrays.asList(types);
@@ -4109,7 +4247,7 @@ out.flush();
 	}
 
 
-    public static void view_graph(HttpServletRequest request, HttpServletResponse response,
+    public void view_graph(HttpServletRequest request, HttpServletResponse response,
         String scheme, String version, String namespace, String code, String type) {
 	  LexBIGService lb_svc = RemoteServerUtil.createLexBIGService();
 	  HashMap hmap = (HashMap) request.getSession().getAttribute("RelationshipHashMap");
@@ -4364,7 +4502,15 @@ out.flush();
       out.println("");
       out.println("<body onload=\"draw();\">");
 
-      out.println("<div class=\"ncibanner\">");
+      //out.println("<div class=\"ncibanner\">");
+      out.println("<div style='clear:both;margin-top:-5px;padding:8px;height:32px;color:white;background-color:#C31F40'>");
+
+      out.println("  <a href=\"http://www.cancer.gov\" target=\"_blank\">");
+      out.println("    <img src=\"/ncitbrowser/images/banner-red.png\"");
+      out.println("      width=\"955\" height=\"39\" border=\"0\"");
+      out.println("      alt=\"National Cancer Institute\"/>");
+      out.println("  </a>");
+      /*
       out.println("  <a href=\"http://www.cancer.gov\" target=\"_blank\">     ");
       out.println("    <img src=\"/ncitbrowser/images/logotype.gif\"");
       out.println("      width=\"556\" height=\"39\" border=\"0\"");
@@ -4385,6 +4531,8 @@ out.flush();
       out.println("      width=\"125\" height=\"39\" border=\"0\"");
       out.println("      alt=\"www.cancer.gov\"/>");
       out.println("  </a>");
+      */
+
       out.println("</div>");
       out.println("<p></p>");
 
@@ -4529,7 +4677,8 @@ out.flush();
 			algorithm = Constants.DEFAULT_SEARCH_ALGORITHM;//"exactMatch";
 		}
 
-		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
+		//String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
+		String checked_vocabularies = get_checked_vocabularies(request);
 
 		if (checked_vocabularies != null) {
 			checked_vocabularies = checked_vocabularies.trim();
@@ -4651,7 +4800,11 @@ out.flush();
 
 	}
 
-	public static void dumpVector(Vector v) {
+	public void export_vsrc(HttpServletRequest request, HttpServletResponse response) {
+		new VSRCExportUtils().exportValueSetDefinitionConfigToCSV(request, response);
+	}
+
+	public void dumpVector(Vector v) {
 		for (int i=0; i<v.size(); i++) {
 			String t = (String) v.elementAt(i);
 			System.out.println(t);

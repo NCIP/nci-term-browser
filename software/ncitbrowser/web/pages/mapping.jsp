@@ -413,7 +413,7 @@ if (show_rank_column) {
                  Map Rank
                  
         <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/rank_help_info.jsf',
-    '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+    '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
     <img src="<%= request.getContextPath() %>/images/help.gif" alt="Rank Definitions" title="Rank Definitions" border="0">
         </a>                 
                  
@@ -429,7 +429,7 @@ if (show_rank_column) {
 
 
         <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/rank_help_info.jsf',
-    '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+    '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
     <img src="<%= request.getContextPath() %>/images/help.gif" alt="Rank Definitions" title="Rank Definitions" border="0">
         </a>
         
@@ -502,6 +502,10 @@ if (show_rank_column) {
                 String target_name = null;
                 String target_namespace = null;
                 MappingData mappingData = null;
+                
+                String source_ns = null;
+                String target_ns = null;
+                
 
 
  if (list == null) {
@@ -513,6 +517,8 @@ if (show_rank_column) {
         source_code = mappingData.getSourceCode();
         source_name = mappingData.getSourceName();
         source_namespace = mappingData.getSourceCodeNamespace();
+        
+        source_ns = source_namespace;
         
         if (display_name_hmap.containsKey(source_namespace)) {
             source_namespace = (String) display_name_hmap.get(source_namespace);
@@ -528,6 +534,8 @@ if (show_rank_column) {
         target_code = mappingData.getTargetCode();
         target_name = mappingData.getTargetName();
         target_namespace = mappingData.getTargetCodeNamespace();
+        
+        target_ns = target_namespace;
         
         if (display_name_hmap.containsKey(target_namespace)) {
             target_namespace = (String) display_name_hmap.get(target_namespace);
@@ -547,7 +555,7 @@ if (show_rank_column) {
 <tr>
                     <td class="datacoldark" scope="row"><%=source_namespace%></td>
         <td class="datacoldark">
-<a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&ns=<%=source_scheme%>&code=<%=URLEncoder.encode(source_code,"UTF-8")%>">
+<a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&ns=<%=source_ns%>&code=<%=URLEncoder.encode(source_code,"UTF-8")%>">
       <%=source_code%>
 </a>
 
@@ -572,7 +580,7 @@ if (show_rank_column) {
         <td class="datacoldark"><%=target_namespace%></td>
         <td class="datacoldark">
 
-<a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&ns=<%=target_scheme%>&code=<%=URLEncoder.encode(target_code,"UTF-8")%>">
+<a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&ns=<%=target_ns%>&code=<%=URLEncoder.encode(target_code,"UTF-8")%>">
       <%=target_code%>
 </a>
 

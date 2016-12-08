@@ -52,7 +52,7 @@ import org.LexGrid.LexBIG.DataModel.InterfaceElements.CodingSchemeRendering;
 import org.LexGrid.LexBIG.DataModel.Collections.NameAndValueList;
 import org.LexGrid.LexBIG.DataModel.Core.NameAndValue;
 import org.LexGrid.LexBIG.Utility.Constructors;
-import org.lexevs.property.PropertyExtension;
+//import org.lexevs.property.PropertyExtension;
 import org.LexGrid.LexBIG.LexBIGService.CodedNodeGraph;
 
 
@@ -419,14 +419,14 @@ public class ConceptDetails {
 
 
     public Vector getConceptPropertyValues(Entity c, String propertyName) {
-        if (c == null)
+        if (c == null) {
             return null;
+		}
         Vector v = new Vector();
-        Property[] properties = c.getProperty();
+        Property[] properties = c.getAllProperties();
 
         for (int j = 0; j < properties.length; j++) {
             Property prop = properties[j];
-
             if (prop.getPropertyName().compareTo(propertyName) == 0) {
                 v.add(prop.getValue().getContent());
             }
@@ -637,6 +637,7 @@ public class ConceptDetails {
         return w;
     }
 
+/*
     public Vector<String> getSupportedPropertyNames(CodingScheme cs) {
         Vector w = getSupportedProperties(cs);
         if (w == null)
@@ -649,6 +650,65 @@ public class ConceptDetails {
         }
         return v;
     }
+*/
+
+	public boolean isAnnotationPropertyPCode(String t) {
+		if (t == null) return false;
+		if (t.length() <= 1) return false;
+		if (!t.startsWith("P")) return false;
+		for (int i=1; i<t.length(); i++) {
+			char c = t.charAt(i);
+			if (!Character.isDigit(c)) return false;
+		}
+		return true;
+	}
+
+    public Vector<String> getSupportedPropertyNames(CodingScheme cs) {
+        Vector w = getSupportedProperties(cs);
+		if (w == null) return null;
+        Vector<String> v = new Vector<String>();
+		for (int i=0; i<w.size(); i++)
+		{
+		     SupportedProperty sp = (SupportedProperty) w.elementAt(i);
+		     if (sp.getUri() != null && isAnnotationPropertyPCode(sp.getLocalId())) {
+				 if (!sp.getUri().endsWith(sp.getLocalId())) {
+					 v.add(sp.getLocalId());
+				 }
+			 } else {
+				 v.add(sp.getLocalId());
+			 }
+		}
+        return SortUtils.quickSort(v);
+	}
+
+
+    public Vector<String> getSupportedPropertyData(CodingScheme cs) {
+        Vector w = getSupportedProperties(cs);
+		if (w == null) return null;
+        Vector<String> v = new Vector<String>();
+		for (int i=0; i<w.size(); i++)
+		{
+		     SupportedProperty sp = (SupportedProperty) w.elementAt(i);
+		     v.add(sp.getUri() + "|" + sp.getLocalId() + "|" + sp.getContent() + "|" + sp.getPropertyType());
+		}
+        return SortUtils.quickSort(v);
+	}
+
+    public HashMap getPropertyName2TypeHashMap(CodingScheme cs) {
+        Vector w = getSupportedProperties(cs);
+		if (w == null) return null;
+        HashMap hmap = new HashMap();
+		for (int i=0; i<w.size(); i++)
+		{
+		     SupportedProperty sp = (SupportedProperty) w.elementAt(i);
+		     if (sp.getUri() != null) {
+				 if (!sp.getUri().endsWith(sp.getLocalId())) {
+					 hmap.put(sp.getLocalId(), sp.getPropertyType().toString());
+				 }
+			 }
+		}
+        return hmap;
+	}
 
 
     public CodingScheme getCodingScheme(String codingScheme,
@@ -987,7 +1047,47 @@ public class ConceptDetails {
     }
 
 
+    public Vector getAllSynonyms(String scheme, Entity concept) {
+        if (concept == null)
+            return null;
+        Vector v = new Vector();
+        Presentation[] properties = concept.getPresentation();
+        int n = 0;
+        boolean inclusion = true;
+        for (int i = 0; i < properties.length; i++) {
+            Presentation p = properties[i];
+			String term_name = p.getValue().getContent();
+			String term_type = "null";
+			String term_source = "null";
+			String term_source_code = "null";
+			String term_subsource = "null";
 
+			PropertyQualifier[] qualifiers = p.getPropertyQualifier();
+			if (qualifiers != null) {
+				for (int j = 0; j < qualifiers.length; j++) {
+					PropertyQualifier q = qualifiers[j];
+					String qualifier_name = q.getPropertyQualifierName();
+					String qualifier_value = q.getValue().getContent();
+					if (qualifier_name.compareTo("source-code") == 0) {
+						term_source_code = qualifier_value;
+					}
+					if (qualifier_name.compareTo("subsource-name") == 0) {
+						term_subsource = qualifier_value;
+					}
+				}
+			}
+			term_type = p.getRepresentationalForm();
+			Source[] sources = p.getSource();
+			if (sources != null && sources.length > 0) {
+				Source src = sources[0];
+				term_source = src.getContent();
+			}
+			v.add(term_name + "|" + term_type + "|" + term_source + "|"
+				+ term_source_code + "|" +  term_subsource);
+        }
+        SortUtils.quickSort(v);
+        return v;
+    }
 
     public HashMap getPropertyValuesForCodes(String scheme, String version,
         Vector codes, String propertyName) {

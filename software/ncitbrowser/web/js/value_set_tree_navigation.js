@@ -207,51 +207,47 @@ document.addEventListener('keyup', doc_keyUp, false);
 
 
 
- 			function changeImage(img_id) {
- 				 var img_obj = document.getElementById(img_id);
- 				 if (img_obj.getAttribute("src").indexOf("minus") != -1) {
- 				     var s = img_obj.getAttribute("src");
- 				     s = s.replace("minus", "plus");
- 				     img_obj.setAttribute("src", s); 					
- 					
- 				 } else if (img_obj.getAttribute("src").indexOf("plus") != -1) {
- 				     var s = img_obj.getAttribute("src");
- 				     s = s.replace("plus", "minus");
- 				     img_obj.setAttribute("src", s);
- 				 }
-                        }
+	function changeImage(img_id) {
+		var img_obj = document.getElementById(img_id);
+		if (img_obj.getAttribute("src").indexOf("minus") != -1) {
+			var s = img_obj.getAttribute("src");
+			s = s.replace("minus", "plus");
+			img_obj.setAttribute("src", s);
+		} else if (img_obj.getAttribute("src").indexOf("plus") != -1) {
+			var s = img_obj.getAttribute("src");
+			s = s.replace("plus", "minus");
+			img_obj.setAttribute("src", s);
+		}
+	}
                         
-                        
+	function show_hide(div_id) {
+		var img_id = "IMG_" + div_id.substring(4, div_id.length);
+		var img_obj = document.getElementById(img_id);
+		if (img_obj.getAttribute("src").indexOf("minus") != -1) {
+			document.getElementById(div_id).style.display = "none";
+		} else if (img_obj.getAttribute("src").indexOf("plus") != -1) {
+			document.getElementById(div_id).style.display = "block";
+		}
+		changeImage(img_id);
+	}
 
+	function show(div_id) {
+		var img_id = "IMG_" + div_id.substring(4, div_id.length);
+		var img_obj = document.getElementById(img_id);
+		if (img_obj.getAttribute("src").indexOf("plus") != -1) {
+			document.getElementById(div_id).style.display = "block";
+			changeImage(img_id);
+		}
+	}
 
- 		    function show_hide(div_id) {
- 		        var img_id = "IMG_" + div_id.substring(4, div_id.length);
- 		        var img_obj = document.getElementById(img_id);
- 				if (img_obj.getAttribute("src").indexOf("minus") != -1) {
- 					document.getElementById(div_id).style.display = "none";
- 				} else if (img_obj.getAttribute("src").indexOf("plus") != -1) {
- 					document.getElementById(div_id).style.display = "block";
- 				}
- 		        changeImage(img_id);
- 		    }
-
- 		    function show(div_id) {
- 		        var img_id = "IMG_" + div_id.substring(4, div_id.length);
- 		        var img_obj = document.getElementById(img_id);
- 				if (img_obj.getAttribute("src").indexOf("plus") != -1) {
- 					document.getElementById(div_id).style.display = "block";
- 					changeImage(img_id);
- 				}
- 		    }
-
- 		    function hide(div_id) {
- 		        var img_id = "IMG_" + div_id.substring(4, div_id.length);
- 		        var img_obj = document.getElementById(img_id);
- 				if (img_obj.getAttribute("src").indexOf("minus") != -1) {
- 					document.getElementById(div_id).style.display = "none";
- 					changeImage(img_id);
- 				}
- 		    }
+	function hide(div_id) {
+		var img_id = "IMG_" + div_id.substring(4, div_id.length);
+		var img_obj = document.getElementById(img_id);
+		if (img_obj.getAttribute("src").indexOf("minus") != -1) {
+			document.getElementById(div_id).style.display = "none";
+			changeImage(img_id);
+		}
+	}
 
  			function select_all() {
  			    var id = "N";
@@ -316,35 +312,77 @@ document.addEventListener('keyup', doc_keyUp, false);
  				return checkedNodes;
  			}
 
-   			function expand_all() {
-   			        var prefix = "N_";
-  			        expand_node(prefix);
- 			} 	
+   			//function expand_all() {
+   			//        var prefix = "N_";
+  			//        expand_node(prefix);
+ 			//} 	
  
- 			function expand_node(prefix) {
-  			    var div = "DIV_";
-  				var child_cnt = 1;
-  				child_id = prefix.concat(child_cnt.toString());
-  				while (document.getElementById(div.concat(child_id)) != null) {
-  				    show(div.concat(child_id));
-  				    expand_node(child_id.concat("_"));
-  				    child_cnt++;
-  				    child_id = prefix.concat(child_cnt.toString());
-  				}
- 			}			
-  
- 			function collapse_all() {
-				var divTags = document.getElementsByTagName('div');
-				for (var i=0;i<divTags.length;i++) {
-				    if (divTags[i].id.indexOf("DIV_N_") == 0) {
-					var num = divTags[i].id.substring(6, divTags[i].id.length); 
-					if (num.indexOf("_") == -1) {
-					    hide(divTags[i].id);
-					}
-				    }
-				}			
- 			}
+	function expand_node(prefix) {
+		var div = "DIV_";
+		var child_cnt = 1;
+		child_id = prefix.concat(child_cnt.toString());
+		while (document.getElementById(div.concat(child_id)) != null) {
+			show(div.concat(child_id));
+			expand_node(child_id.concat("_"));
+			child_cnt++;
+			child_id = prefix.concat(child_cnt.toString());
+		}
+	}
 
+	function getLevel(div) {
+		var n = div.length;
+		var c;
+		var knt = 0;
+		for (var i=0; i<n; i++) {
+		   c = div.charAt(i);
+		   if (c == "_") {
+			knt++;
+		   }
+		}
+		return knt-1;
+	}
+			
+  
+	function collapse_all() {
+		var divTags = document.getElementsByTagName('div');
+		for (var i=0;i<divTags.length;i++) {
+			if (divTags[i].id.indexOf("DIV_N_") == 0) {
+				hide(divTags[i].id);
+			}
+		}
+	}
+
+        
+
+ 
+     function expand(level) {
+         expand_all();
+         collapse_all();
+         var divTags = document.getElementsByTagName('div');
+         
+ 		for (var i=0;i<divTags.length;i++) {
+ 		    var div_id = divTags[i].id;
+ 		    if (divTags[i].id.indexOf("DIV_N_") >= 0) {
+ 				if (divTags[i].id.indexOf("DIV_N_") == 0) {
+ 				
+ 					if (getLevel(div_id) <= level) {
+ 					
+ 						document.getElementById(div_id).style.display = "block";
+ 						var img_id = "IMG_" + div_id.substring(4, div_id.length);
+ 						changeImage(img_id);
+ 					}
+ 				}
+ 		    }
+ 		}
+    }
+        
+        
+	function expand_tree() {
+	    var level = document.getElementById('level').value;
+	    expand(level);
+	}
+	
+	
                         function onValueSetNodeClicked(node_id) {
 				var url="/ncitbrowser/ajax?action=create_src_vs_tree&vsd_uri=" + node_id;
 				window.location.href = url;
@@ -372,3 +410,28 @@ document.addEventListener('keyup', doc_keyUp, false);
 			    alert(checked_vocabularies);
 			}
 
+
+	function expand_all() {
+		var divTags = document.getElementsByTagName('div');
+		for (var i=0;i<divTags.length;i++) {
+			if (divTags[i].id.indexOf("DIV_N_") == 0) {
+				show(divTags[i].id);
+			}
+		}
+	}
+	
+
+			function getCollapseDivID() {
+				var divTags = document.getElementsByTagName('div');
+				var div_id = "";
+				for (var i=0;i<divTags.length;i++) {
+					if (divTags[i].id.indexOf("DIV_N_") == 0) {
+						var num = divTags[i].id.substring(6, divTags[i].id.length);
+						var img_id = "IMG_N_" + num;
+						var img_obj = document.getElementById(img_id);
+						if (img_obj.getAttribute("src").indexOf("plus") != -1) {
+						    return divTags[i].id;
+						}
+					}
+				}
+			}
