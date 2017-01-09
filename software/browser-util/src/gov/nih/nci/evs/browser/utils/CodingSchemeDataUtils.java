@@ -715,7 +715,9 @@ public class CodingSchemeDataUtils {
 				vt.setVersion(version);
 			}
 			CodingScheme cs = lbSvc.resolveCodingScheme(cs_uri, vt);
-			String cs_name = cs.getCodingSchemeName();
+			// [NCITERM-747] Value sets with same name, but different URIs should have values.
+			//String cs_name = cs.getCodingSchemeName();
+			String cs_name = cs.getCodingSchemeURI();
 			CodedNodeSet cns = null;
 			try {
 				try {
