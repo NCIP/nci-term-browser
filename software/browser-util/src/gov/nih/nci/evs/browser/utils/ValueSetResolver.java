@@ -108,16 +108,23 @@ public class ValueSetResolver {
 				String name = (String) vsdUri2NameMap.get(cs_uri);
 				i++;
 				System.out.println("(" + i + ") " + name + " (" + cs_uri + ")");
-				ResolvedConceptReferencesIterator rcri = csdu.resolveCodingScheme(cs_uri, version, resolveObjects);
-				if (it == null) {
-					pw.println("\t" + "Unable to resolve " + name + " (" + cs_uri + ")");
-					result_vec.add(name + "|" + cs_uri + "|Exception");
+				ResolvedConceptReferencesIterator rcri = null;
+				try {
+					rcri = csdu.resolveCodingScheme(cs_uri, version, resolveObjects);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+
+				if (rcri == null) {
+					//pw.println("\t" + "Unable to resolve " + name + " (" + cs_uri + ")");
+					result_vec.add(name + "|" + cs_uri + "|Exception thrown at csdu.resolveCodingScheme.");
 				} else {
 					try {
 						int numberRemaining = rcri.numberRemaining();
 						result_vec.add(name + "|" + cs_uri + "|" + numberRemaining);
 					} catch (Exception ex) {
 						ex.printStackTrace();
+						result_vec.add(name + "|" + cs_uri + "|Exception thrown at rcri.numberRemaining()");
 					}
 				}
 			}
