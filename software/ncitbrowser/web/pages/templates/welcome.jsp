@@ -164,7 +164,7 @@ if (license_display_value != null && (license_display_value.compareTo("show") ==
             <td class="textbody" valign="top">
               <a href="<%=nci_meta_url%>" target="_blank" alt="NCIm">
                 NCI Metathesaurus</a>:
-              Comprehensive database of 4,000,000 terms from 75 terminologies.
+              Comprehensive database of 6,400,000 terms from 75 terminologies.
             </td>
           </tr>
           <tr valign="top">
