@@ -223,6 +223,7 @@ public class Constants {
     public static final String ONTOLOGY_NODE_CHILD_COUNT = "ontology_node_child_count";
     public static final String ONTOLOGY_NODE_DEFINITION = "ontology_node_definition";
     public static final String CHILDREN_NODES = "children_nodes";
+    public static final String ASSOCIATION = "association";
 
     public static final String CODING_SCHEME_NOT_AVAILABLE = "Coding scheme is either not loaded or inactive. Please consult your system administrator.";
     public static final String NCIT_NOT_AVAILABLE = "NCI Thesaurus is either not loaded or inactive. Please consult your system administrator.";
