@@ -2,6 +2,9 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8"%>
+
+<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils"%>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
@@ -22,6 +25,7 @@
      <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
   <!-- End Skip Top Navigation --> 
   <%
+    String application_version = new DataUtils().getApplicationVersion();
     String contactUsUrl = request.getContextPath() + "/pages/contact_us.jsf";
     String subsetsUrl = request.getContextPath() + "/pages/subset.jsf";
     String arrowImage = request.getContextPath() + "/images/up_arrow.jpg";
@@ -106,8 +110,8 @@
 			a particular coding purpose) and mappings between terminologies 
 			to support data translation and cross-reference. 
 			For information on new features and known issues, 
-           		<a href="https://wiki.nci.nih.gov/display/EVS/NCI+Term+Browser+2.10+Release+Notes" target="_blank">
-              		see NCI Term Browser 2.10 Release Notes</a>.
+           		<a href="https://wiki.nci.nih.gov/display/EVS/NCI+Term+Browser+<%=application_version%>+Release+Notes" target="_blank">
+              		see NCI Term Browser <%=application_version%> Release Notes</a>.
 		 </p>
           
           <p>

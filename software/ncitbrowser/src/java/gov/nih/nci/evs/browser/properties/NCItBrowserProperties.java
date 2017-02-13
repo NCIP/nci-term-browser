@@ -143,7 +143,7 @@ public class NCItBrowserProperties {
 	private	static HashMap _bioportalAcronym2NameHashMap = null;//NCBORESTClient.getBioportalAcronym2NameHashMap(getAPIKey());
 
     private static String _owl_role_quantifiers = null;
-
+    private static String _application_version = null;
 
 
     /**
@@ -186,6 +186,10 @@ public class NCItBrowserProperties {
 				_browserProperties
 					.getProperty(_browserProperties.EVS_SERVICE_URL);
 			// _logger.info("EVS_SERVICE_URL: " + service_url);
+
+			_application_version =
+				_browserProperties
+					.getProperty(_browserProperties.NCIT_APP_VERSION);
 
 			_lg_config_file =
 				_browserProperties

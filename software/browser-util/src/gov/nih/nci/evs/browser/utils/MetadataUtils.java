@@ -341,37 +341,35 @@ public class MetadataUtils {
     public String getMetadataValue(String codingSchemeName,
         String version, String urn, String propertyName) {
 
-// Temporary partial workaround for MedDRASecurity OutOfMemoryError exception (LEXEVS JIRA 999):
-/*
-Exception in thread "main" java.lang.OutOfMemoryError: unable to create new nati
-ve thread
-        at java.lang.Thread.start0(Native Method)
-        at java.lang.Thread.start(Thread.java:714)
-        at java.util.Timer.<init>(Timer.java:160)
-        at java.util.Timer.<init>(Timer.java:132)
-        at gov.nih.nci.system.dao.security.MedDRASecurity.resetCache(Unknown Source)
-*/
+		// Temporary partial workaround for MedDRASecurity OutOfMemoryError exception (LEXEVS JIRA 999):
+		/*
+		Exception in thread "main" java.lang.OutOfMemoryError: unable to create new nati
+		ve thread
+				at java.lang.Thread.start0(Native Method)
+				at java.lang.Thread.start(Thread.java:714)
+				at java.util.Timer.<init>(Timer.java:160)
+				at java.util.Timer.<init>(Timer.java:132)
+				at gov.nih.nci.system.dao.security.MedDRASecurity.resetCache(Unknown Source)
+		*/
 
-if (codingSchemeName.compareTo("MedDRA") == 0) {
-	if (propertyName.compareTo("display_name") == 0) {
-	    return codingSchemeName;
-	} else if (propertyName.compareTo("full_name") == 0) {
-		return "Medical Dictionary for Regulatory Activities Terminology";
-	} else if (propertyName.compareTo("term_browser_version") == 0) {
-		return version;
-	}
-}
+		if (codingSchemeName.compareTo("MedDRA") == 0) {
+			if (propertyName.compareTo("display_name") == 0) {
+				return codingSchemeName;
+			} else if (propertyName.compareTo("full_name") == 0) {
+				return "Medical Dictionary for Regulatory Activities Terminology";
+			} else if (propertyName.compareTo("term_browser_version") == 0) {
+				return version;
+			}
+		}
 
         Vector v = getMetadataValues(codingSchemeName, version, urn, propertyName, true);
         if (v == null) {
-            _logger
-                .warn("getMetadataValue returns null??? " + codingSchemeName);
+            //_logger.warn("getMetadataValue returns null??? " + codingSchemeName);
             return "";
         }
         int n = v.size();
         if (n <= 0) {
-            _logger.warn("WARNING: getMetadataValue(\"" + propertyName + "\"): returns no value " + codingSchemeName + " (version: " + version + ")");
-            _logger.warn("  * Note: This metadata might not be loaded.");
+            //_logger.warn("WARNING: getMetadataValue(\"" + propertyName + "\"): returns no value for " + codingSchemeName + " (version: " + version + ")");
             return "";
         }
         if (v.size() == 1)

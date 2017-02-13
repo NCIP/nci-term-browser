@@ -625,9 +625,6 @@ public class DataUtils {
                 return null;
             }
             CodingScheme scheme = lbSvc.resolveCodingScheme(codingScheme, null);
-
-            //System.out.println("(*) getListOfCodingSchemeVersionsUsedInResolution " + scheme.getFormalName());
-
             LexEVSResolvedValueSetService service = new LexEVSResolvedValueSetServiceImpl(lbSvc);
             if (service != null) {
 				AbsoluteCodingSchemeVersionReferenceList acsvr = service.getListOfCodingSchemeVersionsUsedInResolution(scheme);
@@ -638,7 +635,6 @@ public class DataUtils {
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			//System.out.println("getListOfCodingSchemeVersionsUsedInResolution throws exception " + codingScheme);
 		}
 		return null;
 	}
@@ -652,9 +648,6 @@ public class DataUtils {
                 return null;
             }
             CodingScheme scheme = lbSvc.resolveCodingScheme(codingScheme, vt);
-
-            //System.out.println("(*) getListOfCodingSchemeVersionsUsedInResolution " + scheme.getFormalName());
-
             LexEVSResolvedValueSetService service = new LexEVSResolvedValueSetServiceImpl(lbSvc);
             if (service != null) {
 				AbsoluteCodingSchemeVersionReferenceList acsvr = service.getListOfCodingSchemeVersionsUsedInResolution(scheme);
@@ -663,7 +656,6 @@ public class DataUtils {
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			//System.out.println("getListOfCodingSchemeVersionsUsedInResolution throws exception " + codingScheme);
 		}
 		return null;
 	}
@@ -721,12 +713,13 @@ public class DataUtils {
 
         try {
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-            LexEVSResolvedValueSetService service = new LexEVSResolvedValueSetServiceImpl(lbSvc);
+
             if (lbSvc == null) {
                 _logger
-                    .warn("WARNING: Unable to connect to instantiate LexBIGService ???");
+                    .warn("WARNING: Unable to instantiate LexBIGService.");
                 return;
             }
+            LexEVSResolvedValueSetService service = new LexEVSResolvedValueSetServiceImpl(lbSvc);
             CodingSchemeRenderingList csrl = null;
             try {
                 csrl = lbSvc.getSupportedCodingSchemes();
@@ -854,9 +847,7 @@ public class DataUtils {
                         _codingSchemeName2URIHashMap.put(cs.getCodingSchemeName(), cs.getCodingSchemeURI());
 
                         boolean isMapping = isMapping(cs.getCodingSchemeName(), representsVersion);
-                        //_isMappingHashMap.put(cs.getCodingSchemeName(), new Boolean(isMapping));
-
-                        _isMappingHashMap.put(cs.getCodingSchemeName(), Boolean.valueOf(isMapping));
+                         _isMappingHashMap.put(cs.getCodingSchemeName(), Boolean.valueOf(isMapping));
 
                         String[] localnames = cs.getLocalName();
                         for (int m = 0; m < localnames.length; m++) {
@@ -871,14 +862,12 @@ public class DataUtils {
                         NameAndValue[] nvList =
                             new MetadataUtils(lbSvc).getMetadataProperties(cs);
                         if (nvList == null || nvList.length <= 0) {
-                            //_logger.warn("\t*******************************************************************");
-                            _logger.warn("\t*** Warning: Metadata properties are possibly not loaded.       ***");
-                            _logger.warn("\t*** MetadataUtils.getMetadataProperties(cs) returns empty list. ***");
-                            //_logger.warn("\t*******************************************************************");
+                            //_logger.warn("\t*** Warning: Metadata properties are possibly not loaded.       ***");
+                            //_logger.warn("\t*** MetadataUtils.getMetadataProperties(cs) returns empty list. ***");
+                            _logger.warn("\t*** No metadata found for " + cs.getCodingSchemeName() + " (version: " + representsVersion + ")");
                         }
                         //if (cs != null && nvList != null) {
 						if (nvList != null) {
-
                             String css_local_name = css.getLocalName();
                             boolean localname_exist = false;
                             for (int lcv = 0; lcv < localnames.length; lcv++) {
@@ -1021,13 +1010,6 @@ public class DataUtils {
                             _csnv2VersionMap.put(value, representsVersion);
                             _logger.debug("\trepresentsVersion: "
                                 + representsVersion);
-
-                        } else {
-                            _logger
-                                .error("WARNING: MetadataUtils.getMetadataPropertyList returns null??? "
-                                    + formalname);
-                            _logger.error("\t\trepresentsVersion "
-                                + representsVersion);
                         }
 					    }
                     } catch (Exception ex) {
@@ -1041,9 +1023,9 @@ public class DataUtils {
                     }
 
                 } else {
-                    _logger.error("\tWARNING: setCodingSchemeMap discards "
-                        + formalname);
-                    _logger.error("\t\trepresentsVersion " + representsVersion);
+                    _logger.warn("\t"
+                        + formalname + " (version: " + representsVersion + ") is inactive.");
+                    //_logger.error("\t\trepresentsVersion " + representsVersion);
                 }
             }
         } catch (Exception e) {
@@ -1064,7 +1046,6 @@ public class DataUtils {
         _logger.debug("createFormalName2NCImSABHashMap... " );
         _formalName2NCImSABHashMap = createFormalName2NCImSABHashMap();
 
-        //KLO
         if (!_localName2FormalNameHashMap.containsKey(Constants.NCIT)) {
 			_localName2FormalNameHashMap.put(Constants.NCIT, Constants.NCIT_CS_NAME);
 		}
@@ -2080,8 +2061,8 @@ public class DataUtils {
             try {
                 hs = lbSvc.getHistoryService(coding_scheme_name);
             } catch (Exception ex) {
-                _logger.error("WARNING: HistoryService is not available for "
-                    + coding_scheme_name);
+                //_logger.error("WARNING: HistoryService is not available for "
+                //    + coding_scheme_name);
             }
             if (hs != null) {
                 SystemRelease release = hs.getLatestBaseline();

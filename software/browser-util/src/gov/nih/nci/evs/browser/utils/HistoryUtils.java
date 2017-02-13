@@ -86,7 +86,7 @@ public class HistoryUtils {
             if (hs != null)
                 return true;
         } catch (Exception ex) {
-            // _logger.error("Unable to getHistoryService for " +
+            // _logger.error("HistoryService not available for " +
             // codingSchemeName);
         }
         return false;
@@ -195,8 +195,7 @@ public class HistoryUtils {
         try {
             hs = lbSvc.getHistoryService(codingSchemeName);
         } catch (Exception ex) {
-            _logger
-                .error("Unable to getHistoryService for " + codingSchemeName);
+            //_logger.error("Unable to getHistoryService for " + codingSchemeName);
             return null;
         }
 
@@ -219,8 +218,7 @@ public class HistoryUtils {
         try {
             hs = lbSvc.getHistoryService(codingSchemeName);
         } catch (Exception ex) {
-            _logger
-                .error("Unable to getHistoryService for " + codingSchemeName);
+            //_logger.error("Unable to getHistoryService for " + codingSchemeName);
             return null;
         }
 
@@ -242,8 +240,7 @@ public class HistoryUtils {
         try {
             hs = lbSvc.getHistoryService(codingSchemeName);
         } catch (Exception ex) {
-            _logger
-                .error("Unable to getHistoryService for " + codingSchemeName);
+            //_logger.error("Unable to getHistoryService for " + codingSchemeName);
             return null;
         }
 
@@ -313,7 +310,7 @@ public class HistoryUtils {
                     HistoryService hs =
                         lbSvc.getHistoryService(codingSchemeName);
                     if (hs == null) {
-                        _logger.warn("Unable to getHistoryService for "
+                        _logger.warn("HistoryService not available for "
                             + codingSchemeName);
                         return null;
                     }
