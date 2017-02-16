@@ -757,6 +757,9 @@ public class UIUtils {
 		return true;
 	}
 
+	public static Boolean isEven(Integer i) {
+		return (i % 2) == 0;
+	}
 /*
     public static void main(String [] args) {
         boolean testLocal = true;

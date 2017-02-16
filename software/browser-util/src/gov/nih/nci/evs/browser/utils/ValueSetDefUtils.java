@@ -153,7 +153,6 @@ public class ValueSetDefUtils {
 	}
 
     public void exportValueSetDefinitions(String directory_name) {
-
 		String user_dir = System.getProperty("user.dir");
 		String dir_pathname = user_dir + File.separator + directory_name;
 		File dir = new File(dir_pathname);

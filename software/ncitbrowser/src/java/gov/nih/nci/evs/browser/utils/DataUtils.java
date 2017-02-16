@@ -274,7 +274,6 @@ public class DataUtils {
 
     public static ValueSetHierarchy valueSetHierarchy = null;
 
-
     // ==================================================================================
 
     public DataUtils() {
@@ -5578,7 +5577,9 @@ if (lbSvc == null) {
 			supportedSourceStr = "<NOT ASSIGNED>";
 		}
 
-		return name + "|" + uri + "|" + description + "|" + domain + "|" + src_str + "|" + supportedSourceStr;
+		String defaultCodingScheme = vsd.getDefaultCodingScheme();
+
+		return name + "|" + uri + "|" + description + "|" + domain + "|" + src_str + "|" + supportedSourceStr + "|" + defaultCodingScheme;
 	}
 
 
