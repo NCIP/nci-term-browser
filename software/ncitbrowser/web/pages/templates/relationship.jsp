@@ -270,6 +270,8 @@ if (type != null && type.compareTo("all") == 0) {
     <p>
     <%=role_table_str%>
     </p>
+    
+    <p></p>
 
     <%
     propertyData.setRelationshipHashMap(hmap);
