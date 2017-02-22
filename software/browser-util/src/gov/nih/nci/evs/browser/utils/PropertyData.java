@@ -829,6 +829,7 @@ displayLabel2PropertyNameHashMap = addToHashMap(displayLabel2PropertyNameHashMap
 			buf.append("<p></p>");
 			buf.append(expression);
 			buf.append("<p></p>");
+			buf.append("<p></p>");
 			retstr = buf.toString();
 		} else {
 			retstr = generateRelationshipTable(codingScheme, version, code, namespace, rel_type, display_qualifiers, null);
