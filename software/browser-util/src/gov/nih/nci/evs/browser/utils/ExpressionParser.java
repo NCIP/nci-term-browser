@@ -25,7 +25,7 @@ public class ExpressionParser {
 	private HashMap operand_map = null;
 	static HashMap code2NameMap = null;
 	static HashMap name2CodeMap = null;
-	static HashMap roleToValueDomainMap = null;
+	public static HashMap roleToValueDomainMap = null;
 
 	HashMap conceptcode2NameMap = null;
 
@@ -40,6 +40,10 @@ public class ExpressionParser {
 
     private CodeSearchUtils csu = null;
     LexBIGService lbSvc = null;
+
+    public ExpressionParser() {
+
+	}
 
     public ExpressionParser(LexBIGService lbSvc) {
         this.lbSvc = lbSvc;
@@ -143,6 +147,11 @@ public class ExpressionParser {
 			return role_name + "\t" + name;
 		}
 		return restriction;
+	}
+
+	public String getValueDomain(String role_name) {
+		String valueDomain = (String) roleToValueDomainMap.get(role_name);
+		return valueDomain;
 	}
 
     public String findRoleGroup(String expression) {
@@ -598,5 +607,3 @@ public class ExpressionParser {
    */
 }
 
-// Issues:
-// OWL formatted ontologies RoleID???

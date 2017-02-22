@@ -760,6 +760,60 @@ public class UIUtils {
 	public static Boolean isEven(Integer i) {
 		return (i % 2) == 0;
 	}
+
+	public String generateCheckBoxes(Vector labels) {
+        StringBuffer buf = new StringBuffer();
+        buf.append("<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n");
+
+        Boolean is_even = isEven(new Integer(labels.size()));
+        int num_rows = labels.size() / 2;
+        if (!is_even) {
+			num_rows++;
+			labels.add("");
+		}
+
+		String label = null;
+
+		for (int i=0; i<num_rows; i++) {
+			int row_num = i;
+			String label_1 = (String) labels.elementAt(2*row_num);
+			String label_2 = (String) labels.elementAt(2*row_num + 1);
+			buf.append("<tr>\n");
+			buf.append("\t<td class=\"dataCellText\">\n");
+
+			String displayed_label = label_1;
+			int n = displayed_label.indexOf("(*)");
+			if (n != -1) {
+				label = displayed_label.substring(0, n);
+				label = label.trim();
+				displayed_label = label + " (<font size=\"2\" color=\"red\">*</font>)";
+			}
+
+			if (label_1.length() > 0) {
+
+				buf.append("\t<input type=\"checkbox\" id=\"" + label + "\"  name=\"" + label + "\" >" + displayed_label + "</input>\n");
+				buf.append("\t</td>");
+				buf.append("\t<td class=\"dataCellText\">\n");
+		    }
+			displayed_label = label_2;
+			n = displayed_label.indexOf("(*)");
+			if (n != -1) {
+				label = displayed_label.substring(0, n);
+				label = label.trim();
+				displayed_label = label + " (<font size=\"2\" color=\"red\">*</font>)";
+			}
+
+            if (label_2.length() > 0) {
+				buf.append("\t<input type=\"checkbox\" id=\"" + label + "\"  name=\"" + label + "\" >" + displayed_label + "</input>\n");
+				buf.append("\t</td>\n");
+				buf.append("</tr>\n");
+		    }
+		}
+		buf.append("</table>");
+		return buf.toString();
+	}
+
+
 /*
     public static void main(String [] args) {
         boolean testLocal = true;

@@ -149,8 +149,6 @@ public class ValueSetResolver {
 			}
 		}
 		System.out.println("Total run time (ms): " + (System.currentTimeMillis() - ms));
-
-
 	}
 /*
     public static void main(String[] args) {
