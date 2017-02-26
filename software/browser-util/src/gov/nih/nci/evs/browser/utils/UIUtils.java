@@ -813,6 +813,33 @@ public class UIUtils {
 		return buf.toString();
 	}
 
+	public static String createTable(Vector w) {
+        StringBuffer buf = new StringBuffer();
+		buf.append("<table>");
+		for (int i=0; i<w.size(); i++) {
+			int j = i+1;
+			String value = (String) w.elementAt(i);
+			boolean isEven = UIUtils.isEven(i);
+			if (isEven) {
+				buf.append("<tr class=\"dataRowDark\">");
+			} else {
+				buf.append("<tr class=\"dataRowLight\">");
+			}
+			buf.append("<td valign=\"top\">");
+			buf.append(value);
+			buf.append("</td>");
+			buf.append("</tr>");
+		}
+		buf.append("</table>").append("\n");
+		return buf.toString();
+	}
+
+	public static String delimitedString2Table(String line, char c) {
+		String delim = null;
+		delim = "" + c;
+		Vector w = gov.nih.nci.evs.browser.utils.StringUtils.parseData(line, delim);
+		return createTable(w);
+	}
 
 /*
     public static void main(String [] args) {

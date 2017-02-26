@@ -12,10 +12,11 @@
 <%@ page import="javax.faces.context.FacesContext"%>
 <%@ page import="org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference"%>
 <%@ page import="org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator"%>
-<%@ page import="org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList"%>
+<%@ pageimport="org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList"%>
 <%@ page import="org.apache.log4j.*"%>
 
-<%@ page import="org.LexGrid.LexBIG.LexBIGService.*"%>
+<%@ page import="org.LexGrid.LexBIG.LexBIGService.LexBIGService"%>
+<%@ page import="org.lexgrid.resolvedvalueset.LexEVSResolvedValueSetService"%>
 <%@ page import="org.lexgrid.valuesets.LexEVSValueSetDefinitionServices"%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
@@ -70,6 +71,7 @@
    
    
    
+   
    <%!private static Logger _logger = Utils.getJspLogger("value_set_search_results.jsp");%>
    <f:view>
       <!-- Begin Skip Top Navigation -->
@@ -82,9 +84,6 @@
          <div id="main-area_960">
             <%@ include file="/pages/templates/content-header-resolvedvalueset.jsp"%>
             <%
-            
-                
-            
                         String version_selection = (String) request.getSession().getAttribute("version_selection");
                         request.getSession().removeAttribute("version_selection");
                         
@@ -106,25 +105,12 @@
             		String concept_domain = (String) u.elementAt(3);
             		String sources = (String) u.elementAt(4);
             		String supportedsources = (String) u.elementAt(5);
+            		String supportedsource = null;
+            		
             		String defaultCodingScheme = (String) u.elementAt(6);
-            		String supportedsource = supportedsources;
-            		boolean reformat = false;
-            		reformat = true;
-            		Vector codes = new Vector();
-            		/*
-            		if (supportedsources != null) {
-            		     supportedsource = supportedsources;
-            		     int n = supportedsources.indexOf("$");
-			     if (n != -1) {
-			          supportedsource = supportedsources.substring(0, n);
-			     }
-			     if (!DataUtils.isNull(supportedsource)) {
-                                  reformat = true;
-			     }			     
-			}
-			*/
-			
-             		IteratorBeanManager iteratorBeanManager = (IteratorBeanManager) FacesContext
+            		
+
+            		IteratorBeanManager iteratorBeanManager = (IteratorBeanManager) FacesContext
             				.getCurrentInstance().getExternalContext()
             				.getSessionMap().get("iteratorBeanManager");
 
@@ -280,110 +266,102 @@
                         </tr>
                         <tr class="textbody">
                            <td>
+                        <%   
+                        boolean reformat = true;
+                        boolean use_new_format = true;
+                        String rvs_tbl = null;
+                        if (supportedsources != null) {
+                            Vector w = gov.nih.nci.evs.browser.utils.StringUtils.parseData(supportedsources, "$");
+                            supportedsource = (String) w.elementAt(0);
+                        }
+                        if (supportedsource == null || supportedsource.compareTo("null") == 0) {
+                            reformat = false;
+                        }
+                        if (reformat) {
+                                Vector codes = new Vector();
+				List list = iteratorBean.getData(istart, iend);
+				for (int k = 0; k < list.size(); k++) {
+					Object obj = list.get(k);
+					ResolvedConceptReference ref = (ResolvedConceptReference) obj;
+					codes.add(ref.getConceptCode());
+				}  
+
+				LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+				LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+				ValueSetFormatter formatter = new ValueSetFormatter(lbSvc, vsd_service);
+				Vector fields = formatter.getDefaultFields();
+				//public String generate(String vsd_uri, String version, String source, Vector fields, Vector codes, int maxReturn) {
+				rvs_tbl = formatter.generate(defaultCodingScheme, null, supportedsource, fields, codes, codes.size());
+			} else if (use_new_format) {
+                                Vector codes = new Vector();
+				List list = iteratorBean.getData(istart, iend);
+				for (int k = 0; k < list.size(); k++) {
+					Object obj = list.get(k);
+					ResolvedConceptReference ref = (ResolvedConceptReference) obj;
+					codes.add(ref.getConceptCode());
+				}  
+
+				LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+				LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+				ValueSetFormatter formatter = new ValueSetFormatter(lbSvc, vsd_service);
+				Vector fields = formatter.getDefaultFields(false);
+				//public String generate(String vsd_uri, String version, String source, Vector fields, Vector codes, int maxReturn) {
+				rvs_tbl = formatter.generate(defaultCodingScheme, null, supportedsource, fields, codes, codes.size());			
+			}
+			if (rvs_tbl != null) {
+			%>	
+			   <%=rvs_tbl%>
+			<%   
+			} else {
+                        %>
                               <table class="datatable_960" summary="Data Table" cellpadding="3" cellspacing="0" border="0" width="100%">
-                              
-                              <%
-                              Vector concept_vec = new Vector();
-                              if (!reformat) {
-                              
-					List list = iteratorBean.getData(istart, iend);
-					for (int k = 0; k < list.size(); k++) {
-						Object obj = list.get(k);
-						ResolvedConceptReference ref = null;
-						if (obj == null) {
-							_logger.warn("rcr == null???");
-						} else {
-							ref = (ResolvedConceptReference) obj;
-						}
-
-						String entityDescription = "<NOT ASSIGNED>";
-						if (ref.getEntityDescription() != null) {
-							entityDescription = ref.getEntityDescription()
-									.getContent();
-						}
-
-						String t = ref.getConceptCode() + "|"
-								+ entityDescription + "|"
-								+ ref.getCodingSchemeName() + "|"
-								+ ref.getCodeNamespace() + "|"
-								+ ref.getCodingSchemeVersion();
-						concept_vec.add(t);                                 							
-					}                              
-                              %>
-                              
                                  <th class="dataTableHeader" scope="col" align="left">Code</th>
                                  <th class="dataTableHeader" scope="col" align="left">Name</th>
                                  <th class="dataTableHeader" scope="col" align="left">Vocabulary</th>
                                  <th class="dataTableHeader" scope="col" align="left">Namespace</th>
-                                 
-
-                              <%
-                              } else {
-                                        codes = new Vector();
- 					List list = iteratorBean.getData(istart, iend);
-					for (int k = 0; k < list.size(); k++) {
-						Object obj = list.get(k);
-						ResolvedConceptReference ref = (ResolvedConceptReference) obj;
-						codes.add(ref.getConceptCode());
-					}  
-					
-					LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-					LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
-					ValueSetFormatter formatter = new ValueSetFormatter(lbSvc, vsd_service);
-					concept_vec = formatter.run(defaultCodingScheme, null, supportedsource, codes, codes.size());
-                             
-                              
-                              %>
-                              
-                                 <th class="dataTableHeader" scope="col" align="left">Code</th>
-                                 <th class="dataTableHeader" scope="col" align="left"><%=supportedsource%> Name</th>
-                                 <th class="dataTableHeader" scope="col" align="left">NCI Name</th>
-                                 <th class="dataTableHeader" scope="col" align="left">NCI Synonyms</th>
-                                 <th class="dataTableHeader" scope="col" align="left">NCI Definition</th>
-                             
-                              <%
-                              } 
-                              %>                             
-                              
-                              
                                  <%
+                                 	Vector concept_vec = new Vector();
+                                 				List list = iteratorBean.getData(istart, iend);
+                                 				for (int k = 0; k < list.size(); k++) {
+                                 					Object obj = list.get(k);
+                                 					ResolvedConceptReference ref = null;
+                                 					if (obj == null) {
+                                 						_logger.warn("rcr == null???");
+                                 					} else {
+                                 						ref = (ResolvedConceptReference) obj;
+                                 					}
 
-			String code = null;
-			String conceptname = null;
-			String coding_scheme = null;
-			String namespace = null;
-			String vsn = null;
-			String coding_scheme_nm = null;
-			
-			String source_name = null;
-			String nci_name = null;
-			String nci_synonyms = null;
-			String nci_def = null;
-                                 				
-			for (int i = 0; i < concept_vec.size(); i++) {
-				String concept_str = (String) concept_vec.elementAt(i);
-				u = StringUtils.parseData(concept_str);
-				
-				if (!reformat) {
-					code = (String) u.elementAt(0);
-					conceptname = (String) u.elementAt(1);
-					coding_scheme = (String) u.elementAt(2);
-					namespace = (String) u.elementAt(3);
+                                 					String entityDescription = "<NOT ASSIGNED>";
+                                 					if (ref.getEntityDescription() != null) {
+                                 						entityDescription = ref.getEntityDescription()
+                                 								.getContent();
+                                 					}
 
-					vsn = (String) u.elementAt(4);
-					coding_scheme_nm = namespace;
-					vsn = DataUtils.getProductionVersion(namespace);
-				} else {
-					code = (String) u.elementAt(0);
-					source_name = (String) u.elementAt(1);
-					nci_name = (String) u.elementAt(2);
-					nci_synonyms = (String) u.elementAt(3);
-					namespace = (String) u.elementAt(4);
-					nci_def = (String) u.elementAt(5);
-				}
+                                 					String t = ref.getConceptCode() + "|"
+                                 							+ entityDescription + "|"
+                                 							+ ref.getCodingSchemeName() + "|"
+                                 							+ ref.getCodeNamespace() + "|"
+                                 							+ ref.getCodingSchemeVersion();
+                            							
+                                 					concept_vec.add(t);                                 							
+ 
+                                 				}
+                                 				for (int i = 0; i < concept_vec.size(); i++) {
+                                 					String concept_str = (String) concept_vec
+                                 							.elementAt(i);
+                                 					u = StringUtils.parseData(concept_str);
+                                 					String code = (String) u.elementAt(0);
+                                 					String conceptname = (String) u.elementAt(1);
+                                 					String coding_scheme = (String) u.elementAt(2);
+                                 					String namespace = (String) u.elementAt(3);
+                                 					
+                                 					String vsn = (String) u.elementAt(4);
+                                 					String coding_scheme_nm = namespace;
+                                 					vsn = DataUtils.getProductionVersion(namespace);
 
 
-                                if (i % 2 == 0) {
+
+                                 					if (i % 2 == 0) {
                                  %>
                                  <tr class="dataRowDark">
                                     <%
@@ -406,56 +384,19 @@
                                         	}
                                        %>
                                     </td>
-                                    
-                                    <%
-                                    if (!reformat) {
-                                    %>
-                                    
                                     <td class="dataCellText"><%=DataUtils.encodeTerm(conceptname)%></td>
                                     <td class="dataCellText"><%=coding_scheme%></td>
                                     <td class="dataCellText"><%=namespace%></td>
-                                    
-                                    <%
-                                    } else {
-                                    %>  
-                                    
-                                    <td class="dataCellText"><%=DataUtils.encodeTerm(source_name)%></td>
-                                    <td class="dataCellText"><%=DataUtils.encodeTerm(nci_name)%></td>
-                                    <!--
-                                    <td class="dataCellText"><%=nci_synonyms%></td>
-                                    -->
-                                    <td class="dataCellText">
-                                    
-                                    <%       
-				    Vector u2 = gov.nih.nci.evs.browser.utils.StringUtils.parseData(nci_synonyms, "$");
-				    %>
-				    <table>
-                                  <%
-				  for (int j=0; j<u2.size(); j++) {
-					  String s = (String) u2.elementAt(j);
-			          %>
-			               <tr><td class="dataCellText" scope="row"><%=s%></td></tr>
-                                  <%
-				  }
-				  %>
-				  </table>
-				  </td>                                 
-                                    
-                                    
-                                    
-                                    
-                                    <td class="dataCellText"><%=nci_def%></td>
-                                   
-                                    <%
-                                    }
-                                    %>                                    
-                                    
-                                    
                                  <%
-                                 }
+                                 	}
                                  %>
                                  </tr>
                               </table>
+
+			     <%
+				}
+			     %>
+
                            </td>
                         </tr>
                      </table>

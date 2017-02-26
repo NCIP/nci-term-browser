@@ -122,6 +122,7 @@ public class Constants {
     public static final String TYPE_SUBCONCEPT = "type_subconcept";
     public static final String TYPE_INVERSE_ROLE = "type_inverse_role";
     public static final String TYPE_INVERSE_ASSOCIATION = "type_inverse_association";
+    public static final String TYPE_LOGICAL_DEFINITION = "type_logical_definition";
 
     public static final int  STANDARD_VIEW = 1;
     public static final int  TERMINOLOGY_VIEW = 2;

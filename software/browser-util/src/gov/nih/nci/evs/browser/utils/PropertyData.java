@@ -802,13 +802,22 @@ displayLabel2PropertyNameHashMap = addToHashMap(displayLabel2PropertyNameHashMap
 		return generateRelationshipTable(codingScheme, version, code, namespace, rel_type, false);
 	}
 
+	public boolean isNCIT(String codingScheme) {
+		if (codingScheme == null) return false;
+		if (codingScheme.compareTo(Constants.NCI_THESAURUS) == 0 ||
+            codingScheme.compareTo(Constants.NCIT_CS_NAME) == 0) {
+			return true;
+		}
+		return false;
+	}
+
+
     public String generateRelationshipTable(String codingScheme, String version, String code, String namespace, String rel_type,
         boolean display_qualifiers) {
         boolean display_equiv_expression = false;
         String equivalanceClass = null;
         String retstr = null;
-        if ((codingScheme.compareTo(Constants.NCI_THESAURUS) == 0 ||
-            codingScheme.compareTo(Constants.NCIT_CS_NAME) == 0) && rel_type.compareTo(Constants.TYPE_ROLE) == 0) {
+        if (isNCIT(codingScheme) && rel_type.compareTo(Constants.TYPE_ROLE) == 0) {
 			try {
 				equivalanceClass = new CodingSchemeDataUtils(lbSvc).getEquivalenceExpression(codingScheme, version, code);
 				if (equivalanceClass != null) {
@@ -818,22 +827,34 @@ displayLabel2PropertyNameHashMap = addToHashMap(displayLabel2PropertyNameHashMap
 				ex.printStackTrace();
 			}
 		}
+
+		StringBuffer buf = new StringBuffer();
 		if (display_equiv_expression) {
 			String expression = new ExpressionParser(lbSvc).infixExpression2Text(codingScheme, version, equivalanceClass);
-			boolean skipParents = true;
-			expression = new ExpressionFormatter().reformat(codingScheme, version, expression, skipParents);
+			expression = new ExpressionFormatter().reformat(expression);
+			/*
 			StringBuffer buf = new StringBuffer();
 			String defaultLabel = null;
 			String description = new UIUtils().getRelationshipTableLabel(defaultLabel, rel_type, false);
 			buf.append(description);
+
 			buf.append("<p></p>");
 			buf.append(expression);
-			buf.append("<p></p><p>");
+			buf.append("<p></p>");
 			retstr = buf.toString();
-		} else {
-			retstr = generateRelationshipTable(codingScheme, version, code, namespace, rel_type, display_qualifiers, null);
+			*/
+			buf.append(expression);
 		}
-		return retstr;
+		if (isNCIT(codingScheme)) {
+			System.out.println("formatOutboundRoleTable...");
+			RelationshipTabFormatter formatter = new RelationshipTabFormatter(lbSvc);
+			String formattedTable = formatter.formatOutboundRoleTable(codingScheme, version, code, codingScheme);
+			buf.append("<p></p>");
+			buf.append(formattedTable);
+			buf.append("<p></p>");
+			return buf.toString();
+		}
+		return generateRelationshipTable(codingScheme, version, code, namespace, rel_type, display_qualifiers, null);
 	}
 
     public String generateRelationshipTable(String codingScheme, String version, String code, String namespace, String rel_type,
