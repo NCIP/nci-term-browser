@@ -383,7 +383,6 @@ public class RelationshipTabFormatter {
 		key_vec = gov.nih.nci.evs.browser.utils.SortUtils.quickSort(key_vec);
 		for (int i=0; i<key_vec.size(); i++) {
 			String key = (String) key_vec.elementAt(i);
-			System.out.println(key);
 			buf.append("<tr class=\"dataRowDark\">");
 			buf.append("<td class=\"dataCellText\">");
 			buf.append(indent_half + key);
