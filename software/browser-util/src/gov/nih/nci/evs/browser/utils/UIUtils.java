@@ -500,6 +500,13 @@ public class UIUtils {
 			if (isEmpty) {
 				buf.append(" ").append(NONE).append("\n");
 			}
+		} else if (type.compareTo(Constants.TYPE_LOGICAL_DEFINITION) == 0) {
+			buf.append("<b>Logical Definition</b>,&nbsp;showing the parent concepts and direct role assertions that define this concept:");
+			if (isEmpty) {
+				buf.append(" ").append(NONE).append("\n");
+			} else {
+				buf.append("<br/>").append("\n");
+			}
 		}
 		String label = buf.toString();
 		if (label.length() == 0) {

@@ -212,6 +212,28 @@ public class RelationshipTabFormatter {
 		return buf.toString();
 	}
 
+    public HashMap getInboundRoleTable(String scheme_curr, String version_curr, String code_curr, String ns_curr) {
+		boolean superconcept = false;
+		boolean subconcept = false;
+		boolean role = false;
+		boolean inverse_role = true;
+		boolean association = false;
+		boolean inverse_association = false;
+
+        List options = relUtils.createOptionList(
+			                     superconcept,
+                                 subconcept,
+                                 role,
+                                 inverse_role,
+                                 association,
+                                 inverse_association);
+
+        HashMap hmap = relUtils.getRelationshipHashMap(scheme_curr, version_curr, code_curr, ns_curr, true, options);
+        ArrayList roles = (ArrayList) hmap.get(Constants.TYPE_ROLE);
+        return getOutboundRoleTable(roles);
+	}
+
+
     public HashMap getOutboundRoleTable(String scheme_curr, String version_curr, String code_curr, String ns_curr) {
 		boolean superconcept = false;
 		boolean subconcept = false;
@@ -302,6 +324,11 @@ public class RelationshipTabFormatter {
 				buf.append(" ").append(NONE).append("\n");
 			} else {
 				buf.append("<br/>").append("\n");
+			}
+		} else if (type.compareTo(Constants.TYPE_INVERSE_ROLE) == 0) {
+			buf.append("<b>Incoming Role Relationships</b>&nbsp;pointing from other concepts to the current concept:");
+			if (isEmpty) {
+				buf.append(" ").append(NONE).append("\n");
 			}
 		}
 		return buf.toString();
@@ -412,7 +439,101 @@ public class RelationshipTabFormatter {
 		}
 		buf.append("</table>");
 		return buf.toString();
-   }
+    }
+
+    public String formatInboundRoleTable(String scheme_curr, String version_curr, String code_curr, String ns_curr) {
+		HashMap hmap = getInboundRoleTable(scheme_curr, version_curr, code_curr, ns_curr);
+		return formatInboundRoleTable(hmap);
+	}
+
+    public String formatInboundRoleTable(ArrayList roles) {
+		HashMap hmap = getInboundRoleTable(roles);
+		return formatInboundRoleTable(hmap);
+	}
+
+    public HashMap getInboundRoleTable(ArrayList roles) {
+		boolean restrictToConcept = true;
+		ExpressionParser parser = new ExpressionParser();
+        Vector v = new Vector();
+        HashMap domain2RoleDataMap = new HashMap();
+        for (int i=0; i<roles.size(); i++) {
+			String r = (String) roles.get(i);
+			Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(r);
+			String roleName = (String) u.elementAt(0);
+			String domain = parser.getDomain(roleName);
+			Vector w = new Vector();
+			if (domain2RoleDataMap.containsKey(domain)) {
+				w = (Vector) domain2RoleDataMap.get(domain);
+			}
+			if (!w.contains(r)) {
+				w.add(r);
+			}
+			domain2RoleDataMap.put(domain, w);
+		}
+        return domain2RoleDataMap;
+	}
+
+    public String formatInboundRoleTable(HashMap hmap) {
+		StringBuffer buf = new StringBuffer();
+        Vector key_vec = new Vector();
+		Iterator it = hmap.keySet().iterator();
+		while (it.hasNext()) {
+			String key = (String) it.next();
+			key_vec.add(key);
+		}
+		boolean isEmpty = false;
+		if (key_vec.size() == 0) {
+			isEmpty = true;
+		}
+		String label = getRelationshipTableLabel(Constants.TYPE_INVERSE_ROLE, isEmpty);
+        buf.append(label);
+        if (isEmpty) {
+			return buf.toString();
+		}
+
+        Vector columnHeadings = new Vector();
+        columnHeadings.add("Value (qualifiers indented underneath)");
+        columnHeadings.add("Relationship");
+
+        Vector columnWidths = new Vector();
+        columnWidths.add(new Integer(70));
+        columnWidths.add(new Integer(30));
+
+        String table = createTable(columnHeadings, columnWidths);
+        buf.append(table);
+
+		key_vec = gov.nih.nci.evs.browser.utils.SortUtils.quickSort(key_vec);
+		for (int i=0; i<key_vec.size(); i++) {
+			String key = (String) key_vec.elementAt(i);
+			buf.append("<tr class=\"dataRowDark\">");
+			buf.append("<td class=\"dataCellText\">");
+			buf.append(indent_half + key);
+			buf.append("</td><td>" + indent + "</td></tr>");
+			Vector w = (Vector) hmap.get(key);
+			w = gov.nih.nci.evs.browser.utils.SortUtils.quickSort(w);
+			for (int k=0; k<w.size(); k++) {
+				String s = (String) w.elementAt(k);
+				Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(s);
+				String roleName = (String) u.elementAt(0);
+				String roleTargetName = (String) u.elementAt(1);
+				String roleTargetCode = (String) u.elementAt(2);
+				String codingScheme = (String) u.elementAt(3);
+				String namespace = (String) u.elementAt(4);
+				String hyperlink = createHyperlink(codingScheme, namespace, roleTargetCode, roleTargetName);
+
+				buf.append("<tr class=\"dataRowLight\">");
+				buf.append("<td class=\"dataCellText\" scope=\"row\" valign=\"top\">");
+				buf.append(indent).append(hyperlink);
+                buf.append("</td>");
+				buf.append("<td class=\"dataCellText\" scope=\"row\" valign=\"top\">");
+				buf.append(roleName);
+				buf.append("</td>");
+				buf.append("</tr>");
+			}
+		}
+		buf.append("</table>");
+		return buf.toString();
+	}
 
 /*
    public static void main(String[] args) {

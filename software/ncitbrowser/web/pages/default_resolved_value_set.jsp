@@ -219,12 +219,10 @@
                            <td>
                               <table border="0" width="900" >
                                  <tr>
-                                    <td align="left" class="texttitle-blue">Value Set:&nbsp;<%=vsd_uri%></td>
-                                    
+                                    <td align="left" class="texttitle-blue">Value Set:&nbsp;<%=vsd_uri%>
 &nbsp;
 <a href="/ncitbrowser/ajax?action=download&vsd_uri=<%=vsd_uri%>"><img src="/ncitbrowser/images/released_file.gif" alt="Value Set Released Files (FTP Server)" border="0" tabindex="2"></a>
-
-                                    
+</td>
                                     <td align="right">
                                        <h:commandLink
                                           value="Export XML"

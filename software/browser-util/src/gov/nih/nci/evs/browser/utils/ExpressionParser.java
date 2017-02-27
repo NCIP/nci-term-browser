@@ -26,6 +26,7 @@ public class ExpressionParser {
 	static HashMap code2NameMap = null;
 	static HashMap name2CodeMap = null;
 	public static HashMap roleToValueDomainMap = null;
+	public static HashMap roleToDomainMap = null;
 
 	HashMap conceptcode2NameMap = null;
 
@@ -75,6 +76,17 @@ public class ExpressionParser {
 			String role_name = (String) u.elementAt(1);
 			String role_range = (String) u.elementAt(3);
 			roleToValueDomainMap.put(role_name, role_range);
+		}
+
+//		"R156|Allele_Absent_From_Wild-type_Chromosomal_Location|Role_Has_Range|Anatomic Structure, System, or Substance|Role_Has_Domain|Gene",
+
+        roleToDomainMap = new HashMap();
+        for (int i=0; i<role_data.length; i++) {
+			String line = (String) role_data[i];
+			Vector u = StringUtils.parseData(line);
+			String role_name = (String) u.elementAt(1);
+			String role_domain = (String) u.elementAt(5);
+			roleToDomainMap.put(role_name, role_domain);
 		}
  	}
 
@@ -152,6 +164,12 @@ public class ExpressionParser {
 	public String getValueDomain(String role_name) {
 		String valueDomain = (String) roleToValueDomainMap.get(role_name);
 		return valueDomain;
+	}
+
+
+	public String getDomain(String role_name) {
+		String domain = (String) roleToDomainMap.get(role_name);
+		return domain;
 	}
 
     public String findRoleGroup(String expression) {

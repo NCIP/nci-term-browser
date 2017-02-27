@@ -848,6 +848,19 @@ displayLabel2PropertyNameHashMap = addToHashMap(displayLabel2PropertyNameHashMap
 			buf.append(formattedTable);
 			buf.append("<p></p>");
 			return buf.toString();
+		} else if (isNCIT(codingScheme) && rel_type.compareTo(Constants.TYPE_INVERSE_ROLE) == 0) {
+			ArrayList roles = null;
+			String formattedTable = null;
+			if (relationshipHashMap != null) {
+				roles = (ArrayList) relationshipHashMap.get(Constants.TYPE_INVERSE_ROLE);
+				formattedTable = formatter.formatInboundRoleTable(roles);
+			} else {
+			    formattedTable = formatter.formatInboundRoleTable(codingScheme, version, code, codingScheme);
+			}
+			buf.append("<p></p>");
+			buf.append(formattedTable);
+			buf.append("<p></p>");
+			return buf.toString();
 		}
 		return generateRelationshipTable(codingScheme, version, code, namespace, rel_type, display_qualifiers, null);
 	}
