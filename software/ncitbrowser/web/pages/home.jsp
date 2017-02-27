@@ -38,6 +38,8 @@
 <%
 
 Boolean ncit_available = DataUtils.isNCITAvailable();
+System.out.println("ncit_available? " + ncit_available);
+
 
 if (ncit_available == null || !ncit_available.equals(Boolean.TRUE)) {
     String error_msg = "WARNING: " + Constants.NCIT_NOT_AVAILABLE;
@@ -52,6 +54,7 @@ String vocabulary_version = HTTPUtils.cleanXSS((String) request.getParameter("ve
 if (vocabulary_version != null) {
 	request.setAttribute("version", vocabulary_version);
 }
+
 %>
 <f:view>
   <!-- Begin Skip Top Navigation -->

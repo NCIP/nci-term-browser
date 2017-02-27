@@ -29,6 +29,10 @@ public class RelationshipTabFormatter {
     LexBIGService lbSvc = null;
     RelationshipUtils relUtils = null;
 
+    public RelationshipTabFormatter() {
+
+	}
+
     public RelationshipTabFormatter(LexBIGService lbSvc) {
 		this.lbSvc = lbSvc;
 		this.relUtils = new RelationshipUtils(lbSvc);
@@ -271,15 +275,29 @@ public class RelationshipTabFormatter {
 		String NONE = "<i>(none)</i>";
 		StringBuffer buf = new StringBuffer();
 		if (type.compareTo(Constants.TYPE_ROLE) == 0) {
-			buf.append("<b>Role Relationships</b>&nbsp;pointing from the current concept to other concepts:");
+			buf.append("<b>Role Relationships</b>&nbsp;asserted or inherited, pointing from the current concept to other concepts:");
 			if (isEmpty) {
 				buf.append(" ").append(NONE).append("\n");
 			} else {
 				buf.append("<br/>").append("\n");
 				buf.append("<i>(True for the current concept.)</i>").append("\n");
 			}
-		} if (type.compareTo(Constants.TYPE_LOGICAL_DEFINITION) == 0) {
-			buf.append("<b>Logical Definition</b>:");
+		} else if (type.compareTo(Constants.TYPE_LOGICAL_DEFINITION) == 0) {
+			buf.append("<b>Logical Definition</b>,&nbsp;showing the parent concepts and direct role assertions that define this concept:");
+			if (isEmpty) {
+				buf.append(" ").append(NONE).append("\n");
+			} else {
+				buf.append("<br/>").append("\n");
+			}
+		} else if (type.compareTo(Constants.TYPE_SUPERCONCEPT) == 0) {
+			buf.append("<b>Parent Concepts</b>:");
+			if (isEmpty) {
+				buf.append(" ").append(NONE).append("\n");
+			} else {
+				buf.append("<br/>").append("\n");
+			}
+		} else if (type.compareTo(Constants.TYPE_SUBCONCEPT) == 0) {
+			buf.append("<b>Child Concepts</b>:");
 			if (isEmpty) {
 				buf.append(" ").append(NONE).append("\n");
 			} else {
@@ -299,10 +317,59 @@ public class RelationshipTabFormatter {
 		return formatOutboundRoleTable(hmap);
 	}
 
+    public String formatSingleColumnTable(String scheme, String type, ArrayList list) {
+		StringBuffer buf = new StringBuffer();
+		boolean isEmpty = false;
+		if (list == null || list.size() == 0) {
+			isEmpty = true;
+		}
+		String label = getRelationshipTableLabel(type, isEmpty);
+        buf.append(label);
+        if (isEmpty) {
+			return buf.toString();
+		}
+		buf.append("<table class=\"datatable_960\" border=\"0\" width=\"100%\">");
+		for (int i=0; i<list.size(); i++) {
+			String line = (String) list.get(i);
+			Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(line);
+			String name = (String) u.elementAt(0);
+			String code = (String) u.elementAt(1);
+			String namespace = (String) u.elementAt(2);
+			Boolean bool_obj = UIUtils.isEven(new Integer(i));
+			if (bool_obj.equals(Boolean.TRUE)) {
+				buf.append("<tr class=\"dataRowDark\">");
+			} else {
+				buf.append("<tr class=\"dataRowLight\">");
+			}
+			buf.append("<td class=\"dataCellText\">");
+			String hyperlink = createHyperlink(scheme, namespace, code, name);
+			buf.append(indent_half + hyperlink);
+			buf.append("</td>");
+			buf.append("</tr>");
+		}
+		buf.append("</table>");
+        return buf.toString();
+	}
+
+
     public String formatOutboundRoleTable(HashMap hmap) {
 		StringBuffer buf = new StringBuffer();
-		String label = getRelationshipTableLabel(Constants.TYPE_ROLE, false);
+        Vector key_vec = new Vector();
+		Iterator it = hmap.keySet().iterator();
+		while (it.hasNext()) {
+			String key = (String) it.next();
+			key_vec.add(key);
+		}
+		boolean isEmpty = false;
+		if (key_vec.size() == 0) {
+			isEmpty = true;
+		}
+		String label = getRelationshipTableLabel(Constants.TYPE_ROLE, isEmpty);
         buf.append(label);
+        if (isEmpty) {
+			return buf.toString();
+		}
+
         Vector columnHeadings = new Vector();
         columnHeadings.add("Relationship");
 		columnHeadings.add("Value (qualifiers indented underneath)");
@@ -313,12 +380,6 @@ public class RelationshipTabFormatter {
         String table = createTable(columnHeadings, columnWidths);
         buf.append(table);
 
-        Vector key_vec = new Vector();
-		Iterator it = hmap.keySet().iterator();
-		while (it.hasNext()) {
-			String key = (String) it.next();
-			key_vec.add(key);
-		}
 		key_vec = gov.nih.nci.evs.browser.utils.SortUtils.quickSort(key_vec);
 		for (int i=0; i<key_vec.size(); i++) {
 			String key = (String) key_vec.elementAt(i);

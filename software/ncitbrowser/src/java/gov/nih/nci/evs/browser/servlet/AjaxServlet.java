@@ -3850,24 +3850,7 @@ out.flush();
 			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             CodingSchemeDataUtils codingSchemeDataUtils = new CodingSchemeDataUtils(lbSvc);
 			ResolvedConceptReferencesIterator itr = codingSchemeDataUtils.resolveCodingScheme(vsd_uri, null, false);
-			/*
-			try {
-				int numberRemaining = itr.numberRemaining();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
 
-        //long time = System.currentTimeMillis();
-		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
-		ResolvedValueSetDefinition rvsd = null;
-		int lcv = 0;
-		try {
-			ValueSetDefinition vsd = DataUtils.findValueSetDefinitionByURI(vsd_uri);
-			rvsd = vsd_service.resolveValueSetDefinition(vsd, csvList, null, null);
-			if(rvsd != null) {
-				ResolvedConceptReferencesIterator itr = rvsd.getResolvedConceptReferenceIterator();
-				//ResolvedConceptReferencesIterator itr = DataUtils.resolveCodingScheme(vsd_uri, null, false);
-*/
 			IteratorBeanManager iteratorBeanManager = null;
 
 			if (FacesContext.getCurrentInstance() != null &&
@@ -3897,7 +3880,12 @@ out.flush();
 			request.getSession().setAttribute("resolved_vs_key", key);
 
 			try {
-				String nextJSP = "/pages/resolved_value_set.jsf";
+				String defaultCodingScheme = DataUtils.getValueSetDefaultCodingScheme(vsd_uri);
+                String nextJSP = "/pages/resolved_value_set.jsf";
+				if (!DataUtils.isNCIT(defaultCodingScheme)) {
+					//nextJSP = "/pages/default_resolved_value_set.jsf?vsd_uri="+vsd_uri;
+					nextJSP = "/pages/default_resolved_value_set.jsf";
+				}
 				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
 				dispatcher.forward(request,response);
 				return;
@@ -3905,9 +3893,9 @@ out.flush();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-			//return "resolved_value_set";
+
 			return;
-		    //}
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -3915,8 +3903,11 @@ out.flush();
 		String msg = "Unable to resolve the value set " + vsd_uri;
 		request.getSession().setAttribute("message", msg);
         try {
-			//String nextJSP = "/pages/resolved_value_set.jsf";
 			String nextJSP = "/pages/resolved_value_set.jsf?vsd_uri="+vsd_uri;
+            String defaultCodingScheme = DataUtils.getValueSetDefaultCodingScheme(vsd_uri);
+            if (!DataUtils.isNCIT(defaultCodingScheme)) {
+				nextJSP = "/pages/default_resolved_value_set.jsf?vsd_uri="+vsd_uri;
+			}
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
 			dispatcher.forward(request,response);
 			return;

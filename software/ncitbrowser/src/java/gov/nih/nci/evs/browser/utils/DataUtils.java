@@ -7025,7 +7025,12 @@ if (lbSvc == null) {
         return SortUtils.quickSort(v);
     }
 
-
+    public static String getValueSetDefaultCodingScheme(String vsd_uri) {
+		String metadata = getValueSetDefinitionMetadata(findValueSetDefinitionByURI(vsd_uri));
+		Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(metadata);
+		String defaultCodingScheme = (String) u.elementAt(6);
+		return defaultCodingScheme;
+	}
 
     public static void main(String[] args) {
         String scheme = "NCI Thesaurus";

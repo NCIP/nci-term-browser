@@ -115,11 +115,13 @@ public class PropertyData
 
     private HashMap relationshipHashMap = null;
     private String owl_role_quantifiers = null;
+    RelationshipTabFormatter formatter = null;//new RelationshipTabFormatter(lbSvc);
 
 
 // Constructor
 	public PropertyData(LexBIGService lbSvc, String dictionary, String version) {
         this.lbSvc = lbSvc;
+        formatter = new RelationshipTabFormatter(lbSvc);
         this.dictionary = dictionary;
         this.version = version;
 
@@ -812,8 +814,7 @@ displayLabel2PropertyNameHashMap = addToHashMap(displayLabel2PropertyNameHashMap
 	}
 
 
-    public String generateRelationshipTable(String codingScheme, String version, String code, String namespace, String rel_type,
-        boolean display_qualifiers) {
+    public String generateRelationshipTable(String codingScheme, String version, String code, String namespace, String rel_type, boolean display_qualifiers) {
         boolean display_equiv_expression = false;
         String equivalanceClass = null;
         String retstr = null;
@@ -832,23 +833,17 @@ displayLabel2PropertyNameHashMap = addToHashMap(displayLabel2PropertyNameHashMap
 		if (display_equiv_expression) {
 			String expression = new ExpressionParser(lbSvc).infixExpression2Text(codingScheme, version, equivalanceClass);
 			expression = new ExpressionFormatter().reformat(expression);
-			/*
-			StringBuffer buf = new StringBuffer();
-			String defaultLabel = null;
-			String description = new UIUtils().getRelationshipTableLabel(defaultLabel, rel_type, false);
-			buf.append(description);
-
-			buf.append("<p></p>");
-			buf.append(expression);
-			buf.append("<p></p>");
-			retstr = buf.toString();
-			*/
 			buf.append(expression);
 		}
-		if (isNCIT(codingScheme)) {
-			System.out.println("formatOutboundRoleTable...");
-			RelationshipTabFormatter formatter = new RelationshipTabFormatter(lbSvc);
-			String formattedTable = formatter.formatOutboundRoleTable(codingScheme, version, code, codingScheme);
+		if (isNCIT(codingScheme) && rel_type.compareTo(Constants.TYPE_ROLE) == 0) {
+			ArrayList roles = null;
+			String formattedTable = null;
+			if (relationshipHashMap != null) {
+				roles = (ArrayList) relationshipHashMap.get(Constants.TYPE_ROLE);
+				formattedTable = formatter.formatOutboundRoleTable(roles);
+			} else {
+			    formattedTable = formatter.formatOutboundRoleTable(codingScheme, version, code, codingScheme);
+			}
 			buf.append("<p></p>");
 			buf.append(formattedTable);
 			buf.append("<p></p>");

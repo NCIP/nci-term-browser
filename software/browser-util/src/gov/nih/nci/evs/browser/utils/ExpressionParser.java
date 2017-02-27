@@ -475,8 +475,9 @@ public class ExpressionParser {
 
 
 	public Vector getParentClasses(String line) {
-		Vector v = new Vector();
 		Vector w = new Vector();
+		if (line == null) return w;
+		Vector v = new Vector();
 		int n = line.indexOf("(");
 		if (n != -1) {
 			String s = line.substring(0, n);
