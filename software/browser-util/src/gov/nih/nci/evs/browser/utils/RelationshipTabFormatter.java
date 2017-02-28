@@ -337,7 +337,7 @@ public class RelationshipTabFormatter {
 				buf.append("<br/>").append("\n");
 			}
 		} else if (type.compareTo(Constants.TYPE_INVERSE_ROLE) == 0) {
-			buf.append("<b>Incoming Role Relationships</b>&nbsp;pointing from other concepts to the current concept:");
+			buf.append("<b>Incoming Role Relationships</b>,&nbsp;asserted or inherited, pointing from other concepts to the current concept:");
 			if (isEmpty) {
 				buf.append(" ").append(NONE).append("\n");
 			}
