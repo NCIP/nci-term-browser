@@ -128,66 +128,7 @@ public class ExpressionFormatter {
 		return w;
 	}
 
-/*
-	public String reformat(String expression, boolean skipParents) {
-		boolean start = true;
-		if (skipParents) {
-			start = false;
-		}
-        StringBuffer buf = new StringBuffer();
-        buf.append("<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n");
-		Vector v = gov.nih.nci.evs.browser.utils.StringUtils.parseData(expression, "\n");
-		for (int i=0; i<v.size(); i++) {
-			String t = (String) v.elementAt(i);
-			System.out.println("(" + i + ")" + t);
-		}
-		boolean role_group_start = false;
-		for (int i=0; i<v.size(); i++) {
-			String line = (String) v.elementAt(i);
-			if (skipParents && !start) {
-				if (!line.startsWith("\t")) {
-					if (line.compareTo("Parent") != 0) {
-						start = true;
-					}
-				}
-		    }
-		    if (start) {
-				buf.append("<tr>");
-				buf.append("<td class=\"dataCellText\">\n");
 
-				Vector w = formatLine(line);
-				String type = (String) w.elementAt(0);
-
-				if (type.compareTo(TYPE_ROLE_GROUP) == 0) {
-					String s = (String) w.elementAt(1);
-					if (start) buf.append(indent).append(s);
-					role_group_start = true;
-
-				} else if (type.compareTo(TYPE_CATEGORY) == 0) {
-					String s = (String) w.elementAt(1);
-					buf.append(s);
-					if (s.compareTo("or") != 0) {
-						role_group_start = false;
-					}
-				} else if (type.compareTo(TYPE_PARENT) == 0) {
-					String s = (String) w.elementAt(1);
-					buf.append(indent).append(s);
-				} else if (type.compareTo(TYPE_ROLE) == 0) {
-					String s = (String) w.elementAt(1);
-					String t = (String) w.elementAt(2);
-					if (role_group_start) {
-						buf.append(indent);
-					}
-					buf.append(indent).append(s).append(indent).append(t);
-				}
-				buf.append("\n");
-				buf.append("</td></tr>\n");
-			}
-		}
-		buf.append("<table>\n");
-		return buf.toString();
-	}
-*/
    	public String getRelationshipTableLabel(String type, boolean isEmpty) {
 		String NONE = "<i>(none)</i>";
 		StringBuffer buf = new StringBuffer();
@@ -200,7 +141,7 @@ public class ExpressionFormatter {
 				buf.append("<i>(True for the current concept.)</i>").append("\n");
 			}
 		} if (type.compareTo(Constants.TYPE_LOGICAL_DEFINITION) == 0) {
-			buf.append("<b>Logical Definition</b>:");
+			buf.append("<b>Logical Definition</b>,&nbsp;showing the parent concepts and direct role assertions that define this concept:");
 			if (isEmpty) {
 				buf.append(" ").append(NONE).append("\n");
 			} else {
