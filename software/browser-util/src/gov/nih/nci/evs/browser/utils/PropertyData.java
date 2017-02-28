@@ -813,6 +813,8 @@ displayLabel2PropertyNameHashMap = addToHashMap(displayLabel2PropertyNameHashMap
 		return false;
 	}
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//[NCITERM-746] Update of the Relationships Display.
 
     public String generateRelationshipTable(String codingScheme, String version, String code, String namespace, String rel_type, boolean display_qualifiers) {
         boolean display_equiv_expression = false;

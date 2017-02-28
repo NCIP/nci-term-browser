@@ -23,29 +23,34 @@ public class RelationshipTabFormatter {
     String TYPE_ROLE = "3";
     String TYPE_ROLE_GROUP = "4";
 
-    static String indent_half = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-    static String indent = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    //static String Constants.INDENT_HALF = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    //static String indent = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 
     LexBIGService lbSvc = null;
     RelationshipUtils relUtils = null;
+    UIUtils uiUtils = null;
 
     public RelationshipTabFormatter() {
-
+        uiUtils = new UIUtils();
 	}
 
     public RelationshipTabFormatter(LexBIGService lbSvc) {
 		this.lbSvc = lbSvc;
 		this.relUtils = new RelationshipUtils(lbSvc);
+		this.uiUtils = new UIUtils(lbSvc);
 	}
 
-    public String createHyperlink(String codingScheme, String namespace, String code, String name) {
+    public String getHyperlink(String codingScheme, String namespace, String code, String name) {
+		return uiUtils.getHyperlink(codingScheme, null, name, code, namespace);
+        /*
         StringBuffer buf = new StringBuffer();
         buf.append("<a href=\"ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme);
         buf.append("&code=").append(code).append("&ns=" + namespace + "\">").append(name).append("</a>");
         return buf.toString();
+        */
 	}
 
-    public String createHyperlink(String line) {
+    public String getHyperlink(String line) {
 		if (line.indexOf("\t") == -1) return line;
 		if (!line.endsWith(")")) return line;
 		int n = line.lastIndexOf("(");
@@ -61,14 +66,17 @@ public class RelationshipTabFormatter {
 		}
 		name = name.substring(n+1, name.length());
         name = name.trim();
+        String hyperlink = uiUtils.getHyperlink(name, code);
+        /*
         StringBuffer buf = new StringBuffer();
         buf.append("<a href=\"ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus");
         buf.append("&code=").append(code).append("&ns=NCI_Thesaurus\">").append(name).append("</a>");
 		String hyperlink = buf.toString();
+		*/
 		if (role.compareTo("") == 0) {
-			return indent + hyperlink;
+			return Constants.INDENT + hyperlink;
 		}
-		return indent + role + indent + hyperlink;
+		return Constants.INDENT + role + Constants.INDENT + hyperlink;
 	}
 
     public Vector formatLine(String line) {
@@ -111,10 +119,13 @@ public class RelationshipTabFormatter {
 		}
 		name = name.substring(n+1, name.length());
         name = name.trim();
+        /*
         StringBuffer buf = new StringBuffer();
         buf.append("<a href=\"ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus");
         buf.append("&code=").append(code).append("&ns=NCI_Thesaurus\">").append(name).append("</a>");
 		String hyperlink = buf.toString();
+		*/
+		String hyperlink = uiUtils.getHyperlink(name, code);
 		if (role.compareTo("") == 0) {
 			w.add(TYPE_PARENT);
 			w.add(hyperlink);
@@ -134,13 +145,13 @@ public class RelationshipTabFormatter {
 		for (int i=0; i<w.size(); i++) {
 			String line = (String) w.elementAt(i);
 			buf.append("<tr><td class=\"dataCellText\">\n");
-			String s = createHyperlink(line);
+			String s = getHyperlink(line);
 			if (s.indexOf("\t") == -1) {
 				buf.append(s);
 			} else {
 				s = s.trim();
-				if (!s.startsWith(indent)) {
-					buf.append(indent);
+				if (!s.startsWith(Constants.INDENT)) {
+					buf.append(Constants.INDENT);
 				}
 				buf.append(s);
 			}
@@ -184,7 +195,7 @@ public class RelationshipTabFormatter {
 
 				if (type.compareTo(TYPE_ROLE_GROUP) == 0) {
 					String s = (String) w.elementAt(1);
-					if (start) buf.append(indent).append(s);
+					if (start) buf.append(Constants.INDENT).append(s);
 					role_group_start = true;
 
 				} else if (type.compareTo(TYPE_CATEGORY) == 0) {
@@ -195,14 +206,14 @@ public class RelationshipTabFormatter {
 					}
 				} else if (type.compareTo(TYPE_PARENT) == 0) {
 					String s = (String) w.elementAt(1);
-					buf.append(indent).append(s);
+					buf.append(Constants.INDENT).append(s);
 				} else if (type.compareTo(TYPE_ROLE) == 0) {
 					String s = (String) w.elementAt(1);
 					String t = (String) w.elementAt(2);
 					if (role_group_start) {
-						buf.append(indent);
+						buf.append(Constants.INDENT);
 					}
-					buf.append(indent).append(s).append(indent).append(t);
+					buf.append(Constants.INDENT).append(s).append(Constants.INDENT).append(t);
 				}
 				buf.append("\n");
 				buf.append("</td></tr>\n");
@@ -297,7 +308,7 @@ public class RelationshipTabFormatter {
 		String NONE = "<i>(none)</i>";
 		StringBuffer buf = new StringBuffer();
 		if (type.compareTo(Constants.TYPE_ROLE) == 0) {
-			buf.append("<b>Role Relationships</b>&nbsp;asserted or inherited, pointing from the current concept to other concepts:");
+			buf.append("<b>Role Relationships</b>,&nbsp;asserted or inherited, pointing from the current concept to other concepts:");
 			if (isEmpty) {
 				buf.append(" ").append(NONE).append("\n");
 			} else {
@@ -369,8 +380,8 @@ public class RelationshipTabFormatter {
 				buf.append("<tr class=\"dataRowLight\">");
 			}
 			buf.append("<td class=\"dataCellText\">");
-			String hyperlink = createHyperlink(scheme, namespace, code, name);
-			buf.append(indent_half + hyperlink);
+			String hyperlink = getHyperlink(scheme, namespace, code, name);
+			buf.append(Constants.INDENT_HALF + hyperlink);
 			buf.append("</td>");
 			buf.append("</tr>");
 		}
@@ -412,8 +423,8 @@ public class RelationshipTabFormatter {
 			String key = (String) key_vec.elementAt(i);
 			buf.append("<tr class=\"dataRowDark\">");
 			buf.append("<td class=\"dataCellText\">");
-			buf.append(indent_half + key);
-			buf.append("</td><td>" + indent + "</td></tr>");
+			buf.append(Constants.INDENT_HALF + key);
+			buf.append("</td><td>" + Constants.INDENT + "</td></tr>");
 			Vector w = (Vector) hmap.get(key);
 			w = gov.nih.nci.evs.browser.utils.SortUtils.quickSort(w);
 			for (int k=0; k<w.size(); k++) {
@@ -425,11 +436,11 @@ public class RelationshipTabFormatter {
 				String codingScheme = (String) u.elementAt(3);
 				String namespace = (String) u.elementAt(4);
 
-				String hyperlink = createHyperlink(codingScheme, namespace, roleTargetCode, roleTargetName);
+				String hyperlink = getHyperlink(codingScheme, namespace, roleTargetCode, roleTargetName);
 
 				buf.append("<tr class=\"dataRowLight\">");
 				buf.append("<td class=\"dataCellText\" scope=\"row\" valign=\"top\">");
-				buf.append(indent).append(roleName);
+				buf.append(Constants.INDENT).append(roleName);
 				buf.append("</td>");
 				buf.append("<td class=\"dataCellText\" scope=\"row\" valign=\"top\">");
 				buf.append(hyperlink);
@@ -507,8 +518,8 @@ public class RelationshipTabFormatter {
 			String key = (String) key_vec.elementAt(i);
 			buf.append("<tr class=\"dataRowDark\">");
 			buf.append("<td class=\"dataCellText\">");
-			buf.append(indent_half + key);
-			buf.append("</td><td>" + indent + "</td></tr>");
+			buf.append(Constants.INDENT_HALF + key);
+			buf.append("</td><td>" + Constants.INDENT + "</td></tr>");
 			Vector w = (Vector) hmap.get(key);
 			w = gov.nih.nci.evs.browser.utils.SortUtils.quickSort(w);
 			for (int k=0; k<w.size(); k++) {
@@ -519,11 +530,11 @@ public class RelationshipTabFormatter {
 				String roleTargetCode = (String) u.elementAt(2);
 				String codingScheme = (String) u.elementAt(3);
 				String namespace = (String) u.elementAt(4);
-				String hyperlink = createHyperlink(codingScheme, namespace, roleTargetCode, roleTargetName);
+				String hyperlink = getHyperlink(codingScheme, namespace, roleTargetCode, roleTargetName);
 
 				buf.append("<tr class=\"dataRowLight\">");
 				buf.append("<td class=\"dataCellText\" scope=\"row\" valign=\"top\">");
-				buf.append(indent).append(hyperlink);
+				buf.append(Constants.INDENT).append(hyperlink);
                 buf.append("</td>");
 				buf.append("<td class=\"dataCellText\" scope=\"row\" valign=\"top\">");
 				buf.append(roleName);

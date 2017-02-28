@@ -38,8 +38,6 @@
 <%
 
 Boolean ncit_available = DataUtils.isNCITAvailable();
-System.out.println("ncit_available? " + ncit_available);
-
 
 if (ncit_available == null || !ncit_available.equals(Boolean.TRUE)) {
     String error_msg = "WARNING: " + Constants.NCIT_NOT_AVAILABLE;

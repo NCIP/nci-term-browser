@@ -198,6 +198,8 @@ public class Constants {
 
     public static final String CDISC_SUBMISSION_VALUE = "CDISC Submission Value";
 
+    public static String INDENT_HALF = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    public static String INDENT = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 
 	public static final String[] HAZARD_CHARS = {
 		"$QUERY", "$WHERE", "()", "(EVAL", ".JPG HTTP",

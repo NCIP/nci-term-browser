@@ -18,8 +18,8 @@ import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
  */
 
 public class ExpressionFormatter {
-    static String indent_half = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-    static String indent = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+//    static String Constants.INDENT_HALF = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+//    static String indent = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 
     String TYPE_CATEGORY = "1";
     String TYPE_PARENT = "2";
@@ -28,6 +28,7 @@ public class ExpressionFormatter {
 
     //LexBIGService lbSvc = null;
     static HashSet valueDomainSet = null;
+    UIUtils uiUtils = null;
 
     static {
 		valueDomainSet = new HashSet();
@@ -42,7 +43,7 @@ public class ExpressionFormatter {
 	}
 
     public ExpressionFormatter() {
-
+        uiUtils = new UIUtils();
 	}
 
 //<a href="ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&version=17.01e&code=C39679&ns=NCI_Thesaurus">Hallmark Cell</a>
@@ -63,14 +64,18 @@ public class ExpressionFormatter {
 		}
 		name = name.substring(n+1, name.length());
         name = name.trim();
+        /*
         StringBuffer buf = new StringBuffer();
         buf.append("<a href=\"ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus");
         buf.append("&code=").append(code).append("&ns=NCI_Thesaurus\">").append(name).append("</a>");
 		String hyperlink = buf.toString();
+		*/
+        String hyperlink = uiUtils.getHyperlink(name, code);
+
 		if (role.compareTo("") == 0) {
-			return indent + hyperlink;
+			return Constants.INDENT + hyperlink;
 		}
-		return indent + role + indent + hyperlink;
+		return Constants.INDENT + role + Constants.INDENT + hyperlink;
 	}
 
     public Vector formatLine(String line) {
@@ -113,10 +118,14 @@ public class ExpressionFormatter {
 		}
 		name = name.substring(n+1, name.length());
         name = name.trim();
+        /*
         StringBuffer buf = new StringBuffer();
         buf.append("<a href=\"ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus");
         buf.append("&code=").append(code).append("&ns=NCI_Thesaurus\">").append(name).append("</a>");
 		String hyperlink = buf.toString();
+		*/
+		String hyperlink = uiUtils.getHyperlink(name, code);
+
 		if (role.compareTo("") == 0) {
 			w.add(TYPE_PARENT);
 			w.add(hyperlink);
@@ -133,7 +142,7 @@ public class ExpressionFormatter {
 		String NONE = "<i>(none)</i>";
 		StringBuffer buf = new StringBuffer();
 		if (type.compareTo(Constants.TYPE_ROLE) == 0) {
-			buf.append("<b>Role Relationships</b>&nbsp;pointing from the current concept to other concepts:");
+			buf.append("<b>Role Relationships</b>,&nbsp;asserted or inherited, pointing from the current concept to other concepts:");
 			if (isEmpty) {
 				buf.append(" ").append(NONE).append("\n");
 			} else {
@@ -146,6 +155,11 @@ public class ExpressionFormatter {
 				buf.append(" ").append(NONE).append("\n");
 			} else {
 				//buf.append("<br/>").append("\n");
+			}
+		} else if (type.compareTo(Constants.TYPE_INVERSE_ROLE) == 0) {
+			buf.append("<b>Incoming Role Relationships</b>&nbsp;asserted or inherited, pointing from other concepts to the current concept:");
+			if (isEmpty) {
+				buf.append(" ").append(NONE).append("\n");
 			}
 		}
 		return buf.toString();
@@ -189,8 +203,8 @@ public class ExpressionFormatter {
 				if (valueDomainSet.contains(category) || category.compareTo("Parent") == 0) {
 					buf.append("<tr class=\"dataRowDark\">");
 					buf.append("<td class=\"dataCellText\">\n");
-					buf.append(indent_half + category);
-					buf.append("</td><td>" + indent + "</td></tr>");
+					buf.append(Constants.INDENT_HALF + category);
+					buf.append("</td><td>" + Constants.INDENT + "</td></tr>");
 
 				} else {
 					buf.append("<tr class=\"dataRowLight\">");
@@ -203,8 +217,8 @@ public class ExpressionFormatter {
 					//if (start) {
 
 						buf.append("<td class=\"dataCellText\" scope=\"row\" valign=\"top\">");
-						buf.append(indent).append(s);
-						buf.append("</td><td>" + indent + "</td></tr>");
+						buf.append(Constants.INDENT).append(s);
+						buf.append("</td><td>" + Constants.INDENT + "</td></tr>");
 
 					role_group_start = true;
 
@@ -217,19 +231,19 @@ public class ExpressionFormatter {
 					String s = (String) w.elementAt(1);
 
 						buf.append("<td class=\"dataCellText\" scope=\"row\" valign=\"top\">");
-						buf.append(indent).append(s);
-						buf.append("</td><td>" + indent + "</td></tr>");
+						buf.append(Constants.INDENT).append(s);
+						buf.append("</td><td>" + Constants.INDENT + "</td></tr>");
 
 				} else if (type.compareTo(TYPE_ROLE) == 0) {
 					String s = (String) w.elementAt(1);
 					String t = (String) w.elementAt(2);
 
 					if (role_group_start) {
-						buf.append(indent);
+						buf.append(Constants.INDENT);
 					}
 
 					buf.append("<td class=\"dataCellText\" scope=\"row\" valign=\"top\">");
-					buf.append(indent).append(s);
+					buf.append(Constants.INDENT).append(s);
 					buf.append("</td><td>" + t + "</td></tr>");
 				}
 				buf.append("\n");
@@ -285,7 +299,7 @@ public class ExpressionFormatter {
 				if (valueDomainSet.contains(category)) {
 					buf.append("<tr class=\"dataRowDark\">");
 					buf.append("<td class=\"dataCellText\">\n");
-					buf.append(indent_half + category);
+					buf.append(Constants.INDENT_HALF + category);
 					buf.append("</td><td>" + indent + "</td></tr>");
 
 				} else {

@@ -115,10 +115,10 @@ public class ValueSetFormatter {
 	                                 NCI_METATHESAURUS_CUI,
 	                                 UMLS_CUI
 	                                 };
-
+    UIUtils uiUtils = null;
 // Default constructor
 	public ValueSetFormatter() {
-
+        uiUtils = new UIUtils();
 	}
 
 // Constructor
@@ -653,7 +653,6 @@ public class ValueSetFormatter {
 					String code = value;
 					hyperlink = getHyperlink(code);
 				}
-
 				buf.append(hyperlink);
 		    } else {
 				/*
@@ -734,7 +733,8 @@ public class ValueSetFormatter {
 	}
 
 	public String getHyperlink(String code) {
-		return "<a href=\"https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&code=" + code + "&ns=NCI_Thesaurus\">" + code + "</a>";
+		//return "<a href=\"https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&code=" + code + "&ns=NCI_Thesaurus\">" + code + "</a>";
+		return uiUtils.getHyperlink(code, code);
     }
 
 	public String generate(String vsd_uri, String version, String source, Vector fields, Vector codes) {

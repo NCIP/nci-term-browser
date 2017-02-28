@@ -328,7 +328,8 @@ public class UIUtils {
 			if (qualifierColumn == 0) {
                   if (rel_type == null || !rel_type.startsWith("type_inverse")) {
 					  buf.append("<td class=\"dataCellText\" valign=\"top\">").append("\n");
-					  buf.append("				 " + name).append("\n");
+					  //buf.append("				 " + name).append("\n");
+					  buf.append(Constants.INDENT_HALF + name).append("\n");
 					  buf.append("</td>").append("\n");
 					  if (code != null) {
 						  value = getHyperlink(codingScheme, version, value, code, namespace);
@@ -339,7 +340,8 @@ public class UIUtils {
 						  value = getHyperlink(codingScheme, version, value, code, namespace);
 					  }
 					  buf.append("<td class=\"dataCellText\" valign=\"top\">").append("\n");
-					  buf.append("				 " + value).append("\n");
+					  buf.append(Constants.INDENT_HALF + value).append("\n");
+					  //buf.append("				 " + value).append("\n");
 					  buf.append("</td>").append("\n");
 					  buf.append("<td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + name + "</td>").append("\n");
 				  }
@@ -354,7 +356,8 @@ public class UIUtils {
 					buf.append("		  <table>").append("\n");
 					buf.append("			 <tr>");
 					buf.append("<td class=\"dataCellText\">").append("\n");
-					buf.append("				 " + value).append("\n");
+					//buf.append("				 " + value).append("\n");
+					buf.append(Constants.INDENT_HALF + value).append("\n");
 					buf.append("			 </td></tr>").append("\n");
 					for (int j = 0; j < qualifiers.size(); j++) {
 						String q = (String) qualifiers.elementAt(j);
@@ -403,7 +406,8 @@ public class UIUtils {
 					buf.append("		  <table>").append("\n");
 					buf.append("			 <tr>");
 					buf.append("<td class=\"dataCellText\">").append("\n");
-					buf.append("				 " + value).append("\n");
+					//buf.append("				 " + value).append("\n");
+					buf.append(Constants.INDENT_HALF + value).append("\n");
 					buf.append("			 </td></tr>").append("\n");
 					for (int j = 0; j < qualifiers.size(); j++) {
 						String q = (String) qualifiers.elementAt(j);
@@ -445,15 +449,31 @@ public class UIUtils {
         return buf.toString();
 	}
 
+    public String getHyperlink(String name, String code) {
+        return getHyperlink(null, name, code);
+    }
+
+    public String getHyperlink(String version, String name, String code) {
+        return getHyperlink(Constants.NCIT_CS_NAME, version, name, code, Constants.NCIT_CS_NAME);
+    }
+
     public String getHyperlink(String codingScheme, String version, String name, String code, String ns) {
 		if (Arrays.asList(Constants.NON_CONCEPT_TO_CONCEPT_ASSOCIATION).contains(name)) return name;
 
 		StringBuffer buf = new StringBuffer();
-		if (gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(ns)) {
-			buf.append("<a href=\"/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&version=" + version + "&code=" + code + "\">").append("\n");
-		} else {
-			buf.append("<a href=\"/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&version=" + version + "&code=" + code + "&ns=" + ns + "\">").append("\n");
-		}
+		if (version != null) {
+			if (gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(ns)) {
+				buf.append("<a href=\"/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&version=" + version + "&code=" + code + "\">").append("\n");
+			} else {
+				buf.append("<a href=\"/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&version=" + version + "&code=" + code + "&ns=" + ns + "\">").append("\n");
+			}
+	    } else {
+			if (gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(ns)) {
+				buf.append("<a href=\"/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&code=" + code + "\">").append("\n");
+			} else {
+				buf.append("<a href=\"/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&code=" + code + "&ns=" + ns + "\">").append("\n");
+			}
+	    }
 		buf.append(name).append("\n");
 		buf.append("</a>").append("\n");
 		return buf.toString();
@@ -657,7 +677,8 @@ public class UIUtils {
 					buf.append("		  <table>").append("\n");
 					buf.append("			 <tr>");
 					buf.append("<td class=\"dataCellText\" valign=\"top\">").append("\n");
-					buf.append("				 " + name).append("\n");
+					//buf.append("				 " + name).append("\n");
+					buf.append(Constants.INDENT_HALF + name).append("\n");
 					buf.append("			 </td></tr>").append("\n");
 
 					for (int j = 0; j < qualifiers.size(); j++) {
@@ -710,7 +731,8 @@ public class UIUtils {
 					buf.append("		  <table>").append("\n");
 					buf.append("			 <tr>");
 					buf.append("<td class=\"dataCellText\">").append("\n");
-					buf.append("				 " + value).append("\n");
+					//buf.append("				 " + value).append("\n");
+                    buf.append(Constants.INDENT_HALF + value).append("\n");
 					buf.append("			 </td></tr>").append("\n");
 
 					for (int j = 0; j < qualifiers.size(); j++) {
