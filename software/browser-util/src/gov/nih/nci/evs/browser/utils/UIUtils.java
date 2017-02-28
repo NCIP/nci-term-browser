@@ -842,7 +842,30 @@ public class UIUtils {
 		return buf.toString();
 	}
 
+	public static Vector remoteDuplciateValues(Vector v) {
+		if (v == null) return null;
+		HashSet hset = new HashSet();
+		Vector w = new Vector();
+		for (int i=0; i<v.size(); i++) {
+			String t = (String) v.elementAt(i);
+			if (!hset.contains(t)) {
+				hset.add(t);
+				w.add(t);
+			}
+		}
+		return w;
+	}
+
 	public static String createTable(Vector w) {
+		return createTable(w, true);
+	}
+
+
+	public static String createTable(Vector w, boolean removeDuplicate) {
+		if (w == null) return null;
+		if (removeDuplicate) {
+			w = remoteDuplciateValues(w);
+		}
         StringBuffer buf = new StringBuffer();
 		buf.append("<table>");
 		for (int i=0; i<w.size(); i++) {
