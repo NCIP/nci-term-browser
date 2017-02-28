@@ -127,6 +127,7 @@ public class ValueSetFormatter {
 		this.lbSvc = lbSvc;
 		this.vsd_service = vsd_service;
         csdu = new CodingSchemeDataUtils(lbSvc);
+        uiUtils = new UIUtils();
 	}
 
 	public ValueSetFormatter(
@@ -264,11 +265,9 @@ public class ValueSetFormatter {
 				 if (!property_names.contains("DEFINITION")) {
 					 property_names.add("DEFINITION");
 				 }
-				 /*
 				 if (!property_names.contains("ALT_DEFINITION")) {
 					 property_names.add("ALT_DEFINITION");
 				 }
-				 */
 			 } else {
 				 if (type.compareTo(MALIGNANCY_STATUS) == 0) {
 					 if (!property_names.contains("Malignancy_Status")) {
@@ -861,15 +860,15 @@ public class ValueSetFormatter {
 		}
         return null;
 	}
-
 /*
 	public static void main(String[] args) {
 		String vsd_uri = "http://ndfrt:PE";
 		vsd_uri = "http://evs.nci.nih.gov/valueset/C54453";
+		//vsd_uri = "http://evs.nci.nih.gov/valueset/C66781";
 		//vsd_uri = "http://evs.nci.nih.gov/valueset/C54451";
 		//vsd_uri = "http://evs.nci.nih.gov/valueset/C73339";
 		//vsd_uri = "http://evs.nci.nih.gov/valueset/C62596";
-		String serviceUrl = "https://lexevsapi6-stage.nci.nih.gov/lexevsapi64";
+		String serviceUrl = "https://lexevsapi6.nci.nih.gov/lexevsapi64";
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices(serviceUrl);
 
@@ -878,9 +877,17 @@ public class ValueSetFormatter {
         ms = System.currentTimeMillis();
 
 		String version = null;
-		String source = "FDA";
+		String source = test.getValueSetSupportedSource(vsd_uri);// "FDA";
+		System.out.println("vsd_uri: " + vsd_uri);
+		System.out.println("Source: " + source);
 
         String outputfile = "value_set_report_test1.txt";
+        int n = vsd_uri.lastIndexOf("/");
+        if (n != -1) {
+			String code = vsd_uri.substring(n+1, vsd_uri.length());
+			outputfile = "value_set_report_" + code + ".txt";
+		}
+
 
 		PrintWriter pw = null;
 		try {
@@ -906,166 +913,5 @@ public class ValueSetFormatter {
 		}
 		System.out.println("generateReport Total run time (ms): " + (System.currentTimeMillis() - ms));
 	}
-
-	public static void main(String[] args) {
-		String vsd_uri = "http://ndfrt:PE";
-		vsd_uri = "http://evs.nci.nih.gov/valueset/C54453";
-		//vsd_uri = "http://evs.nci.nih.gov/valueset/C54451";
-		//vsd_uri = "http://evs.nci.nih.gov/valueset/C73339";
-		//vsd_uri = "http://evs.nci.nih.gov/valueset/C62596";
-		String serviceUrl = "https://lexevsapi6-stage.nci.nih.gov/lexevsapi64";
-		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices(serviceUrl);
-
-        long ms = System.currentTimeMillis();
-		ValueSetFormatter test = new ValueSetFormatter(lbSvc, vsd_service);
-        ms = System.currentTimeMillis();
-
-		String version = null;
-
-		String source = test.getValueSetSupportedSource(vsd_uri);
-		System.out.println(source);
-
-        String outputfile = "value_set_report_test2.txt";
-
-		PrintWriter pw = null;
-		try {
-			pw = new PrintWriter(outputfile, "UTF-8");
-	        Vector fields = new Vector();
-	        fields.add(NCIT_CONCEPT_CODE);
-	        fields.add(SOURCE_PREFERRED_TERM);
-	        fields.add(NCIT_PREFERRED_TERM);
-	        fields.add(NCIT_SYNONYMS);
-	        fields.add(SOURCE_DEFINITION);
-	        fields.add(NCIT_DEFINITION);
-			Vector retvec = test.export(vsd_uri, version, source, fields);
-			for (int i=0; i<retvec.size(); i++) {
-				String line = (String) retvec.elementAt(i);
-				pw.println(line);
-			}
-		} catch (Exception ex) {
-            ex.printStackTrace();
-		} finally {
-			try {
-				pw.close();
-				System.out.println("Output file " + outputfile + " generated.");
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
-		System.out.println("generateReport Total run time (ms): " + (System.currentTimeMillis() - ms));
-	}
-*/
+	*/
 }
-
-
-/*
-	Supported Properties:
-		(1) abstract
-		(2) Accepted_Therapeutic_Use_For
-		(3) allowedParent
-		(4) ALT_DEFINITION
-		(5) args
-		(6) backwardCompatibleWith
-		(7) base
-		(8) BioCarta_ID
-		(9) Bottom Thing
-		(10) CAS_Registry
-		(11) CHEBI_ID
-		(12) Chemical_Formula
-		(13) code
-		(14) comment
-		(15) Concept_Status
-		(16) Contributing_Source
-		(17) date
-		(18) defaultLanguage
-		(19) DEFINITION
-		(20) DesignNote
-		(21) Display_Name
-		(22) domain
-		(23) EntrezGene_ID
-		(24) Essential_Amino_Acid
-		(25) Essential_Fatty_Acid
-		(26) excludedTest
-		(27) Extensible_List
-		(28) FDA_Table
-		(29) FDA_UNII_Code
-		(30) fractionDigits
-		(31) FULL_SYN
-		(32) GenBank_Accession_Number
-		(33) Gene_Encodes_Product
-		(34) GO_Annotation
-		(35) HGNC_ID
-		(36) Homologous_Gene
-		(37) ICD-O-3_Code
-		(38) Image_Link
-		(39) In_Clinical_Trial_For
-		(40) incompatibleWith
-		(41) INFOODS
-		(42) isDefinedBy
-		(43) KEGG_ID
-		(44) label
-		(45) Legacy_Concept_Name
-		(46) length
-		(47) Macronutrient
-		(48) maxArgs
-		(49) maxExclusive
-		(50) maxInclusive
-		(51) maxLength
-		(52) MGI_Accession_ID
-		(53) Micronutrient
-		(54) minArgs
-		(55) minExclusive
-		(56) minInclusive
-		(57) minLength
-		(58) miRBase_ID
-		(59) NCBI_Taxon_ID
-		(60) NCI_META_CUI
-		(61) Neoplastic_Status
-		(62) NHC0
-		(63) NHC4
-		(64) NSC_Code
-		(65) Nutrient
-		(66) OID
-		(67) OLD_ASSOCIATION
-		(68) OLD_CHILD
-		(69) OLD_KIND
-		(70) OLD_PARENT
-		(71) OLD_ROLE
-		(72) OLD_STATE
-		(73) OMIM_Number
-		(137) PAL-DESCRIPTION
-		(138) PAL-NAME
-		(139) PAL-STATEMENT
-		(140) pattern
-		(141) PDQ_Closed_Trial_Search_ID
-		(142) PDQ_Open_Trial_Search_ID
-		(143) PID_ID
-		(144) Preferred_Name
-		(145) primitive
-		(146) priorVersion
-		(147) probeClass
-		(148) PubMedID_Primary_Reference
-		(149) range
-		(150) readOnly
-		(151) Relative_Enzyme_Activity
-		(152) seeAlso
-		(153) Semantic_Type
-		(154) SNP_ID
-		(155) subclassesDisjoint
-		(156) subPropertyOf
-		(157) Subsource
-		(158) Swiss_Prot
-		(159) todoPrefix
-		(160) todoProperty
-		(161) Tolerable_Level
-		(162) totalDigits
-		(163) type
-		(164) UMLS_CUI
-		(165) Unit
-		(166) US_Recommended_Intake
-		(167) USDA_ID
-		(168) Use_For
-		(169) usedLanguage
-		(170) versionInfo
-*/

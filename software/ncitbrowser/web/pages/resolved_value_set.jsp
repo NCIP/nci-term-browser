@@ -274,7 +274,7 @@
                         boolean use_new_format = true;
                         String rvs_tbl = null;
                         if (supportedsources != null) {
-                            Vector w = gov.nih.nci.evs.browser.utils.StringUtils.parseData(supportedsources, "$");
+                            Vector w = gov.nih.nci.evs.browser.utils.StringUtils.parseData(supportedsources, ";");
                             supportedsource = (String) w.elementAt(0);
                         }
                         if (supportedsource == null || supportedsource.compareTo("null") == 0) {
