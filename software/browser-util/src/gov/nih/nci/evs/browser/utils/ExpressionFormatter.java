@@ -149,12 +149,22 @@ public class ExpressionFormatter {
 				buf.append("<br/>").append("\n");
 				buf.append("<i>(True for the current concept.)</i>").append("\n");
 			}
+/*
 		} if (type.compareTo(Constants.TYPE_LOGICAL_DEFINITION) == 0) {
 			buf.append("<b>Logical Definition</b>,&nbsp;showing the parent concepts and direct role assertions that define this concept:");
 			if (isEmpty) {
 				buf.append(" ").append(NONE).append("\n");
 			} else {
 				//buf.append("<br/>").append("\n");
+			}
+*/
+		} else if (type.compareTo(Constants.TYPE_LOGICAL_DEFINITION) == 0) {
+			buf.append("<b>Logical Definition</b>,&nbsp;showing the parent concepts and direct role assertions that define this concept:");
+			if (isEmpty) {
+				buf.append(" ").append(NONE).append("\n");
+			} else {
+				buf.append("<br/>").append("\n");
+				buf.append("<i>(True for the current concept.)</i>").append("\n");
 			}
 		} else if (type.compareTo(Constants.TYPE_INVERSE_ROLE) == 0) {
 			buf.append("<b>Incoming Role Relationships</b>,&nbsp;asserted or inherited, pointing from other concepts to the current concept:");
