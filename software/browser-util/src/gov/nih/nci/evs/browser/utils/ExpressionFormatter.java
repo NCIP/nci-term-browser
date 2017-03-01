@@ -196,8 +196,8 @@ public class ExpressionFormatter {
 		String label = getRelationshipTableLabel(Constants.TYPE_LOGICAL_DEFINITION, false);
         buf.append(label);
         Vector columnHeadings = new Vector();
-        //columnHeadings.add("Relationship");
-		//columnHeadings.add("Value");
+        columnHeadings.add("Relationship");
+		columnHeadings.add("Value (qualifiers indented underneath)");
         Vector columnWidths = new Vector();
         /*
         columnWidths.add(new Integer(30));
