@@ -199,8 +199,12 @@ public class ExpressionFormatter {
         //columnHeadings.add("Relationship");
 		//columnHeadings.add("Value");
         Vector columnWidths = new Vector();
+        /*
         columnWidths.add(new Integer(30));
         columnWidths.add(new Integer(70));
+        */
+        columnWidths.add(new Integer(40));
+        columnWidths.add(new Integer(60));
         String table = createTable(columnHeadings, columnWidths);
         buf.append(table);
 		Vector v = gov.nih.nci.evs.browser.utils.StringUtils.parseData(expression, "\n");

@@ -412,8 +412,8 @@ public class RelationshipTabFormatter {
         columnHeadings.add("Relationship");
 		columnHeadings.add("Value (qualifiers indented underneath)");
         Vector columnWidths = new Vector();
-        columnWidths.add(new Integer(30));
-        columnWidths.add(new Integer(70));
+        columnWidths.add(new Integer(40));
+        columnWidths.add(new Integer(60));
 
         String table = createTable(columnHeadings, columnWidths);
         buf.append(table);
@@ -507,8 +507,8 @@ public class RelationshipTabFormatter {
         columnHeadings.add("Relationship");
 
         Vector columnWidths = new Vector();
-        columnWidths.add(new Integer(70));
-        columnWidths.add(new Integer(30));
+        columnWidths.add(new Integer(60));
+        columnWidths.add(new Integer(40));
 
         String table = createTable(columnHeadings, columnWidths);
         buf.append(table);
