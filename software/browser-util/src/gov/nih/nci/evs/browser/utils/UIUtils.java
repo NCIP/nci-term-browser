@@ -652,19 +652,18 @@ public class UIUtils {
 		StringBuffer buf = new StringBuffer();
 		if (version != null) {
 			if (gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(ns)) {
-				buf.append("<a href=\"/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&version=" + version + "&code=" + code + "\">").append("\n");
+				buf.append("<a href=\"/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&version=" + version + "&code=" + code + "\">");
 			} else {
-				buf.append("<a href=\"/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&version=" + version + "&code=" + code + "&ns=" + ns + "\">").append("\n");
+				buf.append("<a href=\"/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&version=" + version + "&code=" + code + "&ns=" + ns + "\">");
 			}
 	    } else {
 			if (gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(ns)) {
-				buf.append("<a href=\"/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&code=" + code + "\">").append("\n");
+				buf.append("<a href=\"/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&code=" + code + "\">");
 			} else {
-				buf.append("<a href=\"/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&code=" + code + "&ns=" + ns + "\">").append("\n");
+				buf.append("<a href=\"/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&code=" + code + "&ns=" + ns + "\">");
 			}
 	    }
-		buf.append(name).append("\n");
-		buf.append("</a>").append("\n");
+		buf.append(name).append("</a>").append("\n");
 		return buf.toString();
     }
 
@@ -809,7 +808,7 @@ public class UIUtils {
 	    String secondColumnHeading = spec.getSecondColumnHeading();
         if (firstColumnHeading != null && secondColumnHeading != null) {
 			buf.append("<tr>").append("\n");
-			buf.append("   <th class=\"dataCellText\" scope=\"col\" align=\"left\">" + firstColumnHeading  + "</th>").append("\n");
+			buf.append("   <th class=\"dataCellText\" scope=\"col\" align=\"left\">" + Constants.INDENT_HALF + firstColumnHeading  + "</th>").append("\n");
 			buf.append("   <th class=\"dataCellText\" scope=\"col\" align=\"left\">" + secondColumnHeading + "</th>").append("\n");
 			buf.append("</tr>").append("\n");
 	    }

@@ -294,7 +294,11 @@ public class RelationshipTabFormatter {
 		buf.append("<tr>");
 		for (int i=0; i<columnHeadings.size(); i++) {
 			String s = (String) columnHeadings.elementAt(i);
-			buf.append("   <th class=\"dataCellText\" scope=\"col\" align=\"left\">" + s + "</th>");
+			if (i == 0) {
+				buf.append("   <th class=\"dataCellText\" scope=\"col\" align=\"left\">" + Constants.INDENT_HALF + s + "</th>");
+			} else {
+				buf.append("   <th class=\"dataCellText\" scope=\"col\" align=\"left\">" + s + "</th>");
+			}
 		}
 		buf.append("</tr>");
 		for (int i=0; i<columnWidths.size(); i++) {
