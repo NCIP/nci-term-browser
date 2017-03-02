@@ -298,6 +298,9 @@ public class ValueSetFormatter {
 		long ms = System.currentTimeMillis();
 		try {
 			CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+			if (version == null) {
+				version = csdu.getVocabularyVersionByTag(scheme, Constants.PRODUCTION);
+			}
 			if (version != null) {
 				csvt.setVersion(version);
 			}

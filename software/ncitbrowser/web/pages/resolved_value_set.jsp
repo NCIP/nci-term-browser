@@ -238,7 +238,7 @@
                                           title="Export VSD in LexGrid XML format" />
                                        | <h:commandLink
                                           value="Export CSV"
-                                          action="#{valueSetBean.exportToCSVAction}"
+                                          action="#{valueSetBean.exportValuesToCSVAction}"
                                           styleClass="texttitle-blue-small"
                                           title="Export VSD in CSV format" />
                                     </td>

@@ -1414,6 +1414,9 @@ public class CodingSchemeDataUtils {
     }
 
     public Vector resolve(String scheme, String version) {
+		if (version == null) {
+			version = getVocabularyVersionByTag(scheme, Constants.PRODUCTION);
+		}
 		return resolve(scheme, version, 250);
 	}
 

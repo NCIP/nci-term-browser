@@ -326,4 +326,21 @@ public class Utils {
 		}
 	 }
 
+	public static Vector readFile(String filename)
+	{
+		Vector v = new Vector();
+		try {
+			BufferedReader in = new BufferedReader(
+			   new InputStreamReader(
+						  new FileInputStream(filename), "UTF8"));
+			String str;
+			while ((str = in.readLine()) != null) {
+				v.add(str);
+			}
+            in.close();
+		} catch (Exception ex) {
+            ex.printStackTrace();
+		}
+		return v;
+	}
 }
