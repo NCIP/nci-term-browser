@@ -470,7 +470,7 @@ public class UIUtils {
 	    String secondColumnHeading = spec.getSecondColumnHeading();
         if (firstColumnHeading != null && secondColumnHeading != null) {
 			buf.append("<tr>").append("\n");
-			buf.append("   <th class=\"dataCellText\" scope=\"col\" align=\"left\">" + firstColumnHeading  + "</th>").append("\n");
+			buf.append("   <th class=\"dataCellText\" scope=\"col\" align=\"left\">" + Constants.INDENT_HALF + firstColumnHeading  + "</th>").append("\n");
 			buf.append("   <th class=\"dataCellText\" scope=\"col\" align=\"left\">" + secondColumnHeading + "</th>").append("\n");
 			buf.append("</tr>").append("\n");
 	    }
