@@ -41,6 +41,9 @@ import org.LexGrid.concepts.Definition;
 import org.LexGrid.commonTypes.PropertyQualifier;
 import org.LexGrid.commonTypes.Property;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -99,7 +102,7 @@ public class ValueSetBean {
 	private String selectedConceptDomain = null;
 	private List conceptDomainList = null;
 	private Vector<String> conceptDomainListData = null;
-
+	public static final String XML_DECLARATION = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 
     public void ValueSetBean() {
 
@@ -112,7 +115,6 @@ public class ValueSetBean {
         valueSetSearchUtils.setServiceUrl(serviceURL);
         return valueSetSearchUtils;
 	}
-
 
 	public String getSelectedConceptDomain() {
 		return this.selectedConceptDomain;
@@ -1511,6 +1513,12 @@ public class ValueSetBean {
 			sb.append("WARNING: Export to CVS action failed.");
 		}
 		FacesContext.getCurrentInstance().responseComplete();
+	}
+
+	private String object2XMLStream(ValueSet vs) {
+		XStream xstream_xml = new XStream(new DomDriver());
+		String xml = XML_DECLARATION + "\n" + xstream_xml.toXML(vs);
+		return xml;
 	}
 
 }
