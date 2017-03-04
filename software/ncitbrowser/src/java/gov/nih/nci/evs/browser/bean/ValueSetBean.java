@@ -1493,15 +1493,15 @@ public class ValueSetBean {
 			sb.append(t);
 			sb.append("\n");
 		}
-		vsd_uri = DataUtils.valueSetDefinitionURI2Name(vsd_uri);
-		vsd_uri = vsd_uri.replaceAll(" ", "_");
-		vsd_uri = "resolved_" + vsd_uri + ".txt";
+		String vsd_name = DataUtils.valueSetDefinitionURI2Name(vsd_uri);
+		vsd_name = vsd_name.replaceAll(" ", "_");
+		vsd_name = "resolved_" + vsd_name + ".csv";
 
 		HttpServletResponse response = (HttpServletResponse) FacesContext
 				.getCurrentInstance().getExternalContext().getResponse();
 		response.setContentType("text/csv");
 		response.setHeader("Content-Disposition", "attachment; filename="
-				+ vsd_uri);
+				+ vsd_name);
 
 		response.setContentLength(sb.length());
 		try {
