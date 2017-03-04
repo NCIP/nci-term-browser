@@ -1,5 +1,6 @@
 package gov.nih.nci.evs.browser.bean;
 
+import gov.nih.nci.evs.browser.utils.*;
 
 import java.util.*;
 import java.net.URI;
@@ -102,7 +103,7 @@ public class ValueSetBean {
 	private String selectedConceptDomain = null;
 	private List conceptDomainList = null;
 	private Vector<String> conceptDomainListData = null;
-	public static final String XML_DECLARATION = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+	//public static final String XML_DECLARATION = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 
     public void ValueSetBean() {
 
@@ -1515,10 +1516,69 @@ public class ValueSetBean {
 		FacesContext.getCurrentInstance().responseComplete();
 	}
 
-	private String object2XMLStream(ValueSet vs) {
-		XStream xstream_xml = new XStream(new DomDriver());
-		String xml = XML_DECLARATION + "\n" + xstream_xml.toXML(vs);
-		return xml;
+	public void exportValuesToXMLAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+        String vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
+
+		String metadata = DataUtils
+				.getValueSetDefinitionMetadata(DataUtils
+						.findValueSetDefinitionByURI(vsd_uri));
+		Vector u = StringUtils.parseData(metadata);
+		String name = (String) u.elementAt(0);
+		String valueset_uri = (String) u.elementAt(1);
+		String description = (String) u.elementAt(2);
+		String concept_domain = (String) u.elementAt(3);
+		String sources = (String) u.elementAt(4);
+		String supportedsources = (String) u.elementAt(5);
+		String supportedsource = null;
+		String defaultCodingScheme = (String) u.elementAt(6);
+
+		if (!DataUtils.isNCIT(defaultCodingScheme)) {
+			exportToXMLAction();
+			return;
+		}
+
+		boolean withSource = true;
+		if (supportedsources == null) {
+			withSource = false;
+		}
+
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		String serviceUrl = RemoteServerUtil.getServiceURL();
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices(serviceUrl);
+        ValueSetFormatter test = new ValueSetFormatter(lbSvc, vsd_service);
+        String version = new CodingSchemeDataUtils(lbSvc).getVocabularyVersionByTag(vsd_uri, Constants.PRODUCTION);
+        long ms = System.currentTimeMillis();
+		ValueSetFormatter formatter = new ValueSetFormatter(lbSvc, vsd_service);
+		Vector fields = formatter.getDefaultFields(withSource);
+		ValueSet vs = formatter.instantiateValueSet(vsd_uri, version, fields);
+		String xml_str = formatter.object2XMLStream(vs);
+		try {
+			HttpServletResponse response = (HttpServletResponse) FacesContext
+					.getCurrentInstance().getExternalContext().getResponse();
+			response.setContentType("text/xml");
+
+			String vsd_name = DataUtils.valueSetDefinitionURI2Name(vsd_uri);
+			vsd_name = vsd_name.replaceAll(" ", "_");
+			vsd_name = vsd_name + ".xml";
+
+		    response.setHeader("Content-Disposition", "attachment; filename="
+					+ vsd_name);
+
+			response.setContentLength(xml_str.length());
+
+			ServletOutputStream ouputStream = response.getOutputStream();
+			ouputStream.write(xml_str.getBytes("UTF8"), 0, xml_str.length());
+			ouputStream.flush();
+			ouputStream.close();
+
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		FacesContext.getCurrentInstance().responseComplete();
 	}
 
 }

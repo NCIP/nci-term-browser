@@ -233,7 +233,7 @@
                                     <td align="right">
                                        <h:commandLink
                                           value="Export XML"
-                                          action="#{valueSetBean.exportToXMLAction}"
+                                          action="#{valueSetBean.exportValuesToXMLAction}"
                                           styleClass="texttitle-blue-small"
                                           title="Export VSD in LexGrid XML format" />
                                        | <h:commandLink

@@ -1,5 +1,4 @@
 package gov.nih.nci.evs.browser.bean;
-
 import java.io.*;
 import java.util.*;
 import java.net.*;

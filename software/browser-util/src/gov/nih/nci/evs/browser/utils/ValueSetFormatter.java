@@ -1,5 +1,8 @@
 package gov.nih.nci.evs.browser.utils;
 
+import gov.nih.nci.evs.browser.bean.*;
+import gov.nih.nci.evs.browser.common.*;
+
 import gov.nih.nci.evs.browser.bean.MappingData;
 import gov.nih.nci.evs.browser.common.Constants;
 import gov.nih.nci.evs.browser.properties.*;
@@ -61,9 +64,15 @@ import static gov.nih.nci.evs.browser.common.Constants.*;
 import org.LexGrid.naming.Mappings.*;
 import org.LexGrid.naming.SupportedSource;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+
 public class ValueSetFormatter {
 
 // Variable declaration
+	public static final String XML_DECLARATION = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+
 	LexBIGService lbSvc = null;
 	String serviceUrl = null;
 	LexEVSValueSetDefinitionServices vsd_service = null;
@@ -116,6 +125,29 @@ public class ValueSetFormatter {
 	                                 UMLS_CUI
 	                                 };
     UIUtils uiUtils = null;
+
+    static HashMap vsHeading2VarHashMap = null;
+
+	private String NCITCODE = "ncitCode";
+	private String SOURCEPREFERREDTERM = "sourcePreferredTerm";  //*
+	private String NCITPREFERREDTERM = "ncitPreferredTerm"; //*
+	private String NCITSYNONYMS = "ncitSynonyms";
+	private String SOURCESYNONYMS = "sourceSynonyms"; //*
+	private String NCITDEFINITIONS = "ncitDefinitions"; //*
+	private String SOURCEDEFINITIONS = "sourceDefinitions";
+
+    static {
+		vsHeading2VarHashMap = new HashMap();
+		vsHeading2VarHashMap.put("NCIt Concept Code", "ncitCode");
+		vsHeading2VarHashMap.put("Source Name", "sourcePreferredTerm");
+		vsHeading2VarHashMap.put("NCIt Preferred Term", "ncitPreferredTerm");
+		vsHeading2VarHashMap.put("NCIt Synonyms", "ncitSynonyms");
+		vsHeading2VarHashMap.put("Source Synonyms", "sourceSynonyms");
+		vsHeading2VarHashMap.put("NCIt Definition", "ncitDefinitions");
+		vsHeading2VarHashMap.put("Source Definition", "sourceDefinitions");
+	}
+
+
 // Default constructor
 	public ValueSetFormatter() {
         uiUtils = new UIUtils();
@@ -863,58 +895,94 @@ public class ValueSetFormatter {
 		}
         return null;
 	}
-/*
-	public static void main(String[] args) {
-		String vsd_uri = "http://ndfrt:PE";
-		vsd_uri = "http://evs.nci.nih.gov/valueset/C54453";
-		//vsd_uri = "http://evs.nci.nih.gov/valueset/C66781";
-		//vsd_uri = "http://evs.nci.nih.gov/valueset/C54451";
-		//vsd_uri = "http://evs.nci.nih.gov/valueset/C73339";
-		//vsd_uri = "http://evs.nci.nih.gov/valueset/C62596";
-		String serviceUrl = "https://lexevsapi6.nci.nih.gov/lexevsapi64";
-		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices(serviceUrl);
 
-        long ms = System.currentTimeMillis();
-		ValueSetFormatter test = new ValueSetFormatter(lbSvc, vsd_service);
-        ms = System.currentTimeMillis();
-
-		String version = null;
-		String source = test.getValueSetSupportedSource(vsd_uri);// "FDA";
-		System.out.println("vsd_uri: " + vsd_uri);
-		System.out.println("Source: " + source);
-
-        String outputfile = "value_set_report_test1.txt";
-        int n = vsd_uri.lastIndexOf("/");
-        if (n != -1) {
-			String code = vsd_uri.substring(n+1, vsd_uri.length());
-			outputfile = "value_set_report_" + code + ".txt";
+//=================================================================================================================
+    public String getVarName(String colName) {
+		if (!vsHeading2VarHashMap.containsKey(colName)) {
+			return null;
 		}
+		return (String) vsHeading2VarHashMap.get(colName);
+	}
 
+	public Vector getVars(String line) {
+		Vector w = new Vector();
+		Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(line);
+		for (int i=0; i<u.size(); i++) {
+			String heading = (String) u.elementAt(i);
+			String varName = getVarName(heading);
+			w.add(varName);
+		}
+		return w;
+	}
 
-		PrintWriter pw = null;
-		try {
-			pw = new PrintWriter(outputfile, "UTF-8");
-	        Vector fields = new Vector();
-	        fields.add(NCIT_CONCEPT_CODE);
-	        fields.add(SOURCE_PREFERRED_TERM);
-	        fields.add(NCIT_PREFERRED_TERM);
-	        fields.add(NCIT_SYNONYMS);
-	        fields.add(SOURCE_DEFINITION);
-	        fields.add(NCIT_DEFINITION);
-			String retstr = test.generate(vsd_uri, version, source, fields, 250);
-			pw.println(retstr);
-		} catch (Exception ex) {
-            ex.printStackTrace();
-		} finally {
-			try {
-				pw.close();
-				System.out.println("Output file " + outputfile + " generated.");
-			} catch (Exception ex) {
-				ex.printStackTrace();
+	public ArrayList delimited2List(String delimitedStr) {
+		if (delimitedStr == null) return null;
+		ArrayList a = new ArrayList();
+		Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(delimitedStr, '$');
+		u = removeDuplicateValues(u);
+		u = SortUtils.quickSort(u);
+		for (int i=0; i<u.size(); i++) {
+			String t = (String) u.elementAt(i);
+			a.add(t);
+		}
+		return a;
+	}
+
+	public Vector removeDuplicateValues(Vector v) {
+		Vector w = new Vector();
+		HashSet hset = new HashSet();
+		for (int i=0; i<v.size(); i++) {
+			String t = (String) v.elementAt(i);
+			if (!hset.contains(t)) {
+				hset.add(t);
+				w.add(t);
 			}
 		}
-		System.out.println("generateReport Total run time (ms): " + (System.currentTimeMillis() - ms));
+		return w;
 	}
-	*/
+
+    public ValueSet instantiateValueSet(String vsd_uri, String version, Vector fields) {
+		Vector vs_data = export(vsd_uri, version, fields);
+		ValueSet vs = new ValueSet();
+		ArrayList concepts =new ArrayList();
+		String heading_line = (String) vs_data.elementAt(0);
+		Vector var_vec = getVars(heading_line);
+		for (int i=1; i<vs_data.size(); i++) {
+			String line = (String) vs_data.elementAt(i);
+			Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(line, '|');
+			gov.nih.nci.evs.browser.bean.Concept c = new gov.nih.nci.evs.browser.bean.Concept();
+			for (int j=0; j<var_vec.size(); j++) {
+				String var = (String) var_vec.elementAt(j);
+				String value = (String) u.elementAt(j);
+                if (var.compareTo(NCITCODE) == 0) {
+					c.setNcitCode(value);
+                } else if (var.compareTo(SOURCEPREFERREDTERM) == 0) {
+					c.setSourcePreferredTerm(value);
+                } else if (var.compareTo(NCITPREFERREDTERM) == 0) {
+					c.setNcitPreferredTerm(value);
+				} else {
+					ArrayList a = delimited2List(value);
+					if (var.compareTo(NCITSYNONYMS) == 0) {
+						c.setNcitSynonyms(a);
+					} else if (var.compareTo(SOURCESYNONYMS) == 0) {
+						c.setSourceSynonyms(a);
+					} else if (var.compareTo(NCITDEFINITIONS) == 0) {
+						c.setNcitDefinitions(a);
+					} else if (var.compareTo(SOURCEDEFINITIONS) == 0) {
+						c.setSourceDefinitions(a);
+					}
+				}
+			}
+			concepts.add(c);
+		}
+		vs.setConcepts(concepts);
+        return vs;
+    }
+
+
+	public String object2XMLStream(ValueSet vs) {
+		XStream xstream_xml = new XStream(new DomDriver());
+		String xml = XML_DECLARATION + "\n" + xstream_xml.toXML(vs);
+		return xml;
+	}
 }
