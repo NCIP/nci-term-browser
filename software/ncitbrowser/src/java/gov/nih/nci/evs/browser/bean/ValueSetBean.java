@@ -1467,17 +1467,17 @@ public class ValueSetBean {
 		ValueSetFormatter formatter = new ValueSetFormatter(lbSvc, vsd_service);
         Vector fields = formatter.getDefaultFields(reformat);
 		CodingSchemeDataUtils csdu = new CodingSchemeDataUtils(lbSvc);
-		String version = csdu.getVocabularyVersionByTag(defaultCodingScheme, Constants.PRODUCTION);
-		Vector lines = csdu.resolve(defaultCodingScheme, null);
+		String version = csdu.getVocabularyVersionByTag(vsd_uri, Constants.PRODUCTION);
+		Vector lines = csdu.resolve(vsd_uri, version);
 		Vector codes = new Vector();
 		for (int i=0; i<lines.size(); i++) {
 			String line = (String) lines.elementAt(i);
-			u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(line);
+			u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(line, '|');
 			String code = (String) u.elementAt(1);
 			codes.add(code);
 		}
 
-		Vector rvs_tbl = formatter.export(defaultCodingScheme, version, supportedsource, fields, codes);
+		Vector rvs_tbl = formatter.export(vsd_uri, version, supportedsource, fields, codes);
 	    Vector v = gov.nih.nci.evs.browser.utils.StringUtils.convertDelimited2CSV(rvs_tbl, '|');
         StringBuffer sb = new StringBuffer();
         for (int k=0; k<fields.size(); k++) {
