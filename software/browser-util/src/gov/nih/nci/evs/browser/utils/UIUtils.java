@@ -687,7 +687,9 @@ public class UIUtils {
 				buf.append(" ").append(NONE).append("\n");
 			} else {
 				buf.append("<br/>").append("\n");
-				buf.append("<i>(True for the current concept.)</i>").append("\n");
+//    public static final String ROLE_DESCRIPTION_LABEL = "(True for the current concept and its descendants, may be inherited from parent(s).)";
+				//buf.append("<i>(True for the current concept.)</i>").append("\n");
+				buf.append("<i>" + Constants.ROLE_DESCRIPTION_LABEL + "</i>").append("\n");
 			}
 
 		} else if (type.compareTo(Constants.TYPE_ASSOCIATION) == 0) {
