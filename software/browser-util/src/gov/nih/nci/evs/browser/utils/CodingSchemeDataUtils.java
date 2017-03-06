@@ -1577,4 +1577,6 @@ public class CodingSchemeDataUtils {
 		//System.out.println("Total getPropertyValues run time (ms): " + (System.currentTimeMillis() - ms));
 		return line;
 	 }
+
+
 }

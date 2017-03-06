@@ -95,9 +95,14 @@
             		String message = (String) request.getSession().getAttribute("message");
             		request.getSession().removeAttribute("message");
             		String vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
+            		/*
             		String metadata = DataUtils
             				.getValueSetDefinitionMetadata(DataUtils
             						.findValueSetDefinitionByURI(vsd_uri));
+            		*/
+             		String metadata = DataUtils
+            				.getValueSetDefinitionMetadata(vsd_uri);
+           		
             		Vector u = StringUtils.parseData(metadata);
             		String name = (String) u.elementAt(0);
             		String valueset_uri = (String) u.elementAt(1);

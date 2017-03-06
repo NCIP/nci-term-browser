@@ -1433,9 +1433,13 @@ public class ValueSetBean {
                 .getExternalContext().getRequest();
 
 		String vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
+		/*
 		String metadata = DataUtils
 				.getValueSetDefinitionMetadata(DataUtils
 						.findValueSetDefinitionByURI(vsd_uri));
+		*/
+		String metadata = DataUtils
+				.getValueSetDefinitionMetadata(vsd_uri);
 		Vector u = StringUtils.parseData(metadata);
 		String name = (String) u.elementAt(0);
 		String valueset_uri = (String) u.elementAt(1);
@@ -1522,10 +1526,15 @@ public class ValueSetBean {
                 .getExternalContext().getRequest();
 
         String vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
-
+/*
 		String metadata = DataUtils
 				.getValueSetDefinitionMetadata(DataUtils
 						.findValueSetDefinitionByURI(vsd_uri));
+*/
+		String metadata = DataUtils
+				.getValueSetDefinitionMetadata(vsd_uri);
+
+
 		Vector u = StringUtils.parseData(metadata);
 		String name = (String) u.elementAt(0);
 		String valueset_uri = (String) u.elementAt(1);
