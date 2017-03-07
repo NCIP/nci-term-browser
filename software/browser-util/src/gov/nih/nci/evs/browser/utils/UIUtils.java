@@ -667,6 +667,29 @@ public class UIUtils {
 		return buf.toString();
     }
 
+//https://nciterms.nci.nih.gov
+    public String getHyperlink(String host, String codingScheme, String version, String name, String code, String ns) {
+		if (Arrays.asList(Constants.NON_CONCEPT_TO_CONCEPT_ASSOCIATION).contains(name)) return name;
+
+		StringBuffer buf = new StringBuffer();
+		if (version != null) {
+			if (gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(ns)) {
+				buf.append("<a href=\"" + host + "/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&version=" + version + "&code=" + code + "\">");
+			} else {
+				buf.append("<a href=\"" + host + "/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&version=" + version + "&code=" + code + "&ns=" + ns + "\">");
+			}
+	    } else {
+			if (gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(ns)) {
+				buf.append("<a href=\"" + host + "/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&code=" + code + "\">");
+			} else {
+				buf.append("<a href=\"" + host + "/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&code=" + code + "&ns=" + ns + "\">");
+			}
+	    }
+		buf.append(name).append("</a>").append("\n");
+		return buf.toString();
+    }
+
+
 	public String getRelationshipTableLabel(String defaultLabel, String type, boolean isEmpty) {
 		String NONE = "<i>(none)</i>";
 		StringBuffer buf = new StringBuffer();
