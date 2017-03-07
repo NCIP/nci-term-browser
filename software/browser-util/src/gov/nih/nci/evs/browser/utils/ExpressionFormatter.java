@@ -258,9 +258,8 @@ public class ExpressionFormatter {
 					String t = (String) w.elementAt(2);
 
 					if (role_group_start) {
-						buf.append(Constants.INDENT);
+						//buf.append(Constants.INDENT);
 					}
-
 					buf.append("<td class=\"dataCellText\" scope=\"row\" valign=\"top\">");
 					buf.append(Constants.INDENT).append(s);
 					buf.append("</td><td>" + t + "</td></tr>");
@@ -273,102 +272,6 @@ public class ExpressionFormatter {
 	}
 
 
-	/*
-	public String reformat(String expression) {
-		boolean start = true;
-		if (skipParents) {
-			start = false;
-		}
-        StringBuffer buf = new StringBuffer();
-		String label = getRelationshipTableLabel(Constants.TYPE_LOGICAL_DEFINITION, false);
-        buf.append(label);
-        //buf.append("<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n");
-        Vector columnHeadings = new Vector();
-        columnHeadings.add("Relationship");
-		columnHeadings.add("Value");
-        Vector columnWidths = new Vector();
-        columnWidths.add(new Integer(30));
-        columnWidths.add(new Integer(70));
-
-        String table = createTable(columnHeadings, columnWidths);
-        buf.append(table);
-
-		Vector v = gov.nih.nci.evs.browser.utils.StringUtils.parseData(expression, "\n");
-		for (int i=0; i<v.size(); i++) {
-			String t = (String) v.elementAt(i);
-			System.out.println("(" + i + ")" + t);
-		}
-		boolean role_group_start = false;
-		for (int i=0; i<v.size(); i++) {
-			String line = (String) v.elementAt(i);
-			if (skipParents && !start) {
-				if (!line.startsWith("\t")) {
-					if (line.compareTo("Parent") != 0) {
-						start = true;
-					}
-				}
-		    }
-
-		    if (start) {
-				String category = line;
-				category = category.trim();
-				if (line.startsWith("\t")) {
-					category = category.substring(1, category.length());
-				}
-				if (valueDomainSet.contains(category)) {
-					buf.append("<tr class=\"dataRowDark\">");
-					buf.append("<td class=\"dataCellText\">\n");
-					buf.append(Constants.INDENT_HALF + category);
-					buf.append("</td><td>" + indent + "</td></tr>");
-
-				} else {
-					buf.append("<tr class=\"dataRowLight\">");
-				}
-
-				Vector w = formatLine(line);
-				String type = (String) w.elementAt(0);
-				if (type.compareTo(TYPE_ROLE_GROUP) == 0) {
-					String s = (String) w.elementAt(1);
-					if (start) {
-
-						buf.append("<td class=\"dataCellText\" scope=\"row\" valign=\"top\">");
-						buf.append(indent).append(s);
-						buf.append("</td><td>" + indent + "</td></tr>");
-
-					}
-					role_group_start = true;
-
-				} else if (type.compareTo(TYPE_CATEGORY) == 0) {
-					String s = (String) w.elementAt(1);
-					if (s.compareTo("or") != 0) {
-						role_group_start = false;
-					}
-				} else if (type.compareTo(TYPE_PARENT) == 0) {
-					String s = (String) w.elementAt(1);
-
-						buf.append("<td class=\"dataCellText\" scope=\"row\" valign=\"top\">");
-						buf.append(indent).append(s);
-						buf.append("</td><td>" + indent + "</td></tr>");
-
-				} else if (type.compareTo(TYPE_ROLE) == 0) {
-					String s = (String) w.elementAt(1);
-					String t = (String) w.elementAt(2);
-
-					if (role_group_start) {
-						buf.append(indent);
-					}
-
-					buf.append("<td class=\"dataCellText\" scope=\"row\" valign=\"top\">");
-					buf.append(indent).append(s);
-					buf.append("</td><td>" + t + "</td></tr>");
-				}
-				buf.append("\n");
-			}
-		}
-		buf.append("</table>\n");
-		return buf.toString();
-	}
-	*/
 /*
     public static void main(String [] args) {
 		long ms = System.currentTimeMillis();
