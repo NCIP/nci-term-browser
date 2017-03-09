@@ -361,6 +361,10 @@ public class RelationshipTabFormatter {
 	}
 
     public String formatSingleColumnTable(String scheme, String type, ArrayList list) {
+        return formatSingleColumnTable(scheme, type, list,true);
+	}
+
+    public String formatSingleColumnTable(String scheme, String type, ArrayList list, boolean alternatingBackground) {
 		StringBuffer buf = new StringBuffer();
 		boolean isEmpty = false;
 		if (list == null || list.size() == 0) {
@@ -378,10 +382,14 @@ public class RelationshipTabFormatter {
 			String name = (String) u.elementAt(0);
 			String code = (String) u.elementAt(1);
 			String namespace = (String) u.elementAt(2);
-			Boolean bool_obj = UIUtils.isEven(new Integer(i));
-			if (bool_obj.equals(Boolean.TRUE)) {
-				buf.append("<tr class=\"dataRowDark\">");
-			} else {
+			if (alternatingBackground) {
+				Boolean bool_obj = UIUtils.isEven(new Integer(i));
+				if (bool_obj.equals(Boolean.TRUE)) {
+					buf.append("<tr class=\"dataRowDark\">");
+				} else {
+					buf.append("<tr class=\"dataRowLight\">");
+				}
+		    } else {
 				buf.append("<tr class=\"dataRowLight\">");
 			}
 			buf.append("<td class=\"dataCellText\">");
@@ -393,7 +401,6 @@ public class RelationshipTabFormatter {
 		buf.append("</table>");
         return buf.toString();
 	}
-
 
     public String formatOutboundRoleTable(HashMap hmap) {
 		StringBuffer buf = new StringBuffer();
