@@ -506,6 +506,9 @@ public class ExpressionParser {
 					w.add(t);
 				}
 			}
+		} else {
+			line = line.replaceAll(" and ", "|");
+			return gov.nih.nci.evs.browser.utils.StringUtils.parseData(line);
 		}
 		return w;
 	}
@@ -524,9 +527,10 @@ public class ExpressionParser {
 				String parent_id = "P_" + lcv;
 				hmap.put(parent_id, parent);
 			}
+
 			HashMap map = translateEquivalentClassHashMap(scheme, version, expression, hmap);
 			String s = writeEquivalentClass(map);
-			System.out.println("Time elapsed run time (ms): " + (System.currentTimeMillis() - ms));
+			//System.out.println("Time elapsed run time (ms): " + (System.currentTimeMillis() - ms));
 			return s;
 
 		} catch (Exception ex) {
@@ -607,22 +611,31 @@ public class ExpressionParser {
 		}
         return codes;
 	}
-
-    /*
+/*
     public static void main(String [] args) {
 		long ms = System.currentTimeMillis();
 		String codingSchemeURN = null;
 		codingSchemeURN = "NCI_Thesaurus";
 		String code = "C5266";
+		code = "C114968";
 		String version = null;
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+
+		CodingSchemeDataUtils csdu = new CodingSchemeDataUtils(lbSvc);
+		if (version == null) {
+			version = csdu.getVocabularyVersionByTag(codingSchemeURN, Constants.PRODUCTION);
+		}
+		String equivalanceClass = null;
+		try {
+			equivalanceClass = new CodingSchemeDataUtils(lbSvc).getEquivalenceExpression(codingSchemeURN, version, code);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		System.out.println(equivalanceClass);
 		ExpressionParser test = new ExpressionParser(lbSvc);
-		String expression = "((C3720 and (((R114 some C36437) and (R89 some C36711)) or ((R114 some C36435) and (R89 some C36707)) or ((R114 some C36590) and (R89 some C37216)) or ((R114 some C45440) and (R89 some C45443)) or ((R114 some C45439) and (R89 some C45442)) or ((R114 some C45441) and (R89 some C45444)) or ((R114 some C36436) and (R89 some C36708)) or ((R114 some C27711) and (R89 some C36706)) or ((R114 some C36591) and (R89 some C38348))) and (R105 some C39679) and (R106 some C81946) and (R106 some C37208) and (R104 some C39687) and (R176 some C38184) and (R176 some C101046) and (R176 some C99873) and (R176 some C101059) and (R176 some C99361) and (R176 some C99869) and (R176 some C101075) and (R176 some C101083) and (R176 some C101085) and (R113 some C39680) and (R113 some C37026) and (R113 some C37024) and (R115 some C39695) and (R115 some C36156) and (R115 some C50764)) or (R138 some C12486) or (R89 some C36447) or (R101 some C41165) or (R108 some C39715) or (R105 some C12922) or (R139 some C38640) or (R139 some C12660) or (R104 some C39567) or (R100 some C41165) or (R104 some C33061) or (R108 some C36113) or (R138 some C39300) or (R103 some C13049) or (R101 some C12746) or (R105 some C37017) or (R105 some C12917) or (R105 some C37060) or (R138 some C33930) or (R105 some C36725) or (R89 some C36448) or (R104 some C12535) or (R103 some C41168) or (R105 some C39566) or (R104 some C32725) or (R105 some C36988) or (R104 some C39568) or (R138 some C12549))";
-		String t = test.infixExpression2Text(codingSchemeURN, version, expression);
-		System.out.println("Concept code: " + code);
-		System.out.println(t);
+		String expression = test.infixExpression2Text(codingSchemeURN, version, equivalanceClass);
 		System.out.println("Total run time (ms): " + (System.currentTimeMillis() - ms));
    }
-   */
+*/
 }
 
