@@ -361,7 +361,7 @@ public class RelationshipTabFormatter {
 	}
 
     public String formatSingleColumnTable(String scheme, String type, ArrayList list) {
-        return formatSingleColumnTable(scheme, type, list,true);
+        return formatSingleColumnTable(scheme, type, list, false);
 	}
 
     public String formatSingleColumnTable(String scheme, String type, ArrayList list, boolean alternatingBackground) {
