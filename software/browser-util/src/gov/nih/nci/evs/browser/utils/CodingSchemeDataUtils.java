@@ -1578,5 +1578,23 @@ public class CodingSchemeDataUtils {
 		return line;
 	 }
 
+    public Vector getMappingCodingSchemesEntityParticipatesIn(String code, String namespace) {
+        Vector v = new Vector();
+        try {
+			MappingExtension mappingExtension =
+				(MappingExtension) lbSvc.getGenericExtension("MappingExtension");
 
+			AbsoluteCodingSchemeVersionReferenceList mappingSchemes =
+				mappingExtension.getMappingCodingSchemesEntityParticipatesIn(code, namespace);
+
+			//output is all of the mapping ontologies that this code participates in.
+			for(AbsoluteCodingSchemeVersionReference ref : mappingSchemes.getAbsoluteCodingSchemeVersionReference()){
+				v.add(ref.getCodingSchemeURN() + "|" + ref.getCodingSchemeVersion());
+			}
+
+		} catch (Exception ex) {
+            ex.printStackTrace();
+        }
+		return v;
+	}
 }
