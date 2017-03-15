@@ -190,12 +190,12 @@ public class CacheController {
     }
 
     public String getRemainingSubconceptJSONString(String codingScheme, String version, String parent_code, String parent_ns, String focus_code, boolean from_root) {
-	 if (parent_ns == null || parent_ns.compareTo("null") == 0 || parent_ns.compareTo("undefined") == 0) {
-		 LexBIGService lb_svc = RemoteServerUtil.createLexBIGService();
-		 parent_ns = new ConceptDetails(lb_svc).getNamespaceByCode(codingScheme, version, parent_code);
-	 }
+        LexBIGService lb_svc = RemoteServerUtil.createLexBIGService();
+	    if (parent_ns == null || parent_ns.compareTo("null") == 0 || parent_ns.compareTo("undefined") == 0) {
+		     parent_ns = new ConceptDetails(lb_svc).getNamespaceByCode(codingScheme, version, parent_code);
+	    }
 		long ms = System.currentTimeMillis();
-		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		//LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
         boolean useNamespace = false;
         if (parent_ns == null || parent_ns.compareTo("null") == 0) {
 			parent_ns = new ConceptDetails(lbSvc).getNamespaceByCode(codingScheme, version, parent_code);

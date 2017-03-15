@@ -755,6 +755,7 @@ public class TreeUtils {
 				return null;
 			}
 
+
             Mappings mappings = cs.getMappings();
             SupportedHierarchy[] hierarchies = mappings.getSupportedHierarchy();
             if (hierarchies == null || hierarchies.length == 0) {
@@ -762,6 +763,9 @@ public class TreeUtils {
 			}
 
             SupportedHierarchy hierarchyDefn = hierarchies[0];
+            if (hierarchies.length > 1) {
+                hierarchyDefn = selectSupportedHierarchy(hierarchies, DEFAULT_HIERARCHY_ID);
+			}
             String hier_id = hierarchyDefn.getLocalId();
             String[] associationsToNavigate =
                 hierarchyDefn.getAssociationNames();
@@ -805,6 +809,11 @@ public class TreeUtils {
                 return null;
 
             SupportedHierarchy hierarchyDefn = hierarchies[0];
+            if (hierarchies.length > 1) {
+                hierarchyDefn = selectSupportedHierarchy(hierarchies, DEFAULT_HIERARCHY_ID);
+			}
+            //String hierarchyID = hierarchyDefn.getLocalId();
+
             String[] associationsToNavigate =
                 hierarchyDefn.getAssociationNames();
 
@@ -1784,7 +1793,6 @@ public class TreeUtils {
         return cs;
     }
 
-
 /*
     public String[] getHierarchyIDs(String codingScheme,
         CodingSchemeVersionOrTag versionOrTag) throws LBException {
@@ -1805,10 +1813,26 @@ public class TreeUtils {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
         return hier;
     }
 */
+
+    public String getHierarchyID(String scheme, String version) {
+		CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+		if (version != null) {
+	        versionOrTag.setVersion(version);
+		}
+		try {
+			String[] ids = getHierarchyIDs(scheme, versionOrTag);
+			if (ids != null && ids.length == 1) {
+				return ids[0];
+			}
+			return selectHierarchyId(ids, DEFAULT_HIERARCHY_ID);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
 
     protected  SupportedHierarchy[] getSupportedHierarchies(
         String codingScheme, CodingSchemeVersionOrTag versionOrTag)
@@ -1843,20 +1867,17 @@ public class TreeUtils {
 	}
 
 
-    public String getHierarchyID(String codingScheme, String version) {
-        CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
-        if (version != null)
-            versionOrTag.setVersion(version);
-        try {
-            String[] ids = getHierarchyIDs(codingScheme, versionOrTag);
-            if (ids.length > 0)
-                //return ids[0];
-                return selectHierarchyId(ids, DEFAULT_HIERARCHY_ID);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+    public SupportedHierarchy selectSupportedHierarchy(SupportedHierarchy[] hierarchies, String id) {
+		if (hierarchies == null || hierarchies.length == 0) return null;
+		for (int i=0; i<hierarchies.length; i++) {
+			SupportedHierarchy hierarchyDefn = hierarchies[i];
+			String hier_id = hierarchyDefn.getLocalId();
+			if (hier_id.compareTo(id) == 0) {
+				return hierarchyDefn;
+			}
+		}
+		return null;
+	}
 
     public ResolvedConceptReferenceList getHierarchyRoots(
         String codingScheme, String version) {
@@ -1992,6 +2013,7 @@ public class TreeUtils {
         ResolvedConceptReferenceList matches = null;
         //Vector v = new Vector();
         try {
+
             CodingSchemeVersionOrTag versionOrTag =
                 new CodingSchemeVersionOrTag();
             if (version != null)
@@ -2005,7 +2027,11 @@ public class TreeUtils {
             if (hierarchies == null || hierarchies.length == 0)
                 return null;
             SupportedHierarchy hierarchyDefn = hierarchies[0];
+            if (hierarchies.length > 1) {
+                hierarchyDefn = selectSupportedHierarchy(hierarchies, DEFAULT_HIERARCHY_ID);
+			}
             String hierarchyID = hierarchyDefn.getLocalId();
+
             String[] associationsToNavigate =
                 hierarchyDefn.getAssociationNames();
             boolean associationsNavigatedFwd =
@@ -2228,7 +2254,9 @@ public class TreeUtils {
                 return null;
 
             SupportedHierarchy hierarchyDefn = hierarchies[0];
-            //String hier_id = hierarchyDefn.getLocalId();
+            if (hierarchies.length > 1) {
+                hierarchyDefn = selectSupportedHierarchy(hierarchies, DEFAULT_HIERARCHY_ID);
+			}
 
             String[] associationsToNavigate =
                 hierarchyDefn.getAssociationNames();
@@ -2384,8 +2412,10 @@ public class TreeUtils {
                 return null;
 
             SupportedHierarchy hierarchyDefn = hierarchies[0];
-            //String hier_id = hierarchyDefn.getLocalId();
-
+            if (hierarchies.length > 1) {
+                hierarchyDefn = selectSupportedHierarchy(hierarchies, DEFAULT_HIERARCHY_ID);
+			}
+            //SupportedHierarchy hierarchyDefn = hierarchies[0];
             String[] associationsToNavigate =
                 hierarchyDefn.getAssociationNames();
             boolean associationsNavigatedFwd =
@@ -2430,9 +2460,6 @@ public class TreeUtils {
 					focus.setCodeNamespace(namespace);
 				}
 			}
-
-					//focus.setCodeNamespace(entityCodeNamespace);
-
 					matches =
 						cng.resolveAsList(focus, associationsNavigatedFwd,
 							!associationsNavigatedFwd, 1, 1, new LocalNameList(),
