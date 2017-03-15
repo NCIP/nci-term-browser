@@ -1118,6 +1118,81 @@ public class ViewInHierarchyUtils {
 		return json;
     }
 
+
+    public void runBatchTest(String inputfile, String outputfile) {
+		long ms = System.currentTimeMillis();
+		PrintWriter pw = null;
+		CodingSchemeDataUtils csdu = new CodingSchemeDataUtils(lbSvc);
+		try {
+			Vector v = Utils.readFile(inputfile);
+			pw = new PrintWriter(outputfile, "UTF-8");
+			for (int i=0; i<v.size(); i++) {
+
+				try {
+					String t = (String) v.elementAt(i);
+					pw.println(t);
+					Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(t);
+					String codingScheme = (String) u.elementAt(0);
+					pw.println("\tcodingScheme: " + codingScheme);
+
+					String version = (String) u.elementAt(1);
+					pw.println("\tversion: " + version);
+					if (version == null || version.compareTo("null") == 0) {
+						version = null;
+					}
+					if (version == null) {
+						version = csdu.getVocabularyVersionByTag(codingScheme, "PRODUCTION");
+						pw.println("\tProduction version: " + version);
+					}
+
+					CodingScheme cs = csdu.resolveCodingScheme(codingScheme, version);
+					if (cs == null) {
+						pw.println("ERROR: Unable to resolve " + codingScheme + " version: " + version);
+						System.out.println("ERROR: Unable to resolve " + codingScheme + " version: " + version);
+					} else {
+						System.out.println(cs.getCodingSchemeName());
+						String code = (String) u.elementAt(2);
+						pw.println("\tcode: " + code);
+						//csdu = new CodingSchemeDataUtils(lbSvc);
+						Vector namespace_vec = csdu.getNamespaceNames(codingScheme, version);
+						String ns = null;
+						for (int k=0; k<namespace_vec.size(); k++) {
+							ns = (String) namespace_vec.elementAt(k);
+							pw.println("\tns: " + ns);
+						}
+						if (namespace_vec != null && namespace_vec.size() == 1) {
+							ns = (String) namespace_vec.elementAt(0);
+						} else {
+							ns = null;
+						}
+						printTree(pw, codingScheme, version, code, ns);
+						CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+						if (version != null) {
+							versionOrTag.setVersion(version);
+						}
+						String json = getTree(codingScheme, versionOrTag, code, ns);
+						pw.println("\n" + json);
+						pw.println("\n");
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					pw.println("\tERROR: Exception thrown.");
+				}
+			}
+		} catch (Exception ex) {
+            //pw.println(ex.getCause().toString());
+            ex.printStackTrace();
+		} finally {
+			try {
+				pw.close();
+				System.out.println("Output file " + outputfile + " generated.");
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+		System.out.println("Total run time (ms): " + (System.currentTimeMillis() - ms));
+	}
+
 /*
     public static void main(String[] args) throws Exception {
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();

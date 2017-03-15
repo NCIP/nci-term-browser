@@ -104,6 +104,7 @@ import org.LexGrid.LexBIG.Impl.Extensions.tree.model.LexEvsTree;
 public class TreeUtils {
     private static Logger _logger = Logger.getLogger(TreeUtils.class);
     private static LocalNameList _noopList = new LocalNameList();
+    private static String DEFAULT_HIERARCHY_ID = "is_a";
 
     private LexBIGService lbSvc = null;
     private LexBIGServiceConvenienceMethods lbscm = null;
@@ -1827,6 +1828,20 @@ public class TreeUtils {
         return mappings.getSupportedHierarchy();
     }
 
+    //is_a
+    public String selectHierarchyId(String[] ids, String id) {
+		if (ids == null || ids.length == 0) return null;
+		if (ids.length == 1) {
+			return ids[0];
+		} else {
+			if (Arrays.asList(ids).contains(id)) {
+				return id;
+			} else {
+				return ids[0];
+			}
+		}
+	}
+
 
     public String getHierarchyID(String codingScheme, String version) {
         CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
@@ -1835,9 +1850,10 @@ public class TreeUtils {
         try {
             String[] ids = getHierarchyIDs(codingScheme, versionOrTag);
             if (ids.length > 0)
-                return ids[0];
+                //return ids[0];
+                return selectHierarchyId(ids, DEFAULT_HIERARCHY_ID);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return null;
     }
