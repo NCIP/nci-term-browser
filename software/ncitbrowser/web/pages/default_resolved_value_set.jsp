@@ -15,6 +15,10 @@
 <%@ pageimport="org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList"%>
 <%@ page import="org.apache.log4j.*"%>
 
+<%@ page import="org.LexGrid.LexBIG.LexBIGService.LexBIGService"%>
+<%@ page import="org.lexgrid.resolvedvalueset.LexEVSResolvedValueSetService"%>
+<%@ page import="org.lexgrid.valuesets.LexEVSValueSetDefinitionServices"%>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
@@ -106,6 +110,9 @@
             		String concept_domain = (String) u.elementAt(3);
             		String sources = (String) u.elementAt(4);
             		String supportedsources = (String) u.elementAt(5);
+            		String supportedsource = null;
+            		
+            		String defaultCodingScheme = (String) u.elementAt(6);
             		
 
             		IteratorBeanManager iteratorBeanManager = (IteratorBeanManager) FacesContext
@@ -227,16 +234,16 @@
                                     <td align="left" class="texttitle-blue">Value Set:&nbsp;<%=vsd_uri%>
 &nbsp;
 <a href="/ncitbrowser/ajax?action=download&vsd_uri=<%=vsd_uri%>"><img src="/ncitbrowser/images/released_file.gif" alt="Value Set Released Files (FTP Server)" border="0" tabindex="2"></a>
-</td>
+</td>                                   
                                     <td align="right">
                                        <h:commandLink
                                           value="Export XML"
-                                          action="#{valueSetBean.exportToXMLAction}"
+                                          action="#{valueSetBean.exportValuesToXMLAction}"
                                           styleClass="texttitle-blue-small"
                                           title="Export VSD in LexGrid XML format" />
                                        | <h:commandLink
                                           value="Export CSV"
-                                          action="#{valueSetBean.exportToCSVAction}"
+                                          action="#{valueSetBean.exportValuesToCSVAction}"
                                           styleClass="texttitle-blue-small"
                                           title="Export VSD in CSV format" />
                                     </td>
@@ -267,6 +274,74 @@
                         </tr>
                         <tr class="textbody">
                            <td>
+                        <%   
+                        boolean reformat = true;
+                        boolean use_new_format = true;
+                        String rvs_tbl = null;
+                        if (supportedsources != null) {
+                            Vector w = gov.nih.nci.evs.browser.utils.StringUtils.parseData(supportedsources, ";");
+                            supportedsource = (String) w.elementAt(0);
+                        }
+                        
+                        boolean non_ncit_source = true;
+                        if (supportedsource == null || supportedsource.compareTo("null") == 0 || supportedsource.compareTo("NCI") == 0) {
+                            non_ncit_source = false;
+                        }
+                        
+			Vector codes = new Vector();
+			List list = iteratorBean.getData(istart, iend);
+			for (int k = 0; k < list.size(); k++) {
+				Object obj = list.get(k);
+				ResolvedConceptReference ref = (ResolvedConceptReference) obj;
+				codes.add(ref.getConceptCode());
+			}  
+
+			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+			LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+			ValueSetFormatter formatter = new ValueSetFormatter(lbSvc, vsd_service);
+			Vector fields = formatter.getDefaultFields(non_ncit_source);
+			//public String generate(String vsd_uri, String version, String source, Vector fields, Vector codes, int maxReturn) {
+			rvs_tbl = formatter.generate(defaultCodingScheme, null, supportedsource, fields, codes, codes.size());
+                        
+                        /*
+                        if (reformat) {
+                                Vector codes = new Vector();
+				List list = iteratorBean.getData(istart, iend);
+				for (int k = 0; k < list.size(); k++) {
+					Object obj = list.get(k);
+					ResolvedConceptReference ref = (ResolvedConceptReference) obj;
+					codes.add(ref.getConceptCode());
+				}  
+
+				LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+				LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+				ValueSetFormatter formatter = new ValueSetFormatter(lbSvc, vsd_service);
+				Vector fields = formatter.getDefaultFields();
+				//public String generate(String vsd_uri, String version, String source, Vector fields, Vector codes, int maxReturn) {
+				rvs_tbl = formatter.generate(defaultCodingScheme, null, supportedsource, fields, codes, codes.size());
+			} else if (use_new_format) {
+                                Vector codes = new Vector();
+				List list = iteratorBean.getData(istart, iend);
+				for (int k = 0; k < list.size(); k++) {
+					Object obj = list.get(k);
+					ResolvedConceptReference ref = (ResolvedConceptReference) obj;
+					codes.add(ref.getConceptCode());
+				}  
+
+				LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+				LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+				ValueSetFormatter formatter = new ValueSetFormatter(lbSvc, vsd_service);
+				Vector fields = formatter.getDefaultFields(false);
+				//public String generate(String vsd_uri, String version, String source, Vector fields, Vector codes, int maxReturn) {
+				rvs_tbl = formatter.generate(defaultCodingScheme, null, supportedsource, fields, codes, codes.size());			
+			}
+			*/
+			if (rvs_tbl != null) {
+			%>	
+			   <%=rvs_tbl%>
+			<%   
+			} else {
+                        %>
                               <table class="datatable_960" summary="Data Table" cellpadding="3" cellspacing="0" border="0" width="100%">
                                  <th class="dataTableHeader" scope="col" align="left">Code</th>
                                  <th class="dataTableHeader" scope="col" align="left">Name</th>
@@ -274,7 +349,7 @@
                                  <th class="dataTableHeader" scope="col" align="left">Namespace</th>
                                  <%
                                  	Vector concept_vec = new Vector();
-                                 				List list = iteratorBean.getData(istart, iend);
+                                 				//List list = iteratorBean.getData(istart, iend);
                                  				for (int k = 0; k < list.size(); k++) {
                                  					Object obj = list.get(k);
                                  					ResolvedConceptReference ref = null;
@@ -345,6 +420,11 @@
                                  %>
                                  </tr>
                               </table>
+
+			     <%
+				}
+			     %>
+
                            </td>
                         </tr>
                      </table>

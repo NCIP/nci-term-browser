@@ -282,9 +282,28 @@
                             Vector w = gov.nih.nci.evs.browser.utils.StringUtils.parseData(supportedsources, ";");
                             supportedsource = (String) w.elementAt(0);
                         }
-                        if (supportedsource == null || supportedsource.compareTo("null") == 0) {
-                            reformat = false;
+                        
+                        boolean non_ncit_source = true;
+                        if (supportedsource == null || supportedsource.compareTo("null") == 0 || supportedsource.compareTo("NCI") == 0) {
+                            non_ncit_source = false;
                         }
+                        
+			Vector codes = new Vector();
+			List list = iteratorBean.getData(istart, iend);
+			for (int k = 0; k < list.size(); k++) {
+				Object obj = list.get(k);
+				ResolvedConceptReference ref = (ResolvedConceptReference) obj;
+				codes.add(ref.getConceptCode());
+			}  
+
+			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+			LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+			ValueSetFormatter formatter = new ValueSetFormatter(lbSvc, vsd_service);
+			Vector fields = formatter.getDefaultFields(non_ncit_source);
+			//public String generate(String vsd_uri, String version, String source, Vector fields, Vector codes, int maxReturn) {
+			rvs_tbl = formatter.generate(defaultCodingScheme, null, supportedsource, fields, codes, codes.size());
+                        
+                        /*
                         if (reformat) {
                                 Vector codes = new Vector();
 				List list = iteratorBean.getData(istart, iend);
@@ -316,6 +335,7 @@
 				//public String generate(String vsd_uri, String version, String source, Vector fields, Vector codes, int maxReturn) {
 				rvs_tbl = formatter.generate(defaultCodingScheme, null, supportedsource, fields, codes, codes.size());			
 			}
+			*/
 			if (rvs_tbl != null) {
 			%>	
 			   <%=rvs_tbl%>
@@ -329,7 +349,7 @@
                                  <th class="dataTableHeader" scope="col" align="left">Namespace</th>
                                  <%
                                  	Vector concept_vec = new Vector();
-                                 				List list = iteratorBean.getData(istart, iend);
+                                 				//List list = iteratorBean.getData(istart, iend);
                                  				for (int k = 0; k < list.size(); k++) {
                                  					Object obj = list.get(k);
                                  					ResolvedConceptReference ref = null;

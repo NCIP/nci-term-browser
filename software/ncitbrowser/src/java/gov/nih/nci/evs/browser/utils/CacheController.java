@@ -195,7 +195,7 @@ public class CacheController {
 		     parent_ns = new ConceptDetails(lb_svc).getNamespaceByCode(codingScheme, version, parent_code);
 	    }
 		long ms = System.currentTimeMillis();
-		//LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
         boolean useNamespace = false;
         if (parent_ns == null || parent_ns.compareTo("null") == 0) {
 			parent_ns = new ConceptDetails(lbSvc).getNamespaceByCode(codingScheme, version, parent_code);

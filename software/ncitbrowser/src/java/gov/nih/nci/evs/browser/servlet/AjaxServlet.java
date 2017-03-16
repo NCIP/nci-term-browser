@@ -3881,11 +3881,14 @@ out.flush();
 
 			try {
 				String defaultCodingScheme = DataUtils.getValueSetDefaultCodingScheme(vsd_uri);
-                String nextJSP = "/pages/resolved_value_set.jsf";
+				/*
+                String nextJSP = "/pages/modified_resolved_value_set.jsf";
 				if (!DataUtils.isNCIT(defaultCodingScheme)) {
 					//nextJSP = "/pages/default_resolved_value_set.jsf?vsd_uri="+vsd_uri;
-					nextJSP = "/pages/default_resolved_value_set.jsf";
+					nextJSP = "/pages/resolved_value_set.jsf";
 				}
+				*/
+				String nextJSP = "/pages/resolved_value_set.jsf";
 				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
 				dispatcher.forward(request,response);
 				return;
