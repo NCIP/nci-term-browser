@@ -295,7 +295,7 @@
                         String rvs_tbl = null;
                         
                         if (DataUtils.isNCIT(defaultCodingScheme)) {
-
+                                /*
 				if (supportedsources != null) {
 				    Vector w = gov.nih.nci.evs.browser.utils.StringUtils.parseData(supportedsources, ";");
 				    supportedsource = (String) w.elementAt(0);
@@ -305,6 +305,7 @@
 				if (supportedsource == null || supportedsource.compareTo("null") == 0 || supportedsource.compareTo("NCI") == 0) {
 				    non_ncit_source = false;
 				}
+				*/
 
 				Vector codes = new Vector();
 				List list = iteratorBean.getData(istart, iend);
@@ -313,12 +314,14 @@
 					ResolvedConceptReference ref = (ResolvedConceptReference) obj;
 					codes.add(ref.getConceptCode());
 				}  
-
+                                
 				LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 				LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 				ValueSetFormatter formatter = new ValueSetFormatter(lbSvc, vsd_service);
-				Vector fields = formatter.getDefaultFields(non_ncit_source);
-				rvs_tbl = formatter.generate(defaultCodingScheme, null, supportedsource, fields, codes, codes.size());
+				//Vector fields = formatter.getDefaultFields(non_ncit_source);
+				//rvs_tbl = formatter.generate(defaultCodingScheme, null, supportedsource, fields, codes, codes.size());
+				
+				rvs_tbl = formatter.get_rvs_tbl(vsd_uri);
 			}
 
 			if (rvs_tbl != null) {

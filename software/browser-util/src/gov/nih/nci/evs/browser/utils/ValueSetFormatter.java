@@ -136,6 +136,8 @@ public class ValueSetFormatter {
 	private String NCITDEFINITIONS = "ncitDefinitions"; //*
 	private String SOURCEDEFINITIONS = "sourceDefinitions";
 
+	private	ValueSetMetadataUtils vsmdu = new ValueSetMetadataUtils(vsd_service);
+
     static {
 		vsHeading2VarHashMap = new HashMap();
 		vsHeading2VarHashMap.put("NCIt Concept Code", "ncitCode");
@@ -159,6 +161,7 @@ public class ValueSetFormatter {
 		this.lbSvc = lbSvc;
 		this.vsd_service = vsd_service;
         csdu = new CodingSchemeDataUtils(lbSvc);
+	    vsmdu = new ValueSetMetadataUtils(vsd_service);
         uiUtils = new UIUtils();
 	}
 
@@ -985,4 +988,54 @@ public class ValueSetFormatter {
 		String xml = XML_DECLARATION + "\n" + xstream_xml.toXML(vs);
 		return xml;
 	}
+
+
+    public String get_rvs_tbl(String vsd_uri) {
+		return get_rvs_tbl(vsd_uri, null);
+	}
+
+    public String get_rvs_tbl(String vsd_uri, Vector codes) {
+		String rvs_tbl = null;
+		String supported_source = vsmdu.getValueSetSupportedSource(vsd_uri);
+		CodingSchemeDataUtils csdu = new CodingSchemeDataUtils(lbSvc);
+		String metadata = vsmdu.getValueSetDefinitionMetadata(vsd_uri);
+		Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(metadata);
+		String defaultCodingScheme = (String) u.elementAt(6);
+		boolean non_ncit_source = true;
+		if (supported_source == null || supported_source.compareTo("null") == 0 || supported_source.compareTo("NCI") == 0) {
+			non_ncit_source = false;
+		}
+		if (codes == null) {
+			codes = new Vector();
+			ResolvedConceptReferencesIterator rcri = null;
+			boolean resolveObjects = false;
+			try {
+				rcri = csdu.resolveCodingScheme(vsd_uri, null, resolveObjects);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			if (rcri != null) {
+				try {
+					int numberRemaining = rcri.numberRemaining();
+					while (rcri.hasNext()) {
+						rcri = rcri.scroll(maxToReturn);
+						ResolvedConceptReferenceList rcrl = rcri.getNext();
+						ResolvedConceptReference[] rcra =
+							rcrl.getResolvedConceptReference();
+						for (int i = 0; i < rcra.length; i++) {
+							ResolvedConceptReference rcr = rcra[i];
+							codes.add(rcr.getCode());
+						}
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
+		ValueSetFormatter formatter = new ValueSetFormatter(lbSvc, vsd_service);
+		Vector fields = formatter.getDefaultFields(non_ncit_source);
+		rvs_tbl = formatter.generate(defaultCodingScheme, null, supported_source, fields, codes, codes.size());
+		return rvs_tbl;
+	}
+
 }
