@@ -95,11 +95,6 @@
             		String message = (String) request.getSession().getAttribute("message");
             		request.getSession().removeAttribute("message");
             		String vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
-            		/*
-            		String metadata = DataUtils
-            				.getValueSetDefinitionMetadata(DataUtils
-            						.findValueSetDefinitionByURI(vsd_uri));
-            		*/
              		String metadata = DataUtils
             				.getValueSetDefinitionMetadata(vsd_uri);
            		
@@ -129,7 +124,6 @@
             				.getAttribute("resolved_vs_key");
             		IteratorBean iteratorBean = iteratorBeanManager
             				.getIteratorBean(resolved_vs_key);
-            				
            		
             		if (iteratorBean == null) {
            		
@@ -209,10 +203,6 @@
             		if (iend > size)
             			iend = size - 1;
             %>
-            
-            <!--
-            <div class="pagecontent" style="width:590px;">
-            -->
             <div class="pagecontent"> 
             
                <a name="evs-content" id="evs-content"></a>               
@@ -231,6 +221,26 @@
                            <td>
                               <table border="0" width="900" >
                                  <tr>
+<%                                 
+ if (DataUtils.isNCIT(defaultCodingScheme)) {                                 
+%>                                 
+                                    <td align="left" class="texttitle-blue">Value Set:&nbsp;<%=vsd_uri%></td>
+                                    <td align="right">
+                                       <h:commandLink
+                                          value="Export XML"
+                                          action="#{valueSetBean.exportToXMLAction}"
+                                          styleClass="texttitle-blue-small"
+                                          title="Export VSD in LexGrid XML format" />
+                                       | <h:commandLink
+                                          value="Export CSV"
+                                          action="#{valueSetBean.exportToCSVAction}"
+                                          styleClass="texttitle-blue-small"
+                                          title="Export VSD in CSV format" />
+                                    </td>                              
+<%                                 
+} else {                                 
+%>                                  
+                                 
                                     <td align="left" class="texttitle-blue">Value Set:&nbsp;<%=vsd_uri%>
 &nbsp;
 <a href="/ncitbrowser/ajax?action=download&vsd_uri=<%=vsd_uri%>"><img src="/ncitbrowser/images/released_file.gif" alt="Value Set Released Files (FTP Server)" border="0" tabindex="2"></a>
@@ -247,6 +257,11 @@
                                           styleClass="texttitle-blue-small"
                                           title="Export VSD in CSV format" />
                                     </td>
+<%                                 
+}                                
+%>                                      
+                                    
+                                    
                                  </tr>
                               </table>
                            </td>
@@ -278,34 +293,20 @@
                         boolean reformat = true;
                         boolean use_new_format = true;
                         String rvs_tbl = null;
-                        if (supportedsources != null) {
-                            Vector w = gov.nih.nci.evs.browser.utils.StringUtils.parseData(supportedsources, ";");
-                            supportedsource = (String) w.elementAt(0);
-                        }
                         
-                        boolean non_ncit_source = true;
-                        if (supportedsource == null || supportedsource.compareTo("null") == 0 || supportedsource.compareTo("NCI") == 0) {
-                            non_ncit_source = false;
-                        }
-                        
-			Vector codes = new Vector();
-			List list = iteratorBean.getData(istart, iend);
-			for (int k = 0; k < list.size(); k++) {
-				Object obj = list.get(k);
-				ResolvedConceptReference ref = (ResolvedConceptReference) obj;
-				codes.add(ref.getConceptCode());
-			}  
+                        if (DataUtils.isNCIT(defaultCodingScheme)) {
 
-			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-			LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
-			ValueSetFormatter formatter = new ValueSetFormatter(lbSvc, vsd_service);
-			Vector fields = formatter.getDefaultFields(non_ncit_source);
-			//public String generate(String vsd_uri, String version, String source, Vector fields, Vector codes, int maxReturn) {
-			rvs_tbl = formatter.generate(defaultCodingScheme, null, supportedsource, fields, codes, codes.size());
-                        
-                        /*
-                        if (reformat) {
-                                Vector codes = new Vector();
+				if (supportedsources != null) {
+				    Vector w = gov.nih.nci.evs.browser.utils.StringUtils.parseData(supportedsources, ";");
+				    supportedsource = (String) w.elementAt(0);
+				}
+
+				boolean non_ncit_source = true;
+				if (supportedsource == null || supportedsource.compareTo("null") == 0 || supportedsource.compareTo("NCI") == 0) {
+				    non_ncit_source = false;
+				}
+
+				Vector codes = new Vector();
 				List list = iteratorBean.getData(istart, iend);
 				for (int k = 0; k < list.size(); k++) {
 					Object obj = list.get(k);
@@ -316,26 +317,10 @@
 				LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 				LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 				ValueSetFormatter formatter = new ValueSetFormatter(lbSvc, vsd_service);
-				Vector fields = formatter.getDefaultFields();
-				//public String generate(String vsd_uri, String version, String source, Vector fields, Vector codes, int maxReturn) {
+				Vector fields = formatter.getDefaultFields(non_ncit_source);
 				rvs_tbl = formatter.generate(defaultCodingScheme, null, supportedsource, fields, codes, codes.size());
-			} else if (use_new_format) {
-                                Vector codes = new Vector();
-				List list = iteratorBean.getData(istart, iend);
-				for (int k = 0; k < list.size(); k++) {
-					Object obj = list.get(k);
-					ResolvedConceptReference ref = (ResolvedConceptReference) obj;
-					codes.add(ref.getConceptCode());
-				}  
-
-				LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-				LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
-				ValueSetFormatter formatter = new ValueSetFormatter(lbSvc, vsd_service);
-				Vector fields = formatter.getDefaultFields(false);
-				//public String generate(String vsd_uri, String version, String source, Vector fields, Vector codes, int maxReturn) {
-				rvs_tbl = formatter.generate(defaultCodingScheme, null, supportedsource, fields, codes, codes.size());			
 			}
-			*/
+
 			if (rvs_tbl != null) {
 			%>	
 			   <%=rvs_tbl%>
@@ -349,7 +334,7 @@
                                  <th class="dataTableHeader" scope="col" align="left">Namespace</th>
                                  <%
                                  	Vector concept_vec = new Vector();
-                                 				//List list = iteratorBean.getData(istart, iend);
+                                 				List list = iteratorBean.getData(istart, iend);
                                  				for (int k = 0; k < list.size(); k++) {
                                  					Object obj = list.get(k);
                                  					ResolvedConceptReference ref = null;
