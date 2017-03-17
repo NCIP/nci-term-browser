@@ -3839,11 +3839,11 @@ out.flush();
 			if (version == null || version.compareTo("null") == 0) {
 				version = DataUtils.getVocabularyVersionByTag(uri, "PRODUCTION");
 			}
-			//key = key + "|" + uri + "$" + version;
 			buf.append("|" + uri + "$" + version);
             csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(uri, version));
 		}
 		key = key + buf.toString();
+
         request.getSession().setAttribute("coding_scheme_ref", coding_scheme_ref);
 
 		try {
@@ -3866,7 +3866,6 @@ out.flush();
 			}
 
 			request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
-
 			IteratorBean iteratorBean = iteratorBeanManager.getIteratorBean(key);
 			if (iteratorBean == null) {
 				iteratorBean = new IteratorBean(itr);
@@ -3876,12 +3875,21 @@ out.flush();
 			}
 
 			request.getSession().setAttribute("coding_scheme_ref", coding_scheme_ref);
+            /*
+            try {
+				int numberRemaining = itr.numberRemaining();
+				System.out.println("numberRemaining: " + numberRemaining);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			*/
+
 			request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
 			request.getSession().setAttribute("resolved_vs_key", key);
 
 			try {
-				String defaultCodingScheme = DataUtils.getValueSetDefaultCodingScheme(vsd_uri);
 				/*
+				String defaultCodingScheme = DataUtils.getValueSetDefaultCodingScheme(vsd_uri);
                 String nextJSP = "/pages/modified_resolved_value_set.jsf";
 				if (!DataUtils.isNCIT(defaultCodingScheme)) {
 					//nextJSP = "/pages/default_resolved_value_set.jsf?vsd_uri="+vsd_uri;
@@ -3896,7 +3904,6 @@ out.flush();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-
 			return;
 
 		} catch (Exception ex) {
@@ -3907,10 +3914,12 @@ out.flush();
 		request.getSession().setAttribute("message", msg);
         try {
 			String nextJSP = "/pages/resolved_value_set.jsf?vsd_uri="+vsd_uri;
+			/*
             String defaultCodingScheme = DataUtils.getValueSetDefaultCodingScheme(vsd_uri);
             if (!DataUtils.isNCIT(defaultCodingScheme)) {
 				nextJSP = "/pages/default_resolved_value_set.jsf?vsd_uri="+vsd_uri;
 			}
+			*/
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
 			dispatcher.forward(request,response);
 			return;

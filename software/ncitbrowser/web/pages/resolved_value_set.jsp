@@ -124,30 +124,32 @@
             				.getAttribute("resolved_vs_key");
             		IteratorBean iteratorBean = iteratorBeanManager
             				.getIteratorBean(resolved_vs_key);
-           		
+            				
+            				
+			int itr_size = 0;
+			String itr_size_str = null;
+
             		if (iteratorBean == null) {
-           		
-            			ResolvedConceptReferencesIterator itr = (ResolvedConceptReferencesIterator) request
+          			ResolvedConceptReferencesIterator itr = (ResolvedConceptReferencesIterator) request
             					.getSession().getAttribute(
             							"ResolvedConceptReferencesIterator");
+            							
             			iteratorBean = new IteratorBean(itr);
-            			
             			iteratorBean.initialize();
             			iteratorBean.setKey(resolved_vs_key);
             			request.getSession().setAttribute("resolved_vs_key",
             					resolved_vs_key);
             			iteratorBeanManager.addIteratorBean(iteratorBean);
-            			int itr_size = iteratorBean.getSize();
-         			
+            			itr_size = iteratorBean.getSize();
            			Integer obj = Integer.valueOf(itr_size);
-            			String itr_size_str = obj.toString();
+            			itr_size_str = obj.toString();
            			request.getSession().setAttribute("itr_size_str",
             					itr_size_str);
 
             		} else {
-           			int itr_size = iteratorBean.getSize();
+           			itr_size = iteratorBean.getSize();
             			Integer obj = Integer.valueOf(itr_size);
-            			String itr_size_str = obj.toString();
+            			itr_size_str = obj.toString();
             		}
 
             		String resultsPerPage =  HTTPUtils.cleanXSS((String) request.getParameter("resultsPerPage"));
@@ -193,7 +195,6 @@
             		int num_pages = size / pageSize;
             		if (num_pages * pageSize < size)
             			num_pages++;
-
 
             		int istart = (page_num - 1) * pageSize;
             		if (istart < 0)
@@ -295,18 +296,6 @@
                         String rvs_tbl = null;
                         
                         if (DataUtils.isNCIT(defaultCodingScheme)) {
-                                /*
-				if (supportedsources != null) {
-				    Vector w = gov.nih.nci.evs.browser.utils.StringUtils.parseData(supportedsources, ";");
-				    supportedsource = (String) w.elementAt(0);
-				}
-
-				boolean non_ncit_source = true;
-				if (supportedsource == null || supportedsource.compareTo("null") == 0 || supportedsource.compareTo("NCI") == 0) {
-				    non_ncit_source = false;
-				}
-				*/
-
 				Vector codes = new Vector();
 				List list = iteratorBean.getData(istart, iend);
 				for (int k = 0; k < list.size(); k++) {
@@ -318,9 +307,6 @@
 				LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 				LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 				ValueSetFormatter formatter = new ValueSetFormatter(lbSvc, vsd_service);
-				//Vector fields = formatter.getDefaultFields(non_ncit_source);
-				//rvs_tbl = formatter.generate(defaultCodingScheme, null, supportedsource, fields, codes, codes.size());
-				
 				rvs_tbl = formatter.get_rvs_tbl(vsd_uri);
 			}
 
@@ -336,8 +322,10 @@
                                  <th class="dataTableHeader" scope="col" align="left">Vocabulary</th>
                                  <th class="dataTableHeader" scope="col" align="left">Namespace</th>
                                  <%
+                                 
                                  	Vector concept_vec = new Vector();
                                  				List list = iteratorBean.getData(istart, iend);
+                                 				
                                  				for (int k = 0; k < list.size(); k++) {
                                  					Object obj = list.get(k);
                                  					ResolvedConceptReference ref = null;
@@ -362,6 +350,7 @@
                                  					concept_vec.add(t);                                 							
  
                                  				}
+                                 				
                                  				for (int i = 0; i < concept_vec.size(); i++) {
                                  					String concept_str = (String) concept_vec
                                  							.elementAt(i);
