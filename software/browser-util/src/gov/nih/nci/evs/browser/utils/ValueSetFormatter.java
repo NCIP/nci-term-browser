@@ -533,6 +533,45 @@ public class ValueSetFormatter {
 				}
 			}
 		} else if (type.compareTo(NCIT_SYNONYMS) == 0) {
+			Vector syn_vec = new Vector();
+            for (int i=0; i<u.size(); i++) {
+				String t = (String) u.elementAt(i);
+				if (t.startsWith("name")) {
+					HashMap hmap = lineSegment2HashMap(t);
+					String form = (String) hmap.get("form");
+					String src = (String) hmap.get("source");
+					if (form != null && form.compareTo("PT") != 0 && src != null && src.compareTo("NCI") == 0) {
+						String term_name = (String) hmap.get("prop_value");
+						syn_vec.add(term_name);
+					}
+				}
+			}
+			HashMap hmap = new HashMap();
+			Vector keys = new Vector();
+			Vector values = new Vector();
+			for (int i=0; i<syn_vec.size(); i++) {
+				String syn = (String) syn_vec.elementAt(i);
+				String syn_lower_case = syn.toLowerCase();
+				keys.add(syn_lower_case);
+				hmap.put(syn_lower_case, syn);
+			}
+			keys = gov.nih.nci.evs.browser.utils.SortUtils.quickSort(keys);
+			for (int i=0; i<keys.size(); i++) {
+				String key = (String) keys.elementAt(i);
+				String value = (String) hmap.get(key);
+				values.add(value);
+			}
+			StringBuffer buf = new StringBuffer();
+            for (int i=0; i<values.size(); i++) {
+				String value = (String) values.elementAt(i);
+				buf.append(value).append("$");
+			}
+			String s = buf.toString();
+			if (s.length() > 0) {
+				s = s.substring(0, s.length()-1);
+			}
+
+/*
 			StringBuffer buf = new StringBuffer();
             for (int i=0; i<u.size(); i++) {
 				String t = (String) u.elementAt(i);
@@ -550,6 +589,7 @@ public class ValueSetFormatter {
 			if (s.length() > 0) {
 				s = s.substring(0, s.length()-1);
 			}
+*/
 			return s;
 		} else if (type.compareTo(NCIT_DEFINITION) == 0) {
 			StringBuffer buf = new StringBuffer();
