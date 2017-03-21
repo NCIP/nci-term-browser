@@ -555,9 +555,13 @@
                 <li><b>Synonym Details</b>: Shows each term or abbreviation 
                   with the corresponding term type, source, and code 
                   (for sources that have them).</li>
-                <li><b>Relationships</b>: Shows how other concepts are 
-                  directly related to this concept as parents, children, 
-                  or in other ways.  Note: For some sources, the browser 
+                <li><b>Relationships</b>: 
+                  Shows how other concepts are directly related to this concept as parents, children, or in other ways. 
+                  For NCIt concepts, role relationships are grouped by the type of concept to which the 
+                  concept is related, and, for concepts that have logical models built from their 
+                  inter-concept relationships, there is a separate <b>Logical Definition</b> section showing 
+                  the parent concepts and direct role assertions that define that concept. 
+                  Note: For some sources, the browser 
                   adds inverse relationships not asserted bidirectionally 
                   in the source data file; this is often useful for informational and 
                   navigational purposes, but is sometimes confusing, and 
@@ -799,25 +803,34 @@
                 value set, using the production version of each 
                 participating terminology. The listing shows:
               <ul> 
-                <li>Name:  A descriptive name</li>
-                <li>Description: A plain text description of the nature of the value set</li>
-                <li>Concept Domain: The type of meaning represented.</li>
-                <li>Sources: The authority or origin of the contents.</li>
+                <li><b>Name</b>:  A descriptive name</li>
+                <li><b>Description</b>: A plain text description of the nature of the value set</li>
+                <li><b>Concept Domain</b>: The type of meaning represented.</li>
+                <li><b>Sources</b>: The authority or origin of the contents.</li>
                 <li>
-                  Concepts: The individual concept values that comprise 
+                  <b>Concepts</b>: The individual concept values that comprise 
 				  the value set, presented as follows:
                   <ul>
                     <li>The first 50 concepts of the value set are 
                       listed. Use the <b>Show &lt;n&gt; results per page</b>
                       drop-down menu at the bottom of the page to 
                       display up to 500 concepts at once.</li>
-                    <li>Each concept listed shows its <b>code</b>, 
-                      <b>name</b>, <b>vocabulary</b> and <b>namespace</b>.</li>
-                    <li>Select the <b>Code</b> link (e.g., C81209) 
-                      to display the concept details. See the 
-                      <a href="#terminologies">Terminologies Tab</a>
-                      help section for information on the concept 
-                      details display.</li>
+                      
+                      
+                    <li>
+                    The columns for each concept listing depend on the structure of the set. 
+                    First is the <b>code</b> in the coding terminology used, which is normally linked to the concept details 
+                    available in the Terminologies Tab in the browser. 
+                    Next is the <b>name</b> or <b>preferred term</b> used by the set's issuing authority. 
+                    If the code is from NCIt but the authority has naming that may differ from NCIt, 
+                    the next two columns show the <b>NCIt preferred term and synonyms</b>, 
+                    and two more columns may appear to show both authority and NCIt <b>definitions</b>. 
+                    For concepts not coded with NCIt or having other concept information, code and name are 
+                    directly followed by the <b>vocabulary</b> and <b>namespace</b> for the terminology used.
+                    </li>
+                      
+                     
+                      
                   </ul>
                 </li>
               </ul>

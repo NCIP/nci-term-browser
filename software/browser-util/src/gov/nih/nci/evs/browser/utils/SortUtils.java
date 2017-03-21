@@ -125,4 +125,26 @@ public class SortUtils {
         enumeration = Collections.enumeration(keyList);
         return enumeration;
     }
+
+	public static Vector caseInsensitiveSort(Vector v) {
+		if (v == null) return null;
+		HashMap hmap = new HashMap();
+		Vector keys = new Vector();
+		Vector values = new Vector();
+		for (int i=0; i<v.size(); i++) {
+			String key = (String) v.elementAt(i);
+			String key_lower_case = key.toLowerCase();
+			keys.add(key_lower_case);
+			hmap.put(key_lower_case, key);
+		}
+		keys = quickSort(keys);
+		for (int i=0; i<keys.size(); i++) {
+			String key = (String) keys.elementAt(i);
+			String value = (String) hmap.get(key);
+			values.add(value);
+		}
+		return values;
+	}
+
+
 }
