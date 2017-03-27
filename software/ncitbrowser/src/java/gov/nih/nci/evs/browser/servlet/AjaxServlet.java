@@ -4329,7 +4329,7 @@ out.flush();
 	  LexBIGService lb_svc = RemoteServerUtil.createLexBIGService();
 
 	  if (StringUtils.isNullOrBlank(namespace)) {
-		    LexcBIGService lbSvc = RemoteServerUtil.createLexcBIGService();
+		    LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 		    namespace = new ConceptDetails(lbSvc).getNamespaceByCode(scheme, version, code);
 	  }
 
