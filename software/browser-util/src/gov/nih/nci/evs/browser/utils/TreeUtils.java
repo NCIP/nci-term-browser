@@ -1036,7 +1036,7 @@ public class TreeUtils {
      * branchNodes.hasNext();) { AssociatedConcept branchItemNode =
      * branchNodes.next(); child_list.add(branchItemNode); }
      *
-     * SortUtils.quickSort(child_list);
+     * new SortUtils().quickSort(child_list);
      *
      * for (int i = 0; i < child_list.size(); i++) { AssociatedConcept
      * branchItemNode = (AssociatedConcept) child_list .get(i); String
@@ -1190,7 +1190,7 @@ public class TreeUtils {
                             child_list.add(branchItemNode);
                         }
 
-                        SortUtils.quickSort(child_list);
+                        new SortUtils().quickSort(child_list);
 
                         for (int i = 0; i < child_list.size(); i++) {
                             AssociatedConcept branchItemNode =
@@ -1363,7 +1363,7 @@ public class TreeUtils {
                             child_list.add(branchItemNode);
                         }
 
-                        SortUtils.quickSort(child_list);
+                        new SortUtils().quickSort(child_list);
 
                         for (int i = 0; i < child_list.size(); i++) {
                             AssociatedConcept branchItemNode =
@@ -2122,7 +2122,7 @@ public class TreeUtils {
         }
 
         List list = resolvedConceptReferenceList2List(roots);
-        SortUtils.quickSort(list);
+        new SortUtils().quickSort(list);
         return list;
     }
 
@@ -2223,7 +2223,7 @@ public class TreeUtils {
             }
         }
         List list = resolvedConceptReferenceList2List(modified_roots);
-        SortUtils.quickSort(list);
+        new SortUtils().quickSort(list);
         return list;
     }
 
@@ -2385,7 +2385,7 @@ public class TreeUtils {
         }
         _logger.debug("Run time (milliseconds) getSubconcepts: "
             + (System.currentTimeMillis() - ms) + " to resolve ");
-        SortUtils.quickSort(list);
+        new SortUtils().quickSort(list);
         return list;
     }
 */
@@ -2523,7 +2523,7 @@ public class TreeUtils {
         }
         _logger.debug("Run time (milliseconds) getSubconcepts: "
             + (System.currentTimeMillis() - ms) + " to resolve ");
-        SortUtils.quickSort(list);
+        new SortUtils().quickSort(list);
         return list;
     }
 

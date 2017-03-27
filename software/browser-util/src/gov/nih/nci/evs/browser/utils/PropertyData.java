@@ -133,7 +133,8 @@ public class PropertyData
         this.additionalproperties = new Vector();
         this.displayed_properties = new Vector();
 	}
-
+
+
 	public void set_owl_role_quantifiers(String owl_role_quantifiers) {
 		this.owl_role_quantifiers = owl_role_quantifiers;
 	}
@@ -289,7 +290,8 @@ displayLabel2PropertyNameHashMap = addToHashMap(displayLabel2PropertyNameHashMap
 
 		getTermsAndPropertiesData(curr_concept);
 	}
-
+
+
 	public HashMap getDisplayLabel2PropertyNameHashMap() {
 		return this.displayLabel2PropertyNameHashMap;
 	}
@@ -532,7 +534,8 @@ displayLabel2PropertyNameHashMap = addToHashMap(displayLabel2PropertyNameHashMap
 	public HashMap getPropertyName2ValueHashMap() {
 		return this.propertyName2ValueHashMap;
 	}
-
+
+
 
 	public static String getDisplayLink(HashMap<String, String> label2URL,
 		HashMap<String, String> label2Linktext, String label, String value) {
@@ -760,7 +763,7 @@ displayLabel2PropertyNameHashMap = addToHashMap(displayLabel2PropertyNameHashMap
 				prop_name_vec.add(prop_name);
 			}
 		}
-		return SortUtils.quickSort(prop_name_vec);
+		return new SortUtils().quickSort(prop_name_vec);
 	}
 
 	public void add_displayed_property(String property_name) {

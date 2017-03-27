@@ -430,7 +430,7 @@ public class RelationshipTabFormatter {
         String table = createTable(columnHeadings, columnWidths);
         buf.append(table);
 
-		key_vec = gov.nih.nci.evs.browser.utils.SortUtils.quickSort(key_vec);
+		key_vec = new gov.nih.nci.evs.browser.utils.SortUtils().quickSort(key_vec);
 		for (int i=0; i<key_vec.size(); i++) {
 			String key = (String) key_vec.elementAt(i);
 			buf.append("<tr class=\"dataRowDark\">");
@@ -438,7 +438,7 @@ public class RelationshipTabFormatter {
 			buf.append(Constants.INDENT_HALF + key);
 			buf.append("</td><td>" + Constants.INDENT + "</td></tr>");
 			Vector w = (Vector) hmap.get(key);
-			w = gov.nih.nci.evs.browser.utils.SortUtils.quickSort(w);
+			w = new gov.nih.nci.evs.browser.utils.SortUtils().quickSort(w);
 			for (int k=0; k<w.size(); k++) {
 				String s = (String) w.elementAt(k);
 				Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(s);
@@ -525,7 +525,7 @@ public class RelationshipTabFormatter {
         String table = createTable(columnHeadings, columnWidths);
         buf.append(table);
 
-		key_vec = gov.nih.nci.evs.browser.utils.SortUtils.quickSort(key_vec);
+		key_vec = new gov.nih.nci.evs.browser.utils.SortUtils().quickSort(key_vec);
 		for (int i=0; i<key_vec.size(); i++) {
 			String key = (String) key_vec.elementAt(i);
 			buf.append("<tr class=\"dataRowDark\">");
@@ -533,7 +533,7 @@ public class RelationshipTabFormatter {
 			buf.append(Constants.INDENT_HALF + key);
 			buf.append("</td><td>" + Constants.INDENT + "</td></tr>");
 			Vector w = (Vector) hmap.get(key);
-			w = gov.nih.nci.evs.browser.utils.SortUtils.quickSort(w);
+			w = new gov.nih.nci.evs.browser.utils.SortUtils().quickSort(w);
 			for (int k=0; k<w.size(); k++) {
 				String s = (String) w.elementAt(k);
 				Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(s);

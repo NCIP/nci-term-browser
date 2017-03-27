@@ -779,7 +779,7 @@ public class CacheController {
                         newlist.add(node);
                     }
                 }
-                SortUtils.quickSort(newlist);
+                new SortUtils().quickSort(newlist);
 				LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 		        TreeService treeService =
 			        TreeServiceFactory.getInstance().getTreeService(lbSvc);
@@ -1083,7 +1083,7 @@ public class CacheController {
      * private JSONArray getNodesArray(String node_id, TreeItem ti) { JSONArray
      * nodesArray = new JSONArray(); for (String association :
      * ti.assocToChildMap.keySet()) { List<TreeItem> children =
-     * ti.assocToChildMap.get(association); SortUtils.quickSort(children); for
+     * ti.assocToChildMap.get(association); new SortUtils().quickSort(children); for
      * (int i=0; i<children.size(); i++) { TreeItem childItem = (TreeItem)
      * children.get(i); int knt = 0; if (childItem.expandable) { knt = 1; }
      * JSONObject nodeObject = new JSONObject(); try {
@@ -1111,7 +1111,7 @@ public class CacheController {
         JSONArray nodesArray = new JSONArray();
         for (String association : ti._assocToChildMap.keySet()) {
             List<TreeItem> children = ti._assocToChildMap.get(association);
-            SortUtils.quickSort(children);
+            new SortUtils().quickSort(children);
 
             int cut_off = 200;
             int m = cut_off / 2;
@@ -1393,7 +1393,7 @@ public class CacheController {
         JSONArray nodesArray = new JSONArray();
         for (String association : ti._assocToChildMap.keySet()) {
             List<TreeItem> children = ti._assocToChildMap.get(association);
-            SortUtils.quickSort(children);
+            new SortUtils().quickSort(children);
 
 			for (int i = 0; i < children.size(); i++) {
 				TreeItem childItem = (TreeItem) children.get(i);
@@ -1550,7 +1550,7 @@ public class CacheController {
 			w.add(rcr);
 		}
 
-		w = SortUtils.quickSort(w);
+		w = new SortUtils().quickSort(w);
         for (int i=0; i<w.size(); i++) {
 			ResolvedConceptReference rcr = (ResolvedConceptReference) w.elementAt(i);
 			String cs_name = rcr.getCodingSchemeName();
@@ -1636,7 +1636,7 @@ public class CacheController {
 			String t = (String) list.get(i);
 			w.add(t);
 		}
-		w = SortUtils.quickSort(w);
+		w = new SortUtils().quickSort(w);
 
 		List treeItem_list = new ArrayList();
 
@@ -1655,7 +1655,7 @@ public class CacheController {
 		ms = System.currentTimeMillis();
 		//String json = JSON2TreeItem.treeItem2Json(root);
 
-		//treeItem_list = SortUtils.quickSort(treeItem_list);
+		//treeItem_list = new SortUtils().quickSort(treeItem_list);
 
 		JSONArray nodeArray = treeItemList2JSONArray(treeItem_list);
         /*
@@ -1710,7 +1710,7 @@ public class CacheController {
 			String t = (String) list.get(i);
 			w.add(t);
 		}
-		w = SortUtils.quickSort(w);
+		w = new SortUtils().quickSort(w);
         for (int i=0; i<w.size(); i++) {
 		    String t = (String) w.elementAt(i);
 			Vector u = StringUtils.parseData(t);
@@ -1751,7 +1751,7 @@ public class CacheController {
 			JSONArray list = new JSONArray();
 			for (String association : ti._assocToChildMap.keySet()) {
 				List<TreeItem> children = ti._assocToChildMap.get(association);
-				SortUtils.quickSort(children);
+				new SortUtils().quickSort(children);
 				for (int i=0; i<children.size(); i++) {
 					TreeItem childItem = (TreeItem) children.get(i);
 					JSONObject child_obj = treeItem2JSONObject(childItem);

@@ -153,11 +153,11 @@ public class UIUtils {
 				qualifier_vec.add(t);
 			}
 			keyVec.add(n_v);
-			qualifier_vec = SortUtils.quickSort(qualifier_vec);
+			qualifier_vec = new SortUtils().quickSort(qualifier_vec);
 			qualifierHashMap.put(n_v, qualifier_vec);
 		}
 
-		keyVec = SortUtils.quickSort(keyVec);
+		keyVec = new SortUtils().quickSort(keyVec);
 
 	    HTMLTableSpec spec = new HTMLTableSpec(
 			 description,
@@ -262,7 +262,7 @@ public class UIUtils {
 				String nv = (String) thisEntry.getKey();
 				nv_vec.add(nv);
 			}
-			nv_vec = SortUtils.quickSort(nv_vec);
+			nv_vec = new SortUtils().quickSort(nv_vec);
 		}
 		String description = spec.getDescription();
 		if (description != null) {
@@ -317,7 +317,7 @@ public class UIUtils {
 				namespace = (String) w.elementAt(3);
 			}
             Vector qualifiers = (Vector) qualifierHashMap.get(n_v);
-            qualifiers = SortUtils.quickSort(qualifiers);
+            qualifiers = new SortUtils().quickSort(qualifiers);
 
 			if ((n++) % 2 == 0) {
 				  buf.append("	<tr class=\"dataRowDark\">").append("\n");
@@ -458,7 +458,7 @@ public class UIUtils {
 				String nv = (String) thisEntry.getKey();
 				nv_vec.add(nv);
 			}
-			nv_vec = SortUtils.quickSort(nv_vec);
+			nv_vec = new SortUtils().quickSort(nv_vec);
 		}
 		String description = spec.getDescription();
 		if (description != null) {
@@ -513,7 +513,7 @@ public class UIUtils {
 				namespace = (String) w.elementAt(3);
 			}
             Vector qualifiers = (Vector) qualifierHashMap.get(n_v);
-            qualifiers = SortUtils.quickSort(qualifiers);
+            qualifiers = new SortUtils().quickSort(qualifiers);
 
 			if ((n++) % 2 == 0) {
 				  buf.append("	<tr class=\"dataRowDark\">").append("\n");
@@ -789,11 +789,11 @@ public class UIUtils {
 					qualifier_vec.add(t);
 				}
 				keyVec.add(n_v);
-				qualifier_vec = SortUtils.quickSort(qualifier_vec);
+				qualifier_vec = new SortUtils().quickSort(qualifier_vec);
 				qualifierHashMap.put(n_v, qualifier_vec);
 			}
 		}
-		keyVec = SortUtils.quickSort(keyVec);
+		keyVec = new SortUtils().quickSort(keyVec);
 
 	    HTMLTableSpec spec = new HTMLTableSpec(
 			 description,
@@ -821,7 +821,7 @@ public class UIUtils {
 				String nv = (String) thisEntry.getKey();
 				nv_vec.add(nv);
 			}
-			nv_vec = SortUtils.quickSort(nv_vec);
+			nv_vec = new SortUtils().quickSort(nv_vec);
 		}
 		String description = spec.getDescription();
 		if (description != null) {
@@ -876,7 +876,7 @@ public class UIUtils {
 				namespace = (String) w.elementAt(3);
 			}
             Vector qualifiers = (Vector) qualifierHashMap.get(n_v);
-            qualifiers = SortUtils.quickSort(qualifiers);
+            qualifiers = new SortUtils().quickSort(qualifiers);
 
 			if ((n++) % 2 == 0) {
 				  buf.append("	<tr class=\"dataRowDark\">").append("\n");

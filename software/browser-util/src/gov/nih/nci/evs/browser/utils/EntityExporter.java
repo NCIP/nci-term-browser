@@ -58,7 +58,8 @@ public class EntityExporter {
 			ex.printStackTrace();
 		}
     }
-
+
+
     public void setOutputfile(String outputfile) {
 		this.outputfile = outputfile;
 	}
@@ -111,7 +112,8 @@ public class EntityExporter {
         }
         return null;
     }
-
+
+
 
     public List<String> getDistinctNamespacesOfCode(
             String codingScheme,
@@ -200,7 +202,8 @@ public class EntityExporter {
 			ex.printStackTrace();
 		}
     }
-
+
+
 
     public void printProperties(PrintWriter pw, Entity node) {
         if (node == null) return;
@@ -356,8 +359,10 @@ public class EntityExporter {
         pw.println("code|" + code);
 
         ConceptReferenceList crefs = ConvenienceMethods.createConceptReferenceList(new String[] { code }, scheme);
-        CodedNodeSet cns = lbSvc.getCodingSchemeConcepts(scheme, csvt);
-
+
+        CodedNodeSet cns = lbSvc.getCodingSchemeConcepts(scheme, csvt);
+
+
 		if (cns == null) {
 			pw.println("CNS == NULL???");
 			return false;
@@ -372,7 +377,8 @@ public class EntityExporter {
             ResolvedConceptReference ref = (ResolvedConceptReference) matches.enumerateResolvedConceptReference()
                     .nextElement();
             Entity node = ref.getEntity();
-            printProperties(pw, node);
+
+            printProperties(pw, node);
         }
         return true;
     }
@@ -414,7 +420,8 @@ public class EntityExporter {
 						AssociatedConcept[] acl = assoc.getAssociatedConcepts().getAssociatedConcept();
 						for (int j = 0; j < acl.length; j++) {
 							AssociatedConcept ac = acl[j];
-							String rela = replaceAssociationNameByRela(ac, assoc.getAssociationName());
+
+							String rela = replaceAssociationNameByRela(ac, assoc.getAssociationName());
 							EntityDescription ed = ac.getEntityDescription();
 							pw.println("\t\t" + ac.getConceptCode() + "/"
 									+ (ed == null ? "**No Description**" : ed.getContent()) + " --> (" + rela + ") --> " + code);
@@ -461,7 +468,8 @@ public class EntityExporter {
                     AssociatedConcept[] acl = assoc.getAssociatedConcepts().getAssociatedConcept();
                     for (int j = 0; j < acl.length; j++) {
                         AssociatedConcept ac = acl[j];
-                        String rela = replaceAssociationNameByRela(ac, assoc.getAssociationName());
+
+                        String rela = replaceAssociationNameByRela(ac, assoc.getAssociationName());
 
                         EntityDescription ed = ac.getEntityDescription();
                         pw.println("\t\t" + code + " --> (" + rela + ") --> " + ac.getConceptCode() + "/"
@@ -472,7 +480,8 @@ public class EntityExporter {
         }
     }
 
-
+
+
 
     private String replaceAssociationNameByRela(AssociatedConcept ac, String associationName) {
 		if (ac.getAssociationQualifiers() == null) return associationName;

@@ -107,7 +107,8 @@ public class ValueSetFormatter {
 
 	private static String MALIGNANCY_STATUS = "Malignancy Status";
 	private static String NCI_METATHESAURUS_CUI = "NCI Metathesaurus CUI";
-	private static String UMLS_CUI = "UMLS CUI";
+
+	private static String UMLS_CUI = "UMLS CUI";
 
 	private static String[] TYPES = {NCIT_CONCEPT_CODE,
 	                                 SOURCE_PREFERRED_TERM,
@@ -221,7 +222,8 @@ public class ValueSetFormatter {
 	public String getSupportedSource() {
 		return this.supportedSource;
 	}
-
+
+
     public static Vector getDefaultFields(boolean withSource) {
 		Vector fields = new Vector();
 		fields.add(NCIT_CONCEPT_CODE);
@@ -556,14 +558,14 @@ public class ValueSetFormatter {
 				keys.add(syn_lower_case);
 				hmap.put(syn_lower_case, syn);
 			}
-			keys = gov.nih.nci.evs.browser.utils.SortUtils.quickSort(keys);
+			keys = new gov.nih.nci.evs.browser.utils.SortUtils().quickSort(keys);
 			for (int i=0; i<keys.size(); i++) {
 				String key = (String) keys.elementAt(i);
 				String value = (String) hmap.get(key);
 				values.add(value);
 			}
 			*/
-            Vector values  = gov.nih.nci.evs.browser.utils.SortUtils.caseInsensitiveSort(syn_vec);
+            Vector values  = new gov.nih.nci.evs.browser.utils.SortUtils().caseInsensitiveSort(syn_vec);
 			StringBuffer buf = new StringBuffer();
             for (int i=0; i<values.size(); i++) {
 				String value = (String) values.elementAt(i);
@@ -946,7 +948,7 @@ public class ValueSetFormatter {
 		ArrayList a = new ArrayList();
 		Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(delimitedStr, '$');
 		u = removeDuplicateValues(u);
-		u = SortUtils.quickSort(u);
+		u = new SortUtils().quickSort(u);
 		for (int i=0; i<u.size(); i++) {
 			String t = (String) u.elementAt(i);
 			a.add(t);

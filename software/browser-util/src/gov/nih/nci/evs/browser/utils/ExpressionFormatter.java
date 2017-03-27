@@ -83,7 +83,8 @@ public class ExpressionFormatter {
 		if (line.indexOf("Role group") != -1) {
 			line = line.trim();
 			w.add(TYPE_ROLE_GROUP);
-			w.add(line);
+			//w.add(line);
+			w.add("Role Group(s):");
 			return w;
 		} else if (line.compareTo("\tor") == 0) {
 			line = line.trim();

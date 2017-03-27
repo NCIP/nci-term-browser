@@ -418,7 +418,7 @@ public class HistoryUtils {
 			map.put(s, t);
 			w.add(s);
 		}
-		w = SortUtils.quickSort(w);
+		w = new SortUtils().quickSort(w);
 		u = new Vector();
 		for (int i=0; i<w.size(); i++) {
 			String t = (String) w.elementAt(i);

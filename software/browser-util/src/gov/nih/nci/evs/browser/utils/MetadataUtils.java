@@ -226,7 +226,7 @@ public class MetadataUtils {
                     propertyName);
             v.add(codingSchemeName + "|" + propertyValue);
         }
-        v = SortUtils.quickSort(v);
+        v = new SortUtils().quickSort(v);
         return v;
     }
 
@@ -299,7 +299,7 @@ public class MetadataUtils {
             v.add(t);
         }
         if (sort)
-            return SortUtils.quickSort(v);
+            return new SortUtils().quickSort(v);
         return v;
     }
 

@@ -62,7 +62,7 @@ public class SortUtils {
      *
      * @param list an instance of List
      */
-    public static void quickSort(List list) {
+    public void quickSort(List list) {
         quickSort(list, SORT_BY_NAME);
     }
 
@@ -72,7 +72,7 @@ public class SortUtils {
      * @param list an instance of List
      * @param sort_option, an integer; 1, if sort by name; 2: if sort by code
      */
-    public static void quickSort(List list, int sort_option) {
+    public void quickSort(List list, int sort_option) {
         if (list == null)
             return;
         if (list.size() <= 1)
@@ -91,7 +91,7 @@ public class SortUtils {
      * @param sort_option, an integer; 1, if sort by name; 2: if sort by code
      */
 
-    public static Vector quickSort(Vector v, int sort_option) {
+    public Vector quickSort(Vector v, int sort_option) {
         if (v == null)
             return v;
         if (v.size() <= 1)
@@ -111,12 +111,12 @@ public class SortUtils {
      * @param v an instance of Vector
      */
 
-    public static Vector quickSort(Vector v) {
+    public Vector quickSort(Vector v) {
         return quickSort(v, SORT_BY_NAME);
     }
 
     @SuppressWarnings("unchecked")
-    public static Enumeration<?> sort(Enumeration<?> enumeration) {
+    public Enumeration<?> sort(Enumeration<?> enumeration) {
         if (enumeration == null)
             return enumeration;
 
@@ -126,7 +126,7 @@ public class SortUtils {
         return enumeration;
     }
 
-	public static Vector caseInsensitiveSort(Vector v) {
+	public Vector caseInsensitiveSort(Vector v) {
 		if (v == null) return null;
 		HashMap hmap = new HashMap();
 		Vector keys = new Vector();
@@ -145,6 +145,4 @@ public class SortUtils {
 		}
 		return values;
 	}
-
-
 }

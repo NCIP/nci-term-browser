@@ -777,7 +777,7 @@ public class ValueSetSearchUtils
 		} finally {
 			//System.out.println("Total run time (ms): " + (System.currentTimeMillis() - ms));
 		}
-		return SortUtils.quickSort(v);
+		return new SortUtils().quickSort(v);
    }
 */
 
@@ -820,7 +820,7 @@ public class ValueSetSearchUtils
 		} finally {
 			//System.out.println("Total run time (ms): " + (System.currentTimeMillis() - ms));
 		}
-		return SortUtils.quickSort(v);
+		return new SortUtils().quickSort(v);
     }
 
     public AbsoluteCodingSchemeVersionReferenceList getDefaultAbsoluteCodingSchemeVersionReferenceList(String vsd_uri) {

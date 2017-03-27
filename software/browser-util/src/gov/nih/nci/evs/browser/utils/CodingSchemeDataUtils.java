@@ -139,7 +139,7 @@ public class CodingSchemeDataUtils {
 	    } catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		v = SortUtils.quickSort(v);
+		v = new SortUtils().quickSort(v);
 		return v;
 	}
 
@@ -204,7 +204,7 @@ public class CodingSchemeDataUtils {
 				 v.add(sp.getLocalId());
 			 }
 		}
-        return SortUtils.quickSort(v);
+        return new SortUtils().quickSort(v);
 	}
 
 
@@ -217,7 +217,7 @@ public class CodingSchemeDataUtils {
 		     SupportedProperty sp = (SupportedProperty) w.elementAt(i);
 		     v.add(sp.getUri() + "|" + sp.getLocalId() + "|" + sp.getContent() + "|" + sp.getPropertyType());
 		}
-        return SortUtils.quickSort(v);
+        return new SortUtils().quickSort(v);
 	}
 
     public HashMap getPropertyName2TypeHashMap(CodingScheme cs) {
@@ -448,7 +448,7 @@ public class CodingSchemeDataUtils {
          } catch (Exception e) {
              e.printStackTrace();
          }
- 	     w = SortUtils.quickSort(w);
+ 	     w = new SortUtils().quickSort(w);
  	     return w;
     }
 
@@ -508,7 +508,7 @@ public class CodingSchemeDataUtils {
          } catch (Exception e) {
              e.printStackTrace();
          }
- 	     w = SortUtils.quickSort(w);
+ 	     w = new SortUtils().quickSort(w);
  	     return w;
     }
 
@@ -669,7 +669,7 @@ public class CodingSchemeDataUtils {
 			v.add(rcr);
 		}
 
-		v = SortUtils.quickSort(v);
+		v = new SortUtils().quickSort(v);
 		return v;
     }
 
@@ -1067,7 +1067,7 @@ public class CodingSchemeDataUtils {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		conceptDomainName_vec = SortUtils.quickSort(conceptDomainName_vec);
+		conceptDomainName_vec = new SortUtils().quickSort(conceptDomainName_vec);
 		return conceptDomainName_vec;
 	}
 
@@ -1307,7 +1307,7 @@ public class CodingSchemeDataUtils {
                             child_list.add(branchItemNode);
                         }
 
-                        SortUtils.quickSort(child_list);
+                        new SortUtils().quickSort(child_list);
 
                         for (int i = 0; i < child_list.size(); i++) {
                             AssociatedConcept branchItemNode =

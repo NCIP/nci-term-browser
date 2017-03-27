@@ -128,7 +128,7 @@ public class ValueSetResolver {
 					}
 				}
 			}
-			result_vec = SortUtils.quickSort(result_vec);
+			result_vec = new SortUtils().quickSort(result_vec);
 			int j = 0;
 			pw.println("\n\n");
 			for (i=0; i<result_vec.size(); i++) {

@@ -1036,7 +1036,7 @@ public class DataUtils {
 
         _logger.debug("Populate ontologies... " );
         if (nv_vec.size() > 0) {
-            nv_vec = SortUtils.quickSort(nv_vec);
+            nv_vec = new SortUtils().quickSort(nv_vec);
             for (int k = 0; k < nv_vec.size(); k++) {
                 String value = (String) nv_vec.elementAt(k);
                 if (!value.startsWith(Constants.TERMINOLOGY_VALUE_SET) && !value.startsWith(Constants.TERMINOLOGY_VALUE_SET_NAME)) {
@@ -1790,7 +1790,7 @@ public class DataUtils {
                 hierarchicalAssoName);
         //if (superconcept_vec == null)
         //    return null;
-        // SortUtils.quickSort(superconcept_vec, SortUtils.SORT_BY_CODE);
+        // new SortUtils().quickSort(superconcept_vec, new SortUtils().SORT_BY_CODE);
         return superconcept_vec;
 
     }
@@ -1852,7 +1852,7 @@ public class DataUtils {
                         }
                     }
                 }
-                SortUtils.quickSort(v);
+                new SortUtils().quickSort(v);
             }
 
         } catch (Exception ex) {
@@ -2705,7 +2705,7 @@ if (lbSvc == null) {
 					}
 				}
 				//Collections.sort(superconceptList);
-				SortUtils.quickSort(superconceptList);
+				new SortUtils().quickSort(superconceptList);
 
 		}
         map.put(TYPE_SUPERCONCEPT, superconceptList);
@@ -2726,7 +2726,7 @@ if (lbSvc == null) {
 					new TreeUtils(lbSvc).getSubconceptNamesAndCodes(scheme, version, code);
 				//KLO
 				//Collections.sort(subconceptList);
-				SortUtils.quickSort(subconceptList);
+				new SortUtils().quickSort(subconceptList);
 
 		}
         map.put(TYPE_SUBCONCEPT, subconceptList);
@@ -3054,13 +3054,13 @@ if (lbSvc == null) {
 
             if (roleList.size() > 0) {
                 //Collections.sort(roleList);
-                SortUtils.quickSort(roleList);
+                new SortUtils().quickSort(roleList);
 
             }
 
             if (associationList.size() > 0) {
                 //Collections.sort(associationList);
-                SortUtils.quickSort(associationList);
+                new SortUtils().quickSort(associationList);
             }
 
             map.put(TYPE_ROLE, roleList);
@@ -3068,12 +3068,12 @@ if (lbSvc == null) {
 
             if (inverse_roleList.size() > 0) {
                 //Collections.sort(inverse_roleList);
-                SortUtils.quickSort(inverse_roleList);
+                new SortUtils().quickSort(inverse_roleList);
             }
 
             if (inverse_associationList.size() > 0) {
                 //Collections.sort(inverse_associationList);
-                SortUtils.quickSort(inverse_associationList);
+                new SortUtils().quickSort(inverse_associationList);
             }
 
             map.put(TYPE_INVERSE_ROLE, inverse_roleList);
@@ -3387,7 +3387,7 @@ if (lbSvc == null) {
      * p.getRepresentationalForm(); Source[] sources = p.getSource(); if
      * (sources != null && sources.length > 0) { Source src = sources[0];
      * term_source = src.getContent(); } v.add(term_name + "|" + term_type + "|"
-     * + term_source + "|" + term_source_code); //} } SortUtils.quickSort(v);
+     * + term_source + "|" + term_source_code); //} } new SortUtils().quickSort(v);
      * return v; }
      */
 
@@ -3426,7 +3426,7 @@ if (lbSvc == null) {
                 + term_source_code);
 
         }
-        SortUtils.quickSort(v);
+        new SortUtils().quickSort(v);
         return v;
     }
 
@@ -3476,7 +3476,7 @@ if (lbSvc == null) {
                     + term_source_code);
             }
         }
-        SortUtils.quickSort(v);
+        new SortUtils().quickSort(v);
         return v;
     }
 
@@ -4656,7 +4656,7 @@ if (lbSvc == null) {
 		}
 
 		_codingScheme2MappingCodingSchemes.put(formalName, v);
-		return SortUtils.quickSort(v);
+		return new SortUtils().quickSort(v);
 
 	}
 
@@ -5176,7 +5176,7 @@ if (lbSvc == null) {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		conceptDomainName_vec = SortUtils.quickSort(conceptDomainName_vec);
+		conceptDomainName_vec = new SortUtils().quickSort(conceptDomainName_vec);
 		return conceptDomainName_vec;
 	}
 
@@ -5192,7 +5192,7 @@ if (lbSvc == null) {
 			String t = (String) iterator.next();
 			v.add(t);
 		}
-		return SortUtils.quickSort(v);
+		return new SortUtils().quickSort(v);
 	}
 
 
@@ -5209,7 +5209,7 @@ if (lbSvc == null) {
 			String t = (String) list.get(i);
 			v.add(t);
 		}
-		return SortUtils.quickSort(v);
+		return new SortUtils().quickSort(v);
 	}
 
 
@@ -5254,7 +5254,7 @@ if (lbSvc == null) {
 
 			v.add(name + "|" + t);
 		}
-		return SortUtils.quickSort(v);
+		return new SortUtils().quickSort(v);
 	}
 
 	public static String getVSDURIByName(String name) {
@@ -5466,7 +5466,7 @@ if (lbSvc == null) {
 				}
 			}
 		}
-		return SortUtils.quickSort(availableValueSetDefinitionSources);
+		return new SortUtils().quickSort(availableValueSetDefinitionSources);
 	}
 
 
@@ -5582,7 +5582,7 @@ if (lbSvc == null) {
 						}
 					}
 				}
-				w = SortUtils.quickSort(w);
+				w = new SortUtils().quickSort(w);
 				return w;
 		    } else {
 				//System.out.println("WARNING: DataUtils.getCodingSchemeReferencesInValueSetDefinition returns null? (URI: "
@@ -5628,7 +5628,7 @@ if (lbSvc == null) {
 						}
 					}
 				}
-				w = SortUtils.quickSort(w);
+				w = new SortUtils().quickSort(w);
 				return w;
 		    }
 		} catch (Exception ex) {
@@ -6576,7 +6576,7 @@ if (lbSvc == null) {
 		} finally {
 			//System.out.println("Total run time (ms): " + (System.currentTimeMillis() - ms));
 		}
-		return SortUtils.quickSort(v);
+		return new SortUtils().quickSort(v);
    }
 
    public static Vector uri2CodingSchemeName(Vector uri_vec) {
@@ -6923,7 +6923,7 @@ if (lbSvc == null) {
 		    }
         }
         // Sort source help table (NCITERM-626)
-        return SortUtils.quickSort(v);
+        return new SortUtils().quickSort(v);
     }
 
 
@@ -6962,7 +6962,7 @@ if (lbSvc == null) {
 				String metadata = getValueSetDefinitionMetadata(vsd);
 				valueSetDefinitionMetadata.add(metadata);
 			}
-			SortUtils.quickSort(valueSetDefinitionMetadata);
+			new SortUtils().quickSort(valueSetDefinitionMetadata);
 	    } catch (Exception ex) {
 			ex.printStackTrace();
 		}

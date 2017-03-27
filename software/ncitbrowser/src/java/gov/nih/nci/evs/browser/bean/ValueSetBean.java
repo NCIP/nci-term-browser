@@ -188,7 +188,7 @@ public class ValueSetBean {
 			v.add(codingSchemeName);
 		}
 
-		v = SortUtils.quickSort(v);
+		v = new SortUtils().quickSort(v);
 
 		String display_name = "ALL";
 		ontologyList.add(new SelectItem(display_name));

@@ -335,7 +335,7 @@ public class ExpressionParser {
 				}
 				if (!u.contains(role_target_name + "(" + role_target_code + ")")) {
 					u.add(role_target_name + " (" + role_target_code + ")");
-					u = gov.nih.nci.evs.browser.utils.SortUtils.quickSort(u);
+					u = new gov.nih.nci.evs.browser.utils.SortUtils().quickSort(u);
 					map.put(value_domain, u);
 				}
 
@@ -356,7 +356,7 @@ public class ExpressionParser {
 				}
 				if (!u.contains(role_name + "\t" + role_target_name + "(" + role_target_code + ")")) {
 					u.add(role_name + "\t" + role_target_name + " (" + role_target_code + ")");
-					u = gov.nih.nci.evs.browser.utils.SortUtils.quickSort(u);
+					u = new gov.nih.nci.evs.browser.utils.SortUtils().quickSort(u);
 					map.put(value_domain, u);
 				}
 			} else if (role.startsWith("RG_")) {
@@ -551,7 +551,7 @@ public class ExpressionParser {
 					key_vec.add(value_domain);
 				}
 			}
-			key_vec = gov.nih.nci.evs.browser.utils.SortUtils.quickSort(key_vec);
+			key_vec = new gov.nih.nci.evs.browser.utils.SortUtils().quickSort(key_vec);
 			for (int k=0; k<key_vec.size(); k++) {
 				String value_domain = (String) key_vec.elementAt(k);
 				if (value_domain.compareTo(PARENT) == 0) {

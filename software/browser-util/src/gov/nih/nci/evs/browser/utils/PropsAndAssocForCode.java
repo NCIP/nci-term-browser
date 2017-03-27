@@ -80,7 +80,8 @@ public class PropsAndAssocForCode {
 		printFrom(pw, code, lbSvc, scheme, csvt);
 		printTo(pw, code, lbSvc, scheme, csvt);
     }
-
+
+
 
     public void run(PrintWriter pw, String scheme, String version, String code, String entityType) throws LBException {
 		CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
@@ -91,7 +92,8 @@ public class PropsAndAssocForCode {
     }
 
 
-
+
+
     void displayMessage(String s) {
 		displayMessage(null, s);
 	}
@@ -140,8 +142,10 @@ public class PropsAndAssocForCode {
     public boolean printProps(PrintWriter pw, String code, LexBIGService lbSvc, String scheme, CodingSchemeVersionOrTag csvt, String entityType)
             throws LBException {
         ConceptReferenceList crefs = ConvenienceMethods.createConceptReferenceList(new String[] { code }, scheme);
-        //CodedNodeSet cns = lbSvc.getCodingSchemeConcepts(scheme, csvt);
-        CodedNodeSet cns = getCodedNodeSet(scheme, csvt, entityType);
+
+        //CodedNodeSet cns = lbSvc.getCodingSchemeConcepts(scheme, csvt);
+
+        CodedNodeSet cns = getCodedNodeSet(scheme, csvt, entityType);
 		if (cns == null) {
 			System.out.println("CNS == NULL???");
 			return false;
@@ -311,7 +315,8 @@ public class PropsAndAssocForCode {
             while (refEnum.hasMoreElements()) {
                 ResolvedConceptReference ref = refEnum.nextElement();
                 AssociationList targetof = ref.getTargetOf();
-
+
+
                 if (targetof != null) {
 					if (targetof != null) {
 						Association[] associations = targetof.getAssociation();
@@ -323,7 +328,8 @@ public class PropsAndAssocForCode {
 								AssociatedConcept[] acl = assoc.getAssociatedConcepts().getAssociatedConcept();
 								for (int j = 0; j < acl.length; j++) {
 									AssociatedConcept ac = acl[j];
-									String rela = replaceAssociationNameByRela(ac, assoc.getAssociationName());
+
+									String rela = replaceAssociationNameByRela(ac, assoc.getAssociationName());
 									EntityDescription ed = ac.getEntityDescription();
 									displayMessage(pw, "\t\t" + ac.getConceptCode() + "/"
 											+ (ed == null ? "**No Description**" : ed.getContent()) + " --> (" + rela + ") --> " + code);
@@ -382,7 +388,8 @@ public class PropsAndAssocForCode {
 							AssociatedConcept[] acl = assoc.getAssociatedConcepts().getAssociatedConcept();
 							for (int j = 0; j < acl.length; j++) {
 								AssociatedConcept ac = acl[j];
-								String rela = replaceAssociationNameByRela(ac, assoc.getAssociationName());
+
+								String rela = replaceAssociationNameByRela(ac, assoc.getAssociationName());
 
 								EntityDescription ed = ac.getEntityDescription();
 								displayMessage(pw, "\t\t" + code + " --> (" + rela + ") --> " + ac.getConceptCode() + "/"
@@ -402,7 +409,8 @@ public class PropsAndAssocForCode {
         }
     }
 
-
+
+
     private String replaceAssociationNameByRela(AssociatedConcept ac, String associationName) {
 		return associationName;
 	}

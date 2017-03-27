@@ -160,7 +160,7 @@ public class HierarchyUtils {
 			ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
 			w.add(rcr);
 		}
-		w = SortUtils.quickSort(w);
+		w = new SortUtils().quickSort(w);
 		try {
 			for (int i=0; i<w.size(); i++) {
 				ResolvedConceptReference rcr = (ResolvedConceptReference) w.elementAt(i);
@@ -258,7 +258,7 @@ public class HierarchyUtils {
 			JSONArray list = new JSONArray();
 			for (String association : ti._assocToChildMap.keySet()) {
 				List<TreeItem> children = ti._assocToChildMap.get(association);
-				SortUtils.quickSort(children);
+				new SortUtils().quickSort(children);
 				for (int i=0; i<children.size(); i++) {
 					TreeItem childItem = (TreeItem) children.get(i);
 					JSONObject child_obj = treeItem2JSONObject(childItem);
@@ -304,7 +304,7 @@ public class HierarchyUtils {
 			String t = (String) list.get(i);
 			w.add(t);
 		}
-		w = SortUtils.quickSort(w);
+		w = new SortUtils().quickSort(w);
 		List treeItem_list = new ArrayList();
         for (int i=0; i<w.size(); i++) {
 		    String t = (String) w.elementAt(i);
@@ -402,7 +402,7 @@ public class HierarchyUtils {
 			ResolvedConceptReference rcr = roots.getResolvedConceptReference(i);
 			v.add(rcr.getEntityDescription().getContent() + " (" + rcr.getConceptCode() + ")");
 		}
-		v = SortUtils.quickSort(v);
+		v = new SortUtils().quickSort(v);
 		for (int i=0; i<v.size(); i++) {
 			String line = (String) v.elementAt(i);
 			int j = i+1;

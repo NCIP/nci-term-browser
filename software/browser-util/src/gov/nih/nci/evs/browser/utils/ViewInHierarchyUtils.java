@@ -363,7 +363,7 @@ public class ViewInHierarchyUtils {
     			w.add(node);
 			}
 
-            w = SortUtils.quickSort(w);
+            w = new SortUtils().quickSort(w);
             listEvsTreeNode = new ArrayList<LexEvsTreeNode>();
 	        for (int k=0; k<w.size(); k++) {
 				LexEvsTreeNode node = (LexEvsTreeNode) w.get(k);
@@ -703,7 +703,7 @@ public class ViewInHierarchyUtils {
 				}
 				w.add(childItem);
 			}
-			w = SortUtils.quickSort(w);
+			w = new SortUtils().quickSort(w);
 			for (int i=0; i<w.size(); i++) {
 				TreeItem childItem = (TreeItem) w.elementAt(i);
 				ti.addChild(childNavText, childItem);
@@ -871,7 +871,7 @@ public class ViewInHierarchyUtils {
 					}
 					w.add(childItem);
 				}
-				w = SortUtils.quickSort(w);
+				w = new SortUtils().quickSort(w);
 				for (int i=0; i<w.size(); i++) {
 					TreeItem childItem = (TreeItem) w.elementAt(i);
 					ti.addChild(childNavText, childItem);
@@ -905,7 +905,7 @@ public class ViewInHierarchyUtils {
 			childItem._expandable = true;
 			w.add(childItem);
 		}
-		w = SortUtils.quickSort(w);
+		w = new SortUtils().quickSort(w);
 		for (int i=0; i<w.size(); i++) {
 			TreeItem childItem = (TreeItem) w.elementAt(i);
 			ti.addChild(childNavText, childItem);

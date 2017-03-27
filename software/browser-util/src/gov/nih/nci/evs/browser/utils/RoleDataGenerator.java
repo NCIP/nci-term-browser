@@ -47,7 +47,8 @@ import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods;
 
 
 public class RoleDataGenerator {
-	static String ASSOCIATION = "association";
+
+	static String ASSOCIATION = "association";
 	static String NOT_AVAILABLE = "not available";
 	LexBIGService lbSvc = null;
 	private LexBIGServiceConvenienceMethods lbscm = null;
@@ -154,7 +155,7 @@ public class RoleDataGenerator {
                             child_list.add(branchItemNode);
                         }
 
-                        SortUtils.quickSort(child_list);
+                        new SortUtils().quickSort(child_list);
 
                         for (int i = 0; i < child_list.size(); i++) {
                             AssociatedConcept branchItemNode =
@@ -219,7 +220,7 @@ public class RoleDataGenerator {
 				lines.add(line);
 		    }
 		}
-		lines = SortUtils.quickSort(lines);
+		lines = new SortUtils().quickSort(lines);
 		for (int i=0; i<lines.size(); i++) {
 			String line = (String) lines.elementAt(i);
 			roledata[i] = line;

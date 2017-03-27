@@ -134,7 +134,7 @@ public class CodingSchemeUtils {
 			String key = (String) it.next();
 			key_vec.add(key);
 		}
-		key_vec = SortUtils.quickSort(key_vec);
+		key_vec = new SortUtils().quickSort(key_vec);
 		for (int i=0; i<key_vec.size(); i++) {
 			String key = (String) key_vec.elementAt(i);
 			String value = (String) hmap.get(key);
