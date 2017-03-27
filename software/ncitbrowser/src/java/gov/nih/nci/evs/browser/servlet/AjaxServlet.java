@@ -4330,7 +4330,7 @@ out.flush();
 
 	  if (StringUtils.isNullOrBlank(namespace)) {
 		    LexcBIGService lbSvc = RemoteServerUtil.createLexcBIGService();
-		    namespace = new ConceptDetails(lbSvc) getNamespaceByCode(scheme, version, code);
+		    namespace = new ConceptDetails(lbSvc).getNamespaceByCode(scheme, version, code);
 	  }
 
 	  HashMap hmap = (HashMap) request.getSession().getAttribute("RelationshipHashMap");
