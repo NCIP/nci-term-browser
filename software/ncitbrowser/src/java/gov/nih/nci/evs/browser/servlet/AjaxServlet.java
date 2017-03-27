@@ -4327,6 +4327,12 @@ out.flush();
     public void view_graph(HttpServletRequest request, HttpServletResponse response,
         String scheme, String version, String namespace, String code, String type) {
 	  LexBIGService lb_svc = RemoteServerUtil.createLexBIGService();
+
+	  if (StringUtils.isNullOrBlank(namespace)) {
+		    LexcBIGService lbSvc = RemoteServerUtil.createLexcBIGService();
+		    namespace = new ConceptDetails(lbSvc) getNamespaceByCode(scheme, version, code);
+	  }
+
 	  HashMap hmap = (HashMap) request.getSession().getAttribute("RelationshipHashMap");
 	  if (hmap == null) {
 		  RelationshipUtils relationshipUtils = new RelationshipUtils(lb_svc);

@@ -212,18 +212,20 @@ String short_name = cs_name;
 			if (con != null) {
 				code = con.getEntityCode();
 				ns = con.getEntityCodeNamespace();
-
-
 			} else {
 				code = (String) request.getSession().getAttribute("code");
 				ns = (String) request.getSession().getAttribute("ns");
 			}
 		}
 
-		request.getSession().setAttribute("code", code);	
+		request.getSession().setAttribute("code", code);
+		
+                //[NCITERM-758] View Graph: Page Can't be found due to ns=null when selecting Concept from Cart and then View Graph		
+		if (StringUtils.isNullOrBlank(ns)) {
+		    LexcBIGService lbSvc = RemoteServerUtil.createLexcBIGService();
+		    ns = new ConceptDetails(lbSvc) getNamespaceByCode(dictionary, version, code);
+		}
 		request.getSession().setAttribute("ns", ns);
-
-
 		String active_code = (String) request.getSession().getAttribute("active_code");
 
 
