@@ -6909,8 +6909,8 @@ if (lbSvc == null) {
 			//}
 
             String urn = null;
-            String prodictionVersion = DataUtils.getProductionVersion(scheme);
-            if (prodictionVersion != null && prodictionVersion.compareTo(version) == 0) {
+            String productionVersion = DataUtils.getProductionVersion(scheme);
+            if (productionVersion != null && productionVersion.compareTo(version) == 0) {
                 Vector w = metadataUtils.getMetadataValues(scheme, version, urn, propertyName, true);
 				if (w == null || w.size() == 0) {
 					//v.add(name + "|" + propertyName + " not available");
