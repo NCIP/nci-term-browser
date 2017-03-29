@@ -232,7 +232,7 @@ if (vsc != null && !DataUtils.isNullOrBlank(vsc.getReportURI())) {
                               <table border="0" width="900" >
                                  <tr>
 <%                                 
- if (DataUtils.isNCIT(defaultCodingScheme)) {                                 
+ if (!DataUtils.isNCIT(defaultCodingScheme)) {                                 
 %>                                 
 
 <td align="left" class="texttitle-blue">Value Set:&nbsp;<%=vsd_uri%>
