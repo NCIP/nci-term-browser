@@ -84,6 +84,14 @@
          <div id="main-area_960">
             <%@ include file="/pages/templates/content-header-resolvedvalueset.jsp"%>
             <%
+            
+boolean has_released_file = false;            
+ValueSetConfig vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri);
+if (vsc != null && !DataUtils.isNullOrBlank(vsc.getReportURI())) { 
+    has_released_file = true;  
+}
+
+
                         String version_selection = (String) request.getSession().getAttribute("version_selection");
                         request.getSession().removeAttribute("version_selection");
                         
@@ -225,9 +233,21 @@
 <%                                 
  if (DataUtils.isNCIT(defaultCodingScheme)) {                                 
 %>                                 
-                                    <td align="left" class="texttitle-blue">Value Set:&nbsp;<%=vsd_uri%>
+
+<td align="left" class="texttitle-blue">Value Set:&nbsp;<%=vsd_uri%>
+
+
+
+<%
+if (has_released_file) {
+%>  
 &nbsp;
 <a href="/ncitbrowser/ajax?action=download&vsd_uri=<%=vsd_uri%>"><img src="/ncitbrowser/images/released_file.gif" alt="Value Set Released Files (FTP Server)" border="0" tabindex="2"></a>
+<%
+}
+%>
+
+
 </td> 
                                     <td align="right">
                                        <h:commandLink
@@ -245,9 +265,18 @@
 } else {                                 
 %>                                  
                                  
+
                                     <td align="left" class="texttitle-blue">Value Set:&nbsp;<%=vsd_uri%>
+                                    
+<%
+if (has_released_file) {
+%>                                     
 &nbsp;
 <a href="/ncitbrowser/ajax?action=download&vsd_uri=<%=vsd_uri%>"><img src="/ncitbrowser/images/released_file.gif" alt="Value Set Released Files (FTP Server)" border="0" tabindex="2"></a>
+<%
+}
+%>
+
 </td>                                   
                                     <td align="right">
                                        <h:commandLink

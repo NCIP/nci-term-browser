@@ -1423,7 +1423,6 @@ public class ValueSetBean {
 		}
 
 		FacesContext.getCurrentInstance().responseComplete();
-
 	}
 
 
@@ -1448,6 +1447,11 @@ public class ValueSetBean {
 		String sources = (String) u.elementAt(4);
 		String supportedsources = (String) u.elementAt(5);
 		String supportedsource = null;
+		if (supportedsources != null) {
+			Vector u2 = gov.nih.nci.evs.browser.utils.StringUtils.parseData(supportedsources, ";");
+			supportedsource = (String) u2.elementAt(0);
+		}
+
 		String defaultCodingScheme = (String) u.elementAt(6);
 
 		if (!DataUtils.isNCIT(defaultCodingScheme)) {
@@ -1462,7 +1466,8 @@ public class ValueSetBean {
 		    Vector w = gov.nih.nci.evs.browser.utils.StringUtils.parseData(supportedsources, ";");
 		    supportedsource = (String) w.elementAt(0);
 		}
-		if (supportedsource == null || supportedsource.compareTo("null") == 0) {
+		//if (supportedsource == null || supportedsource.compareTo("null") == 0) {
+		if (supportedsource == null || supportedsource.compareTo("null") == 0 || supportedsource.compareTo("NCI") == 0) {
 		    reformat = false;
 		}
 
@@ -1543,6 +1548,11 @@ public class ValueSetBean {
 		String sources = (String) u.elementAt(4);
 		String supportedsources = (String) u.elementAt(5);
 		String supportedsource = null;
+		if (supportedsources != null) {
+			Vector u2 = gov.nih.nci.evs.browser.utils.StringUtils.parseData(supportedsources, ";");
+			supportedsource = (String) u2.elementAt(0);
+		}
+
 		String defaultCodingScheme = (String) u.elementAt(6);
 
 		if (!DataUtils.isNCIT(defaultCodingScheme)) {
@@ -1551,7 +1561,7 @@ public class ValueSetBean {
 		}
 
 		boolean withSource = true;
-		if (supportedsources == null) {
+		if (supportedsource == null || supportedsource.compareTo("null") == 0 || supportedsource.compareTo("NCI") == 0) {
 			withSource = false;
 		}
 
