@@ -85,14 +85,7 @@
             <%@ include file="/pages/templates/content-header-resolvedvalueset.jsp"%>
             <%
             
-boolean has_released_file = false;            
-ValueSetConfig vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri);
-if (vsc != null && !DataUtils.isNullOrBlank(vsc.getReportURI())) { 
-    has_released_file = true;  
-}
-
-
-                        String version_selection = (String) request.getSession().getAttribute("version_selection");
+                       String version_selection = (String) request.getSession().getAttribute("version_selection");
                         request.getSession().removeAttribute("version_selection");
                         
                         boolean bool_val;
@@ -103,6 +96,14 @@ if (vsc != null && !DataUtils.isNullOrBlank(vsc.getReportURI())) {
             		String message = (String) request.getSession().getAttribute("message");
             		request.getSession().removeAttribute("message");
             		String vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
+            		
+boolean has_released_file = false;            
+ValueSetConfig vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri);
+if (vsc != null && !DataUtils.isNullOrBlank(vsc.getReportURI())) { 
+    has_released_file = true;  
+}
+
+            		
              		String metadata = DataUtils
             				.getValueSetDefinitionMetadata(vsd_uri);
            		
