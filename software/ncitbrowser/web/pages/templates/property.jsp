@@ -525,7 +525,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 	    synonym_values.add(presentation_value);
 	    hset2.add(presentation_value);
         }
-        synonym_values = SortUtils.quickSort(synonym_values);
+        synonym_values = new SortUtils().quickSort(synonym_values);
     }
 
     int row=0;

@@ -205,7 +205,7 @@ public class TestConceptDetails extends ServiceTestCase {
 			if (v == null) {
 				m++;
 			} else {
-				v = SortUtils.quickSort(v);
+				v = new SortUtils().quickSort(v);
 				for (int j=0; j<v.size(); j++) {
 					String s = (String) v.elementAt(j);
 					System.out.println("\t" + s);

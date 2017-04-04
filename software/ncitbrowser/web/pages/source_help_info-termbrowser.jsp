@@ -138,11 +138,12 @@ subject to the conditions specified at
               for (int n=0; n<abbr_vec.size(); n++) {
                  String t = (String) abbr_vec.elementAt(n);
                  Vector w = StringUtils.parseData(t, "|");
-                 String abbr = (String) w.elementAt(0);
+                 int size = w.size();
                  
-                 if (!abbr.startsWith("Terminology Value Set")) {
+                 String abbr = (String) w.elementAt(size-2);
+                 if (!(abbr.startsWith("Terminology Value Set") && abbr.startsWith("Terminology_Value_Set"))) {
                          lcv++;
-			 String def = (String) w.elementAt(1);
+			 String def = (String) w.elementAt(size-1);
 			 def = JSPUtils.replaceContextPath(def, basePath);
 			 def = JSPUtils.replaceInnerEvalExpressions(def, from_vec, to_vec);
 			 

@@ -1168,6 +1168,7 @@ if (action.compareTo("xmldefinitions") == 0) {
       println(out, "    }");
       println(out, "");
 
+/*
       out.println("    function loadNodeData(node, fnLoadComplete) {");
       out.println("      var id = node.data.id;");
       out.println("      var ns = node.data.ns;");
@@ -1229,6 +1230,75 @@ if (action.compareTo("xmldefinitions") == 0) {
       out.println("		}");
       out.println("		tree.removeNode(node,true);");
       out.println("	    }");
+      out.println("        }");
+      out.println("        fnLoadComplete();");
+      out.println("      }");
+*/
+
+      out.println("    function loadNodeData(node, fnLoadComplete) {");
+      out.println("      var id = node.data.id;");
+      out.println("      var ns = node.data.ns;");
+      out.println("      var responseSuccess = function(o)");
+      out.println("      {");
+      out.println("        var path;");
+      out.println("        var dirs;");
+      out.println("        var files;");
+      out.println("        var respTxt = o.responseText;");
+      out.println("        var respObj = eval('(' + respTxt + ')');");
+      out.println("        var fileNum = 0;");
+      out.println("        var categoryNum = 0;");
+      out.println("        var pos = id.indexOf(\"_dot_\");");
+      out.println("        if ( typeof(respObj.nodes) != \"undefined\") {");
+      out.println("			if (pos == -1) {");
+      out.println("				for (var i=0; i < respObj.nodes.length; i++) {");
+      out.println("				    var name = respObj.nodes[i].ontology_node_name;");
+      out.println("			        var nodeDetails = \"javascript:onClickTreeNode('\"");
+      out.println("								 + respObj.nodes[i].ontology_node_id");
+      out.println("								 + \"','\"");
+      out.println("								 + respObj.nodes[i].ontology_node_ns");
+      out.println("								 + \"');\";");
+      out.println("");
+      out.println("					if (respObj.nodes[i].ontology_node_child_count > 0) {");
+      out.println("					    var newNodeData = { label:name, id:respObj.nodes[i].ontology_node_id, ns:respObj.nodes[i].ontology_node_ns, href:nodeDetails };");
+      out.println("						var newNode = new YAHOO.widget.TextNode(newNodeData, node, false);");
+      out.println("						newNode.setDynamicLoad(loadNodeData);");
+      out.println("						fnLoadComplete();");
+      out.println("					} else {");
+      out.println("			            var newNodeData = { isLeaf:true, label:name, id:respObj.nodes[i].ontology_node_id, ns:respObj.nodes[i].ontology_node_ns, href:nodeDetails };");
+      out.println("					    var newNode = new YAHOO.widget.TextNode(newNodeData, node, false);");
+      out.println("					    newNode.isLeaf = true;");
+      out.println("					    newNode.setDynamicLoad(loadNodeData);");
+      out.println("					    fnLoadComplete();");
+      out.println("					}");
+      out.println("");
+      out.println("				}");
+      out.println("");
+      out.println("			} else {");
+      out.println("			    var parent = node.parent;");
+      out.println("				for (var i=0; i < respObj.nodes.length; i++) {");
+      out.println("					  var name = respObj.nodes[i].ontology_node_name;");
+      out.println("");
+      out.println("				      var nodeDetails = \"javascript:onClickTreeNode('\"");
+      out.println("									 + respObj.nodes[i].ontology_node_id");
+      out.println("									 + \"','\"");
+      out.println("									 + respObj.nodes[i].ontology_node_ns");
+      out.println("									 + \"');\";");
+      out.println("");
+      out.println("					if (respObj.nodes[i].ontology_node_child_count > 0) {");
+      out.println("					    var newNodeData = { label:name, id:respObj.nodes[i].ontology_node_id, ns:respObj.nodes[i].ontology_node_ns, href:nodeDetails };");
+      out.println("						var newNode = new YAHOO.widget.TextNode(newNodeData, parent, true);");
+      out.println("						newNode.setDynamicLoad(loadNodeData);");
+      out.println("					} else {");
+      out.println("			            var newNodeData = { isLeaf:true, label:name, id:respObj.nodes[i].ontology_node_id, ns:respObj.nodes[i].ontology_node_ns, href:nodeDetails };");
+      out.println("					    var newNode = new YAHOO.widget.TextNode(newNodeData, parent, true);");
+      out.println("					    newNode.setDynamicLoad(loadNodeData);");
+      //out.println("					    loadNodeData(newNode, fnLoadComplete);");
+      out.println("					    fnLoadComplete();");
+      out.println("					}");
+      out.println("");
+      out.println("				}");
+      out.println("				tree.removeNode(node, true);");
+      out.println("			}");
       out.println("        }");
       out.println("        fnLoadComplete();");
       out.println("      }");
@@ -3769,35 +3839,18 @@ out.flush();
 			if (version == null || version.compareTo("null") == 0) {
 				version = DataUtils.getVocabularyVersionByTag(uri, "PRODUCTION");
 			}
-			//key = key + "|" + uri + "$" + version;
 			buf.append("|" + uri + "$" + version);
             csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(uri, version));
 		}
 		key = key + buf.toString();
+
         request.getSession().setAttribute("coding_scheme_ref", coding_scheme_ref);
 
 		try {
 			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             CodingSchemeDataUtils codingSchemeDataUtils = new CodingSchemeDataUtils(lbSvc);
 			ResolvedConceptReferencesIterator itr = codingSchemeDataUtils.resolveCodingScheme(vsd_uri, null, false);
-			/*
-			try {
-				int numberRemaining = itr.numberRemaining();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
 
-        //long time = System.currentTimeMillis();
-		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
-		ResolvedValueSetDefinition rvsd = null;
-		int lcv = 0;
-		try {
-			ValueSetDefinition vsd = DataUtils.findValueSetDefinitionByURI(vsd_uri);
-			rvsd = vsd_service.resolveValueSetDefinition(vsd, csvList, null, null);
-			if(rvsd != null) {
-				ResolvedConceptReferencesIterator itr = rvsd.getResolvedConceptReferenceIterator();
-				//ResolvedConceptReferencesIterator itr = DataUtils.resolveCodingScheme(vsd_uri, null, false);
-*/
 			IteratorBeanManager iteratorBeanManager = null;
 
 			if (FacesContext.getCurrentInstance() != null &&
@@ -3813,7 +3866,6 @@ out.flush();
 			}
 
 			request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
-
 			IteratorBean iteratorBean = iteratorBeanManager.getIteratorBean(key);
 			if (iteratorBean == null) {
 				iteratorBean = new IteratorBean(itr);
@@ -3823,10 +3875,27 @@ out.flush();
 			}
 
 			request.getSession().setAttribute("coding_scheme_ref", coding_scheme_ref);
+            /*
+            try {
+				int numberRemaining = itr.numberRemaining();
+				System.out.println("numberRemaining: " + numberRemaining);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			*/
+
 			request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
 			request.getSession().setAttribute("resolved_vs_key", key);
 
 			try {
+				/*
+				String defaultCodingScheme = DataUtils.getValueSetDefaultCodingScheme(vsd_uri);
+                String nextJSP = "/pages/modified_resolved_value_set.jsf";
+				if (!DataUtils.isNCIT(defaultCodingScheme)) {
+					//nextJSP = "/pages/default_resolved_value_set.jsf?vsd_uri="+vsd_uri;
+					nextJSP = "/pages/resolved_value_set.jsf";
+				}
+				*/
 				String nextJSP = "/pages/resolved_value_set.jsf";
 				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
 				dispatcher.forward(request,response);
@@ -3835,9 +3904,8 @@ out.flush();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-			//return "resolved_value_set";
 			return;
-		    //}
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -3845,8 +3913,13 @@ out.flush();
 		String msg = "Unable to resolve the value set " + vsd_uri;
 		request.getSession().setAttribute("message", msg);
         try {
-			//String nextJSP = "/pages/resolved_value_set.jsf";
 			String nextJSP = "/pages/resolved_value_set.jsf?vsd_uri="+vsd_uri;
+			/*
+            String defaultCodingScheme = DataUtils.getValueSetDefaultCodingScheme(vsd_uri);
+            if (!DataUtils.isNCIT(defaultCodingScheme)) {
+				nextJSP = "/pages/default_resolved_value_set.jsf?vsd_uri="+vsd_uri;
+			}
+			*/
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
 			dispatcher.forward(request,response);
 			return;
@@ -3942,7 +4015,11 @@ out.flush();
 						//[NCITERM-731] Concepts selected from a Value Sets' Released File: View Graph not viewable due to ns=null in the URL
 						//09082016
 						//url = url + "&ns=NCI%20Thesaurus";
-						url = url + "&ns=NCI_Thesaurus";
+						//url = url + "&ns=NCI_Thesaurus";
+						LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+						String ns = new ConceptDetails(lbSvc).getNamespaceByCode(Constants.NCI_THESAURUS, ncit_production_version, code);
+						url = url + "&ns=" + ns;
+
 						ResolvedValueSetIteratorHolder rvsi = new ResolvedValueSetIteratorHolder(excelfile, sheet, startIndex, col, code, url, cdisc);
 						request.getSession().setAttribute("rvsi", rvsi);
 					} catch (Exception ex) {
@@ -4250,6 +4327,12 @@ out.flush();
     public void view_graph(HttpServletRequest request, HttpServletResponse response,
         String scheme, String version, String namespace, String code, String type) {
 	  LexBIGService lb_svc = RemoteServerUtil.createLexBIGService();
+
+	  if (StringUtils.isNullOrBlank(namespace)) {
+		    LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		    namespace = new ConceptDetails(lbSvc).getNamespaceByCode(scheme, version, code);
+	  }
+
 	  HashMap hmap = (HashMap) request.getSession().getAttribute("RelationshipHashMap");
 	  if (hmap == null) {
 		  RelationshipUtils relationshipUtils = new RelationshipUtils(lb_svc);

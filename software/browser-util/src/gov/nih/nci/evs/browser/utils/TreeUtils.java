@@ -104,6 +104,7 @@ import org.LexGrid.LexBIG.Impl.Extensions.tree.model.LexEvsTree;
 public class TreeUtils {
     private static Logger _logger = Logger.getLogger(TreeUtils.class);
     private static LocalNameList _noopList = new LocalNameList();
+    private static String DEFAULT_HIERARCHY_ID = "is_a";
 
     private LexBIGService lbSvc = null;
     private LexBIGServiceConvenienceMethods lbscm = null;
@@ -754,6 +755,7 @@ public class TreeUtils {
 				return null;
 			}
 
+
             Mappings mappings = cs.getMappings();
             SupportedHierarchy[] hierarchies = mappings.getSupportedHierarchy();
             if (hierarchies == null || hierarchies.length == 0) {
@@ -761,6 +763,9 @@ public class TreeUtils {
 			}
 
             SupportedHierarchy hierarchyDefn = hierarchies[0];
+            if (hierarchies.length > 1) {
+                hierarchyDefn = selectSupportedHierarchy(hierarchies, DEFAULT_HIERARCHY_ID);
+			}
             String hier_id = hierarchyDefn.getLocalId();
             String[] associationsToNavigate =
                 hierarchyDefn.getAssociationNames();
@@ -804,6 +809,11 @@ public class TreeUtils {
                 return null;
 
             SupportedHierarchy hierarchyDefn = hierarchies[0];
+            if (hierarchies.length > 1) {
+                hierarchyDefn = selectSupportedHierarchy(hierarchies, DEFAULT_HIERARCHY_ID);
+			}
+            //String hierarchyID = hierarchyDefn.getLocalId();
+
             String[] associationsToNavigate =
                 hierarchyDefn.getAssociationNames();
 
@@ -1026,7 +1036,7 @@ public class TreeUtils {
      * branchNodes.hasNext();) { AssociatedConcept branchItemNode =
      * branchNodes.next(); child_list.add(branchItemNode); }
      *
-     * SortUtils.quickSort(child_list);
+     * new SortUtils().quickSort(child_list);
      *
      * for (int i = 0; i < child_list.size(); i++) { AssociatedConcept
      * branchItemNode = (AssociatedConcept) child_list .get(i); String
@@ -1180,7 +1190,7 @@ public class TreeUtils {
                             child_list.add(branchItemNode);
                         }
 
-                        SortUtils.quickSort(child_list);
+                        new SortUtils().quickSort(child_list);
 
                         for (int i = 0; i < child_list.size(); i++) {
                             AssociatedConcept branchItemNode =
@@ -1353,7 +1363,7 @@ public class TreeUtils {
                             child_list.add(branchItemNode);
                         }
 
-                        SortUtils.quickSort(child_list);
+                        new SortUtils().quickSort(child_list);
 
                         for (int i = 0; i < child_list.size(); i++) {
                             AssociatedConcept branchItemNode =
@@ -1783,7 +1793,6 @@ public class TreeUtils {
         return cs;
     }
 
-
 /*
     public String[] getHierarchyIDs(String codingScheme,
         CodingSchemeVersionOrTag versionOrTag) throws LBException {
@@ -1804,10 +1813,26 @@ public class TreeUtils {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
         return hier;
     }
 */
+
+    public String getHierarchyID(String scheme, String version) {
+		CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+		if (version != null) {
+	        versionOrTag.setVersion(version);
+		}
+		try {
+			String[] ids = getHierarchyIDs(scheme, versionOrTag);
+			if (ids != null && ids.length == 1) {
+				return ids[0];
+			}
+			return selectHierarchyId(ids, DEFAULT_HIERARCHY_ID);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
 
     protected  SupportedHierarchy[] getSupportedHierarchies(
         String codingScheme, CodingSchemeVersionOrTag versionOrTag)
@@ -1827,20 +1852,32 @@ public class TreeUtils {
         return mappings.getSupportedHierarchy();
     }
 
+    //is_a
+    public String selectHierarchyId(String[] ids, String id) {
+		if (ids == null || ids.length == 0) return null;
+		if (ids.length == 1) {
+			return ids[0];
+		} else {
+			if (Arrays.asList(ids).contains(id)) {
+				return id;
+			} else {
+				return ids[0];
+			}
+		}
+	}
 
-    public String getHierarchyID(String codingScheme, String version) {
-        CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
-        if (version != null)
-            versionOrTag.setVersion(version);
-        try {
-            String[] ids = getHierarchyIDs(codingScheme, versionOrTag);
-            if (ids.length > 0)
-                return ids[0];
-        } catch (Exception e) {
 
-        }
-        return null;
-    }
+    public SupportedHierarchy selectSupportedHierarchy(SupportedHierarchy[] hierarchies, String id) {
+		if (hierarchies == null || hierarchies.length == 0) return null;
+		for (int i=0; i<hierarchies.length; i++) {
+			SupportedHierarchy hierarchyDefn = hierarchies[i];
+			String hier_id = hierarchyDefn.getLocalId();
+			if (hier_id.compareTo(id) == 0) {
+				return hierarchyDefn;
+			}
+		}
+		return null;
+	}
 
     public ResolvedConceptReferenceList getHierarchyRoots(
         String codingScheme, String version) {
@@ -1976,6 +2013,7 @@ public class TreeUtils {
         ResolvedConceptReferenceList matches = null;
         //Vector v = new Vector();
         try {
+
             CodingSchemeVersionOrTag versionOrTag =
                 new CodingSchemeVersionOrTag();
             if (version != null)
@@ -1989,7 +2027,11 @@ public class TreeUtils {
             if (hierarchies == null || hierarchies.length == 0)
                 return null;
             SupportedHierarchy hierarchyDefn = hierarchies[0];
+            if (hierarchies.length > 1) {
+                hierarchyDefn = selectSupportedHierarchy(hierarchies, DEFAULT_HIERARCHY_ID);
+			}
             String hierarchyID = hierarchyDefn.getLocalId();
+
             String[] associationsToNavigate =
                 hierarchyDefn.getAssociationNames();
             boolean associationsNavigatedFwd =
@@ -2080,7 +2122,7 @@ public class TreeUtils {
         }
 
         List list = resolvedConceptReferenceList2List(roots);
-        SortUtils.quickSort(list);
+        new SortUtils().quickSort(list);
         return list;
     }
 
@@ -2181,7 +2223,7 @@ public class TreeUtils {
             }
         }
         List list = resolvedConceptReferenceList2List(modified_roots);
-        SortUtils.quickSort(list);
+        new SortUtils().quickSort(list);
         return list;
     }
 
@@ -2212,7 +2254,9 @@ public class TreeUtils {
                 return null;
 
             SupportedHierarchy hierarchyDefn = hierarchies[0];
-            //String hier_id = hierarchyDefn.getLocalId();
+            if (hierarchies.length > 1) {
+                hierarchyDefn = selectSupportedHierarchy(hierarchies, DEFAULT_HIERARCHY_ID);
+			}
 
             String[] associationsToNavigate =
                 hierarchyDefn.getAssociationNames();
@@ -2341,7 +2385,7 @@ public class TreeUtils {
         }
         _logger.debug("Run time (milliseconds) getSubconcepts: "
             + (System.currentTimeMillis() - ms) + " to resolve ");
-        SortUtils.quickSort(list);
+        new SortUtils().quickSort(list);
         return list;
     }
 */
@@ -2368,8 +2412,10 @@ public class TreeUtils {
                 return null;
 
             SupportedHierarchy hierarchyDefn = hierarchies[0];
-            //String hier_id = hierarchyDefn.getLocalId();
-
+            if (hierarchies.length > 1) {
+                hierarchyDefn = selectSupportedHierarchy(hierarchies, DEFAULT_HIERARCHY_ID);
+			}
+            //SupportedHierarchy hierarchyDefn = hierarchies[0];
             String[] associationsToNavigate =
                 hierarchyDefn.getAssociationNames();
             boolean associationsNavigatedFwd =
@@ -2414,9 +2460,6 @@ public class TreeUtils {
 					focus.setCodeNamespace(namespace);
 				}
 			}
-
-					//focus.setCodeNamespace(entityCodeNamespace);
-
 					matches =
 						cng.resolveAsList(focus, associationsNavigatedFwd,
 							!associationsNavigatedFwd, 1, 1, new LocalNameList(),
@@ -2480,7 +2523,7 @@ public class TreeUtils {
         }
         _logger.debug("Run time (milliseconds) getSubconcepts: "
             + (System.currentTimeMillis() - ms) + " to resolve ");
-        SortUtils.quickSort(list);
+        new SortUtils().quickSort(list);
         return list;
     }
 

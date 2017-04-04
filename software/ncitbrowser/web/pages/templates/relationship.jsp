@@ -121,7 +121,7 @@ if (type != null && type.compareTo("all") == 0) {
 
     propertyData.setRelationshipHashMap(hmap);
     if (owl2_display) {
-    arrayList = relationshipUtils.getRelationshipData(scheme_curr, version_curr, ns_curr, code_curr, associationName, direction);
+        arrayList = relationshipUtils.getRelationshipData(scheme_curr, version_curr, ns_curr, code_curr, associationName, direction);
     }
     if (owl2_display && arrayList != null) {    
          parent_table_str = propertyData.generateRelationshipTable(scheme_curr, version_curr, code_curr, ns_curr, Constants.TYPE_SUPERCONCEPT, true, arrayList);
@@ -133,65 +133,14 @@ if (type != null && type.compareTo("all") == 0) {
     } else {
     %>
    <p>
+    <%	   
+         parent_table_str = new RelationshipTabFormatter().formatSingleColumnTable(scheme_curr, Constants.TYPE_SUPERCONCEPT, superconcepts);
+    %>   
+	    <p>
+	    <%=parent_table_str%>
+	    </p>    
     <%
-      label = "Parent Concepts:";
-      concepts = superconcepts;
-      
-      
-      if (concepts == null || concepts.size() <= 0)
-      {
-    %>
-        <b><%=label%></b> <i>(none)</i>
-    <%
-      } else if (concepts != null && concepts.size() == 1) {
-          String s = (String) concepts.get(0);
-          Vector ret_vec = StringUtils.parseData(s, "|");
-          String cName = (String) ret_vec.elementAt(0);
-          String cCode = (String) ret_vec.elementAt(1);
-          cNamespace = null;
-          
-          if (ret_vec.size() > 2) {
-              cNamespace = (String) ret_vec.elementAt(2);
-          }
-          
-    %>
-          <b><%=label%></b>
-          <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr_nm%><%=version_parameter%>&ns=<%=cNamespace%>&code=<%=cCode%>">
-            <%=cName%>
-          </a>
-    <%
-      } else if (concepts != null) {
-    %>
-        <b><%=label%></b>
-        <table class="datatable_960" border="0" width="100%">
-    <%
-        for (int i=0; i<concepts.size(); i++) {
-          String s = (String) concepts.get(i);
-          Vector ret_vec = StringUtils.parseData(s, "|");
-          String cName = (String) ret_vec.elementAt(0);
-          String cCode = (String) ret_vec.elementAt(1);
-          
-          if (ret_vec.size() > 2) {
-	       cNamespace = (String) ret_vec.elementAt(2);
-	  }
-          
-          String rowColor = (i%2 == 0) ? "dataRowDark" : "dataRowLight";
-         
-    %>
-          <tr class="<%=rowColor%>">
-            <td class="dataCellText">
-              <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr_nm%><%=version_parameter%>&ns=<%=cNamespace%>&code=<%=cCode%>">
-                <%=cName%>
-              </a>
-            </td>
-          </tr>
-    <%
-        }
-    %>
-        </table>
-    <%
-      }
-   }
+    }
     %>
   </p>
    <%
@@ -209,57 +158,14 @@ if (type != null && type.compareTo("all") == 0) {
     <%	    
     } else {
     %>
-  <p>
+    <p>
+    <%	   
+         child_table_str = new RelationshipTabFormatter().formatSingleColumnTable(scheme_curr, Constants.TYPE_SUBCONCEPT, subconcepts);
+    %>   
+	    <p>
+	    <%=child_table_str%>
+	    </p>    
     <%
-      label = "Child Concepts:";
-      concepts = subconcepts;
-      if (concepts == null || concepts.size() <= 0)
-      {
-    %>
-        <b><%=label%></b> <i>(none)</i>
-    <%
-      } else if (concepts != null && concepts.size() == 1) {
-          String s = (String) concepts.get(0);
-          Vector ret_vec = StringUtils.parseData(s, "|");
-          String cName = (String) ret_vec.elementAt(0);
-          String cCode = (String) ret_vec.elementAt(1);
-          if (ret_vec.size() > 2) {
-              cNamespace = (String) ret_vec.elementAt(2);
-          }    
-          %>
-          <b><%=label%></b>
-          <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr_nm%><%=version_parameter%>&ns=<%=cNamespace%>&code=<%=cCode%>">
-            <%=cName%>
-          </a>
-    <%
-      } else if (concepts != null) {
-    %>
-        <b><%=label%></b>
-        <table class="datatable_960" border="0" width="100%">
-    <%
-        for (int i=0; i<concepts.size(); i++) {
-          String s = (String) concepts.get(i);
-          Vector ret_vec = StringUtils.parseData(s, "|");
-          String cName = (String) ret_vec.elementAt(0);
-          String cCode = (String) ret_vec.elementAt(1);
-          if (ret_vec.size() > 2) {
-          	cNamespace = (String) ret_vec.elementAt(2);
-          }
-          String rowColor = (i%2 == 0) ? "dataRowDark" : "dataRowLight";
-    %>
-          <tr class="<%=rowColor%>">
-            <td class="dataCellText">
-              <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr_nm%><%=version_parameter%>&ns=<%=cNamespace%>&code=<%=cCode%>">
-                <%=cName%>
-              </a>
-            </td>
-          </tr>
-    <%
-        }
-    %>
-        </table>
-    <%
-      }
     }
     %>
     </p>

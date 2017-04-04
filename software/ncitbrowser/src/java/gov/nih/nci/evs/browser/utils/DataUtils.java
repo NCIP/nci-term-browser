@@ -274,6 +274,7 @@ public class DataUtils {
 
     public static ValueSetHierarchy valueSetHierarchy = null;
 
+    public static HashMap vsdURI2MetadataHashMap = null;
 
     // ==================================================================================
 
@@ -302,11 +303,12 @@ public class DataUtils {
 		setCodingSchemeMap();
 		System.out.println("setCodingSchemeMap run time (ms): " + (System.currentTimeMillis() - ms));
 		ms = System.currentTimeMillis();
-
+/*
         System.out.println("getValueSetDefinitionMetadata... ");
 		if (_valueSetDefinitionMetadata == null) {
 			_valueSetDefinitionMetadata = getValueSetDefinitionMetadata();
         }
+*/
 
 		System.out.println("getValueSetDefinitionMetadata run time (ms): " + (System.currentTimeMillis() - ms));
 		ms = System.currentTimeMillis();
@@ -625,9 +627,6 @@ public class DataUtils {
                 return null;
             }
             CodingScheme scheme = lbSvc.resolveCodingScheme(codingScheme, null);
-
-            //System.out.println("(*) getListOfCodingSchemeVersionsUsedInResolution " + scheme.getFormalName());
-
             LexEVSResolvedValueSetService service = new LexEVSResolvedValueSetServiceImpl(lbSvc);
             if (service != null) {
 				AbsoluteCodingSchemeVersionReferenceList acsvr = service.getListOfCodingSchemeVersionsUsedInResolution(scheme);
@@ -638,7 +637,6 @@ public class DataUtils {
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			//System.out.println("getListOfCodingSchemeVersionsUsedInResolution throws exception " + codingScheme);
 		}
 		return null;
 	}
@@ -652,9 +650,6 @@ public class DataUtils {
                 return null;
             }
             CodingScheme scheme = lbSvc.resolveCodingScheme(codingScheme, vt);
-
-            //System.out.println("(*) getListOfCodingSchemeVersionsUsedInResolution " + scheme.getFormalName());
-
             LexEVSResolvedValueSetService service = new LexEVSResolvedValueSetServiceImpl(lbSvc);
             if (service != null) {
 				AbsoluteCodingSchemeVersionReferenceList acsvr = service.getListOfCodingSchemeVersionsUsedInResolution(scheme);
@@ -663,7 +658,6 @@ public class DataUtils {
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			//System.out.println("getListOfCodingSchemeVersionsUsedInResolution throws exception " + codingScheme);
 		}
 		return null;
 	}
@@ -721,12 +715,13 @@ public class DataUtils {
 
         try {
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-            LexEVSResolvedValueSetService service = new LexEVSResolvedValueSetServiceImpl(lbSvc);
+
             if (lbSvc == null) {
                 _logger
-                    .warn("WARNING: Unable to connect to instantiate LexBIGService ???");
+                    .warn("WARNING: Unable to instantiate LexBIGService.");
                 return;
             }
+            LexEVSResolvedValueSetService service = new LexEVSResolvedValueSetServiceImpl(lbSvc);
             CodingSchemeRenderingList csrl = null;
             try {
                 csrl = lbSvc.getSupportedCodingSchemes();
@@ -854,9 +849,7 @@ public class DataUtils {
                         _codingSchemeName2URIHashMap.put(cs.getCodingSchemeName(), cs.getCodingSchemeURI());
 
                         boolean isMapping = isMapping(cs.getCodingSchemeName(), representsVersion);
-                        //_isMappingHashMap.put(cs.getCodingSchemeName(), new Boolean(isMapping));
-
-                        _isMappingHashMap.put(cs.getCodingSchemeName(), Boolean.valueOf(isMapping));
+                         _isMappingHashMap.put(cs.getCodingSchemeName(), Boolean.valueOf(isMapping));
 
                         String[] localnames = cs.getLocalName();
                         for (int m = 0; m < localnames.length; m++) {
@@ -871,14 +864,12 @@ public class DataUtils {
                         NameAndValue[] nvList =
                             new MetadataUtils(lbSvc).getMetadataProperties(cs);
                         if (nvList == null || nvList.length <= 0) {
-                            //_logger.warn("\t*******************************************************************");
-                            _logger.warn("\t*** Warning: Metadata properties are possibly not loaded.       ***");
-                            _logger.warn("\t*** MetadataUtils.getMetadataProperties(cs) returns empty list. ***");
-                            //_logger.warn("\t*******************************************************************");
+                            //_logger.warn("\t*** Warning: Metadata properties are possibly not loaded.       ***");
+                            //_logger.warn("\t*** MetadataUtils.getMetadataProperties(cs) returns empty list. ***");
+                            _logger.warn("\t*** No metadata found for " + cs.getCodingSchemeName() + " (version: " + representsVersion + ")");
                         }
                         //if (cs != null && nvList != null) {
 						if (nvList != null) {
-
                             String css_local_name = css.getLocalName();
                             boolean localname_exist = false;
                             for (int lcv = 0; lcv < localnames.length; lcv++) {
@@ -1021,13 +1012,6 @@ public class DataUtils {
                             _csnv2VersionMap.put(value, representsVersion);
                             _logger.debug("\trepresentsVersion: "
                                 + representsVersion);
-
-                        } else {
-                            _logger
-                                .error("WARNING: MetadataUtils.getMetadataPropertyList returns null??? "
-                                    + formalname);
-                            _logger.error("\t\trepresentsVersion "
-                                + representsVersion);
                         }
 					    }
                     } catch (Exception ex) {
@@ -1041,9 +1025,9 @@ public class DataUtils {
                     }
 
                 } else {
-                    _logger.error("\tWARNING: setCodingSchemeMap discards "
-                        + formalname);
-                    _logger.error("\t\trepresentsVersion " + representsVersion);
+                    _logger.warn("\t"
+                        + formalname + " (version: " + representsVersion + ") is inactive.");
+                    //_logger.error("\t\trepresentsVersion " + representsVersion);
                 }
             }
         } catch (Exception e) {
@@ -1052,7 +1036,7 @@ public class DataUtils {
 
         _logger.debug("Populate ontologies... " );
         if (nv_vec.size() > 0) {
-            nv_vec = SortUtils.quickSort(nv_vec);
+            nv_vec = new SortUtils().quickSort(nv_vec);
             for (int k = 0; k < nv_vec.size(); k++) {
                 String value = (String) nv_vec.elementAt(k);
                 if (!value.startsWith(Constants.TERMINOLOGY_VALUE_SET) && !value.startsWith(Constants.TERMINOLOGY_VALUE_SET_NAME)) {
@@ -1064,7 +1048,6 @@ public class DataUtils {
         _logger.debug("createFormalName2NCImSABHashMap... " );
         _formalName2NCImSABHashMap = createFormalName2NCImSABHashMap();
 
-        //KLO
         if (!_localName2FormalNameHashMap.containsKey(Constants.NCIT)) {
 			_localName2FormalNameHashMap.put(Constants.NCIT, Constants.NCIT_CS_NAME);
 		}
@@ -1099,19 +1082,28 @@ public class DataUtils {
 
 		_VSDName2URIHashMap = getVSDName2URIHashMap();
 
+/*
 		_logger.debug("Initializing Value Set Metadata ...");
 		Vector v = getValueSetDefinitionMetadata();
 		if (v == null || v.size() == 0) {
 			hasNoValueSet = true;
 			return;
 		}
-
+*/
 		_logger.debug("Done Initializing Value Set Metadata ...");
 		_logger.debug("\tInitializing ValueSetHierarchy ...");
 
         LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
         LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 
+        //KLO, 03062017
+        ValueSetMetadataUtils vsmdu = new ValueSetMetadataUtils(vsd_service);
+        vsdURI2MetadataHashMap = vsmdu.getValueSetDefinitionMetadata();
+
+		if (vsdURI2MetadataHashMap == null || vsdURI2MetadataHashMap.keySet().size() == 0) {
+			hasNoValueSet = true;
+			return;
+		}
 
         //ValueSetHierarchy valueSetHierarchy = new ValueSetHierarchy(lbSvc,
         valueSetHierarchy = new ValueSetHierarchy(lbSvc,
@@ -1798,7 +1790,7 @@ public class DataUtils {
                 hierarchicalAssoName);
         //if (superconcept_vec == null)
         //    return null;
-        // SortUtils.quickSort(superconcept_vec, SortUtils.SORT_BY_CODE);
+        // new SortUtils().quickSort(superconcept_vec, new SortUtils().SORT_BY_CODE);
         return superconcept_vec;
 
     }
@@ -1860,7 +1852,7 @@ public class DataUtils {
                         }
                     }
                 }
-                SortUtils.quickSort(v);
+                new SortUtils().quickSort(v);
             }
 
         } catch (Exception ex) {
@@ -2080,8 +2072,8 @@ public class DataUtils {
             try {
                 hs = lbSvc.getHistoryService(coding_scheme_name);
             } catch (Exception ex) {
-                _logger.error("WARNING: HistoryService is not available for "
-                    + coding_scheme_name);
+                //_logger.error("WARNING: HistoryService is not available for "
+                //    + coding_scheme_name);
             }
             if (hs != null) {
                 SystemRelease release = hs.getLatestBaseline();
@@ -2713,7 +2705,7 @@ if (lbSvc == null) {
 					}
 				}
 				//Collections.sort(superconceptList);
-				SortUtils.quickSort(superconceptList);
+				new SortUtils().quickSort(superconceptList);
 
 		}
         map.put(TYPE_SUPERCONCEPT, superconceptList);
@@ -2734,7 +2726,7 @@ if (lbSvc == null) {
 					new TreeUtils(lbSvc).getSubconceptNamesAndCodes(scheme, version, code);
 				//KLO
 				//Collections.sort(subconceptList);
-				SortUtils.quickSort(subconceptList);
+				new SortUtils().quickSort(subconceptList);
 
 		}
         map.put(TYPE_SUBCONCEPT, subconceptList);
@@ -3062,13 +3054,13 @@ if (lbSvc == null) {
 
             if (roleList.size() > 0) {
                 //Collections.sort(roleList);
-                SortUtils.quickSort(roleList);
+                new SortUtils().quickSort(roleList);
 
             }
 
             if (associationList.size() > 0) {
                 //Collections.sort(associationList);
-                SortUtils.quickSort(associationList);
+                new SortUtils().quickSort(associationList);
             }
 
             map.put(TYPE_ROLE, roleList);
@@ -3076,12 +3068,12 @@ if (lbSvc == null) {
 
             if (inverse_roleList.size() > 0) {
                 //Collections.sort(inverse_roleList);
-                SortUtils.quickSort(inverse_roleList);
+                new SortUtils().quickSort(inverse_roleList);
             }
 
             if (inverse_associationList.size() > 0) {
                 //Collections.sort(inverse_associationList);
-                SortUtils.quickSort(inverse_associationList);
+                new SortUtils().quickSort(inverse_associationList);
             }
 
             map.put(TYPE_INVERSE_ROLE, inverse_roleList);
@@ -3395,7 +3387,7 @@ if (lbSvc == null) {
      * p.getRepresentationalForm(); Source[] sources = p.getSource(); if
      * (sources != null && sources.length > 0) { Source src = sources[0];
      * term_source = src.getContent(); } v.add(term_name + "|" + term_type + "|"
-     * + term_source + "|" + term_source_code); //} } SortUtils.quickSort(v);
+     * + term_source + "|" + term_source_code); //} } new SortUtils().quickSort(v);
      * return v; }
      */
 
@@ -3434,7 +3426,7 @@ if (lbSvc == null) {
                 + term_source_code);
 
         }
-        SortUtils.quickSort(v);
+        new SortUtils().quickSort(v);
         return v;
     }
 
@@ -3484,7 +3476,7 @@ if (lbSvc == null) {
                     + term_source_code);
             }
         }
-        SortUtils.quickSort(v);
+        new SortUtils().quickSort(v);
         return v;
     }
 
@@ -4664,7 +4656,7 @@ if (lbSvc == null) {
 		}
 
 		_codingScheme2MappingCodingSchemes.put(formalName, v);
-		return SortUtils.quickSort(v);
+		return new SortUtils().quickSort(v);
 
 	}
 
@@ -5184,7 +5176,7 @@ if (lbSvc == null) {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		conceptDomainName_vec = SortUtils.quickSort(conceptDomainName_vec);
+		conceptDomainName_vec = new SortUtils().quickSort(conceptDomainName_vec);
 		return conceptDomainName_vec;
 	}
 
@@ -5200,7 +5192,7 @@ if (lbSvc == null) {
 			String t = (String) iterator.next();
 			v.add(t);
 		}
-		return SortUtils.quickSort(v);
+		return new SortUtils().quickSort(v);
 	}
 
 
@@ -5217,7 +5209,7 @@ if (lbSvc == null) {
 			String t = (String) list.get(i);
 			v.add(t);
 		}
-		return SortUtils.quickSort(v);
+		return new SortUtils().quickSort(v);
 	}
 
 
@@ -5262,7 +5254,7 @@ if (lbSvc == null) {
 
 			v.add(name + "|" + t);
 		}
-		return SortUtils.quickSort(v);
+		return new SortUtils().quickSort(v);
 	}
 
 	public static String getVSDURIByName(String name) {
@@ -5310,15 +5302,6 @@ if (lbSvc == null) {
 		}
 		return null;
 	}
-
-
-    //public static String valueSetDefiniionURI2Name(String vsd_uri) {
-	public static String valueSetDefinitionURI2Name(String vsd_uri) {
-		String metadata = getValueSetDefinitionMetadata(vsd_uri);
-		Vector v = parseData(metadata);
-		return (String) v.elementAt(0);
-	}
-
 
     public static HashMap getCodingSchemeURN2ValueSetMetadataHashMap(Vector vsd_vec) {
         HashMap hmap = new HashMap();
@@ -5483,7 +5466,7 @@ if (lbSvc == null) {
 				}
 			}
 		}
-		return SortUtils.quickSort(availableValueSetDefinitionSources);
+		return new SortUtils().quickSort(availableValueSetDefinitionSources);
 	}
 
 
@@ -5499,106 +5482,6 @@ if (lbSvc == null) {
 	}
 
 
-	public static Vector getValueSetDefinitionMetadata() {
-		if (_valueSetDefinitionMetadata != null) return _valueSetDefinitionMetadata;
-		Vector valueSetDefinitionMetadata = new Vector();
-		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
-		if (vsd_service == null) {
-			System.out.println("Unable to instantiate LexEVSValueSetDefinitionServices???");
-			return null;
-		}
-
-		try {
-			List list = vsd_service.listValueSetDefinitionURIs();
-			if (list == null || list.size() == 0) return null;
-			for (int i=0; i<list.size(); i++) {
-				String uri = (String) list.get(i);
-				ValueSetDefinition vsd = findValueSetDefinitionByURI(uri);
-				String metadata = getValueSetDefinitionMetadata(vsd);
-				valueSetDefinitionMetadata.add(metadata);
-			}
-			SortUtils.quickSort(valueSetDefinitionMetadata);
-	    } catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return valueSetDefinitionMetadata;
-	}
-
-
-
-	public static String getValueSetDefinitionMetadata(String vsd_uri) {
-		if (vsd_uri == null) return null;
-		ValueSetDefinition vsd = findValueSetDefinitionByURI(vsd_uri);
-		if (vsd == null) return null;
-		return getValueSetDefinitionMetadata(vsd);
-	}
-
-
-    public static String getValueSetDefinitionMetadata(ValueSetDefinition vsd) {
-		if (vsd== null) return null;
-		String name = "";
-		String uri = "";
-		String description = "";
-		String domain = "";
-		String src_str = "";
-
-		//String supportedSourceStr = "";
-		StringBuffer buf = new StringBuffer();
-
-		uri = vsd.getValueSetDefinitionURI();
-		name = vsd.getValueSetDefinitionName();
-		if (name == null || name.compareTo("") == 0) {
-			name = "<NOT ASSIGNED>";
-		}
-
-		domain = vsd.getConceptDomain();
-		if (domain == null || domain.compareTo("") == 0) {
-			domain = "<NOT ASSIGNED>";
-		}
-
-		java.util.Enumeration<? extends Source> sourceEnum = vsd.enumerateSource();
-
-		while (sourceEnum.hasMoreElements()) {
-			Source src = (Source) sourceEnum.nextElement();
-			src_str = src_str + src.getContent() + ";";
-		}
-		if (src_str.length() > 0) {
-			src_str = src_str.substring(0, src_str.length()-1);
-		}
-
-		if (src_str == null || src_str.compareTo("") == 0) {
-			src_str = "<NOT ASSIGNED>";
-		}
-
-		if (vsd.getEntityDescription() != null) {
-			description = vsd.getEntityDescription().getContent();
-			if (description == null || description.compareTo("") == 0) {
-				description = "<NO DESCRIPTION>";
-			}
-		} else {
-			description = "<NO DESCRIPTION>";
-		}
-
-		//[GF#31718] Sources on value set home pages displaying wrong value.
-		Mappings mappings = vsd.getMappings();
-        java.util.Enumeration<? extends SupportedSource> supportedSourceEnum = mappings.enumerateSupportedSource();
-
-		while (supportedSourceEnum.hasMoreElements()) {
-			SupportedSource src = (SupportedSource) supportedSourceEnum.nextElement();
-			//supportedSourceStr = supportedSourceStr + src.getContent() + ";";
-			buf.append(src.getContent() + ";");
-		}
-		String supportedSourceStr = buf.toString();
-
-		if (supportedSourceStr.length() > 0) {
-			supportedSourceStr = supportedSourceStr.substring(0, supportedSourceStr.length()-1);
-		}
-		if (supportedSourceStr == null || supportedSourceStr.compareTo("") == 0) {
-			supportedSourceStr = "<NOT ASSIGNED>";
-		}
-
-		return name + "|" + uri + "|" + description + "|" + domain + "|" + src_str + "|" + supportedSourceStr;
-	}
 
 
     public static Vector getCodingSchemesInValueSetDefinition(String uri) {
@@ -5699,7 +5582,7 @@ if (lbSvc == null) {
 						}
 					}
 				}
-				w = SortUtils.quickSort(w);
+				w = new SortUtils().quickSort(w);
 				return w;
 		    } else {
 				//System.out.println("WARNING: DataUtils.getCodingSchemeReferencesInValueSetDefinition returns null? (URI: "
@@ -5745,7 +5628,7 @@ if (lbSvc == null) {
 						}
 					}
 				}
-				w = SortUtils.quickSort(w);
+				w = new SortUtils().quickSort(w);
 				return w;
 		    }
 		} catch (Exception ex) {
@@ -6693,7 +6576,7 @@ if (lbSvc == null) {
 		} finally {
 			//System.out.println("Total run time (ms): " + (System.currentTimeMillis() - ms));
 		}
-		return SortUtils.quickSort(v);
+		return new SortUtils().quickSort(v);
    }
 
    public static Vector uri2CodingSchemeName(Vector uri_vec) {
@@ -7026,8 +6909,8 @@ if (lbSvc == null) {
 			//}
 
             String urn = null;
-            String prodictionVersion = DataUtils.getProductionVersion(scheme);
-            if (prodictionVersion != null && prodictionVersion.compareTo(version) == 0) {
+            String productionVersion = DataUtils.getProductionVersion(scheme);
+            if (productionVersion != null && productionVersion.compareTo(version) == 0) {
                 Vector w = metadataUtils.getMetadataValues(scheme, version, urn, propertyName, true);
 				if (w == null || w.size() == 0) {
 					//v.add(name + "|" + propertyName + " not available");
@@ -7040,10 +6923,140 @@ if (lbSvc == null) {
 		    }
         }
         // Sort source help table (NCITERM-626)
-        return SortUtils.quickSort(v);
+        return new SortUtils().quickSort(v);
     }
 
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public static String getValueSetDefaultCodingScheme(String vsd_uri) {
+		String metadata = getValueSetDefinitionMetadata(vsd_uri);
+		if (metadata == null) return null;
+		Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(metadata);
+		String defaultCodingScheme = (String) u.elementAt(6);
+		return defaultCodingScheme;
+	}
+
+
+	public static String valueSetDefinitionURI2Name(String vsd_uri) {
+		String metadata = getValueSetDefinitionMetadata(vsd_uri);
+		Vector v = parseData(metadata);
+		return (String) v.elementAt(0);
+	}
+
+/*
+	public static Vector getValueSetDefinitionMetadata() {
+		if (_valueSetDefinitionMetadata != null) return _valueSetDefinitionMetadata;
+		Vector valueSetDefinitionMetadata = new Vector();
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+		if (vsd_service == null) {
+			System.out.println("Unable to instantiate LexEVSValueSetDefinitionServices???");
+			return null;
+		}
+
+		try {
+			List list = vsd_service.listValueSetDefinitionURIs();
+			if (list == null || list.size() == 0) return null;
+			for (int i=0; i<list.size(); i++) {
+				String uri = (String) list.get(i);
+				ValueSetDefinition vsd = findValueSetDefinitionByURI(uri);
+				String metadata = getValueSetDefinitionMetadata(vsd);
+				valueSetDefinitionMetadata.add(metadata);
+			}
+			new SortUtils().quickSort(valueSetDefinitionMetadata);
+	    } catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return valueSetDefinitionMetadata;
+	}
+*/
+	public static String getValueSetDefinitionMetadata(ValueSetDefinition vsd) {
+		if (vsd == null) return null;
+		String vsd_uri = vsd.getValueSetDefinitionURI();
+		return getValueSetDefinitionMetadata(vsd_uri);
+	}
+
+
+	public static String getValueSetDefinitionMetadata(String vsd_uri) {
+		/*
+		if (vsd_uri == null) return null;
+		ValueSetDefinition vsd = findValueSetDefinitionByURI(vsd_uri);
+		if (vsd == null) return null;
+		return getValueSetDefinitionMetadata(vsd);
+		*/
+		if (!vsdURI2MetadataHashMap.containsKey(vsd_uri)) return null;
+		return (String) vsdURI2MetadataHashMap.get(vsd_uri);
+	}
+
+/*
+    public static String getValueSetDefinitionMetadata(ValueSetDefinition vsd) {
+		if (vsd== null) return null;
+		String name = "";
+		String uri = "";
+		String description = "";
+		String domain = "";
+		String src_str = "";
+
+		//String supportedSourceStr = "";
+		StringBuffer buf = new StringBuffer();
+
+		uri = vsd.getValueSetDefinitionURI();
+		name = vsd.getValueSetDefinitionName();
+		if (name == null || name.compareTo("") == 0) {
+			name = "<NOT ASSIGNED>";
+		}
+
+		domain = vsd.getConceptDomain();
+		if (domain == null || domain.compareTo("") == 0) {
+			domain = "<NOT ASSIGNED>";
+		}
+
+		java.util.Enumeration<? extends Source> sourceEnum = vsd.enumerateSource();
+
+		while (sourceEnum.hasMoreElements()) {
+			Source src = (Source) sourceEnum.nextElement();
+			src_str = src_str + src.getContent() + ";";
+		}
+		if (src_str.length() > 0) {
+			src_str = src_str.substring(0, src_str.length()-1);
+		}
+
+		if (src_str == null || src_str.compareTo("") == 0) {
+			src_str = "<NOT ASSIGNED>";
+		}
+
+		if (vsd.getEntityDescription() != null) {
+			description = vsd.getEntityDescription().getContent();
+			if (description == null || description.compareTo("") == 0) {
+				description = "<NO DESCRIPTION>";
+			}
+		} else {
+			description = "<NO DESCRIPTION>";
+		}
+
+		//[GF#31718] Sources on value set home pages displaying wrong value.
+		Mappings mappings = vsd.getMappings();
+        java.util.Enumeration<? extends SupportedSource> supportedSourceEnum = mappings.enumerateSupportedSource();
+
+		while (supportedSourceEnum.hasMoreElements()) {
+			SupportedSource src = (SupportedSource) supportedSourceEnum.nextElement();
+			//supportedSourceStr = supportedSourceStr + src.getContent() + ";";
+			buf.append(src.getContent() + ";");
+		}
+		String supportedSourceStr = buf.toString();
+
+		if (supportedSourceStr.length() > 0) {
+			supportedSourceStr = supportedSourceStr.substring(0, supportedSourceStr.length()-1);
+		}
+		if (supportedSourceStr == null || supportedSourceStr.compareTo("") == 0) {
+			supportedSourceStr = "<NOT ASSIGNED>";
+		}
+
+		String defaultCodingScheme = vsd.getDefaultCodingScheme();
+
+		return name + "|" + uri + "|" + description + "|" + domain + "|" + src_str + "|" + supportedSourceStr + "|" + defaultCodingScheme;
+	}
+	*/
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static void main(String[] args) {
         String scheme = "NCI Thesaurus";

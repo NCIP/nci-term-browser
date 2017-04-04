@@ -157,7 +157,7 @@ public class RESTClient{
             Map.Entry me = (Map.Entry)iter.next();
             v.add(me.getKey() + "|" + me.getValue());
         }
-        v = SortUtils.quickSort(v);
+        v = new SortUtils().quickSort(v);
         for (int i=0; i<v.size(); i++) {
 			String t = (String) v.elementAt(i);
 			int j = i+1;

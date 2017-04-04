@@ -232,7 +232,7 @@ public class RelationshipUtils {
 			String t = (String) list.get(i);
 			v.add(t);
 		}
-		v = SortUtils.quickSort(v);
+		v = new SortUtils().quickSort(v);
 		list = new ArrayList();
 		for (int i=0; i<v.size(); i++) {
 			String t = (String) v.elementAt(i);
@@ -248,7 +248,7 @@ public class RelationshipUtils {
 			String t = (String) list.get(i);
 			v.add(t);
 		}
-		v = SortUtils.quickSort(v);
+		v = new SortUtils().quickSort(v);
 		ArrayList new_list = new ArrayList();
 		for (int i=0; i<v.size(); i++) {
 			String t = (String) v.elementAt(i);
@@ -336,7 +336,7 @@ public class RelationshipUtils {
 						}
 					}
 					//Collections.sort(superconceptList);
-					SortUtils.quickSort(superconceptList);
+					new SortUtils().quickSort(superconceptList);
 			}
 	    }
         map.put(Constants.TYPE_SUPERCONCEPT, superconceptList);
@@ -355,7 +355,7 @@ public class RelationshipUtils {
         if (checkOption(options, SUBCONCEPT_OPTION)) {
 			if (!isMapping) {
 					subconceptList = treeUtils.getSubconceptNamesAndCodes(scheme, version, code, ns);
-					//SortUtils.quickSort(subconceptList);
+					//new SortUtils().quickSort(subconceptList);
 					subconceptList = sortList(subconceptList);
 			}
 	    }
@@ -723,22 +723,22 @@ public class RelationshipUtils {
 		}
 
 		if (roleList.size() > 0) {
-			SortUtils.quickSort(roleList);
+			new SortUtils().quickSort(roleList);
 		}
 
 		if (associationList.size() > 0) {
-			SortUtils.quickSort(associationList);
+			new SortUtils().quickSort(associationList);
 		}
 
 		map.put(Constants.TYPE_ROLE, roleList);
 		map.put(Constants.TYPE_ASSOCIATION, associationList);
 
 		if (inverse_roleList.size() > 0) {
-			SortUtils.quickSort(inverse_roleList);
+			new SortUtils().quickSort(inverse_roleList);
 		}
 
 		if (inverse_associationList.size() > 0) {
-			SortUtils.quickSort(inverse_associationList);
+			new SortUtils().quickSort(inverse_associationList);
 		}
 
 		map.put(Constants.TYPE_INVERSE_ROLE, inverse_roleList);

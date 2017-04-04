@@ -15,6 +15,10 @@
 <%@ pageimport="org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList"%>
 <%@ page import="org.apache.log4j.*"%>
 
+<%@ page import="org.LexGrid.LexBIG.LexBIGService.LexBIGService"%>
+<%@ page import="org.lexgrid.resolvedvalueset.LexEVSResolvedValueSetService"%>
+<%@ page import="org.lexgrid.valuesets.LexEVSValueSetDefinitionServices"%>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
@@ -80,7 +84,8 @@
          <div id="main-area_960">
             <%@ include file="/pages/templates/content-header-resolvedvalueset.jsp"%>
             <%
-                        String version_selection = (String) request.getSession().getAttribute("version_selection");
+            
+                       String version_selection = (String) request.getSession().getAttribute("version_selection");
                         request.getSession().removeAttribute("version_selection");
                         
                         boolean bool_val;
@@ -91,9 +96,17 @@
             		String message = (String) request.getSession().getAttribute("message");
             		request.getSession().removeAttribute("message");
             		String vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
-            		String metadata = DataUtils
-            				.getValueSetDefinitionMetadata(DataUtils
-            						.findValueSetDefinitionByURI(vsd_uri));
+            		
+boolean has_released_file = false;            
+ValueSetConfig vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri);
+if (vsc != null && !DataUtils.isNullOrBlank(vsc.getReportURI())) { 
+    has_released_file = true;  
+}
+
+            		
+             		String metadata = DataUtils
+            				.getValueSetDefinitionMetadata(vsd_uri);
+           		
             		Vector u = StringUtils.parseData(metadata);
             		String name = (String) u.elementAt(0);
             		String valueset_uri = (String) u.elementAt(1);
@@ -101,6 +114,9 @@
             		String concept_domain = (String) u.elementAt(3);
             		String sources = (String) u.elementAt(4);
             		String supportedsources = (String) u.elementAt(5);
+            		String supportedsource = null;
+            		
+            		String defaultCodingScheme = (String) u.elementAt(6);
             		
 
             		IteratorBeanManager iteratorBeanManager = (IteratorBeanManager) FacesContext
@@ -118,30 +134,31 @@
             		IteratorBean iteratorBean = iteratorBeanManager
             				.getIteratorBean(resolved_vs_key);
             				
-           		
+            				
+			int itr_size = 0;
+			String itr_size_str = null;
+
             		if (iteratorBean == null) {
-           		
-            			ResolvedConceptReferencesIterator itr = (ResolvedConceptReferencesIterator) request
+          			ResolvedConceptReferencesIterator itr = (ResolvedConceptReferencesIterator) request
             					.getSession().getAttribute(
             							"ResolvedConceptReferencesIterator");
+            							
             			iteratorBean = new IteratorBean(itr);
-            			
             			iteratorBean.initialize();
             			iteratorBean.setKey(resolved_vs_key);
             			request.getSession().setAttribute("resolved_vs_key",
             					resolved_vs_key);
             			iteratorBeanManager.addIteratorBean(iteratorBean);
-            			int itr_size = iteratorBean.getSize();
-         			
+            			itr_size = iteratorBean.getSize();
            			Integer obj = Integer.valueOf(itr_size);
-            			String itr_size_str = obj.toString();
+            			itr_size_str = obj.toString();
            			request.getSession().setAttribute("itr_size_str",
             					itr_size_str);
 
             		} else {
-           			int itr_size = iteratorBean.getSize();
+           			itr_size = iteratorBean.getSize();
             			Integer obj = Integer.valueOf(itr_size);
-            			String itr_size_str = obj.toString();
+            			itr_size_str = obj.toString();
             		}
 
             		String resultsPerPage =  HTTPUtils.cleanXSS((String) request.getParameter("resultsPerPage"));
@@ -188,7 +205,6 @@
             		if (num_pages * pageSize < size)
             			num_pages++;
 
-
             		int istart = (page_num - 1) * pageSize;
             		if (istart < 0)
             			istart = 0;
@@ -197,10 +213,6 @@
             		if (iend > size)
             			iend = size - 1;
             %>
-            
-            <!--
-            <div class="pagecontent" style="width:590px;">
-            -->
             <div class="pagecontent"> 
             
                <a name="evs-content" id="evs-content"></a>               
@@ -219,7 +231,25 @@
                            <td>
                               <table border="0" width="900" >
                                  <tr>
-                                    <td align="left" class="texttitle-blue">Value Set:&nbsp;<%=vsd_uri%></td>
+<%                                 
+ if (!DataUtils.isNCIT(defaultCodingScheme)) {                                 
+%>                                 
+
+<td align="left" class="texttitle-blue">Value Set:&nbsp;<%=vsd_uri%>
+
+
+
+<%
+if (has_released_file) {
+%>  
+&nbsp;
+<a href="/ncitbrowser/ajax?action=download&vsd_uri=<%=vsd_uri%>"><img src="/ncitbrowser/images/released_file.gif" alt="Value Set Released Files (FTP Server)" border="0" tabindex="2"></a>
+<%
+}
+%>
+
+
+</td> 
                                     <td align="right">
                                        <h:commandLink
                                           value="Export XML"
@@ -231,7 +261,41 @@
                                           action="#{valueSetBean.exportToCSVAction}"
                                           styleClass="texttitle-blue-small"
                                           title="Export VSD in CSV format" />
+                                    </td>                              
+<%                                 
+} else {                                 
+%>                                  
+                                 
+
+                                    <td align="left" class="texttitle-blue">Value Set:&nbsp;<%=vsd_uri%>
+                                    
+<%
+if (has_released_file) {
+%>                                     
+&nbsp;
+<a href="/ncitbrowser/ajax?action=download&vsd_uri=<%=vsd_uri%>"><img src="/ncitbrowser/images/released_file.gif" alt="Value Set Released Files (FTP Server)" border="0" tabindex="2"></a>
+<%
+}
+%>
+
+</td>                                   
+                                    <td align="right">
+                                       <h:commandLink
+                                          value="Export XML"
+                                          action="#{valueSetBean.exportValuesToXMLAction}"
+                                          styleClass="texttitle-blue-small"
+                                          title="Export VSD in LexGrid XML format" />
+                                       | <h:commandLink
+                                          value="Export CSV"
+                                          action="#{valueSetBean.exportValuesToCSVAction}"
+                                          styleClass="texttitle-blue-small"
+                                          title="Export VSD in CSV format" />
                                     </td>
+<%                                 
+}                                
+%>                                      
+                                    
+                                    
                                  </tr>
                               </table>
                            </td>
@@ -259,14 +323,42 @@
                         </tr>
                         <tr class="textbody">
                            <td>
+                        <%   
+                        boolean reformat = true;
+                        boolean use_new_format = true;
+                        String rvs_tbl = null;
+                        
+                        if (DataUtils.isNCIT(defaultCodingScheme)) {
+				Vector codes = new Vector();
+				List list = iteratorBean.getData(istart, iend);
+				for (int k = 0; k < list.size(); k++) {
+					Object obj = list.get(k);
+					ResolvedConceptReference ref = (ResolvedConceptReference) obj;
+					codes.add(ref.getConceptCode());
+				}  
+                                
+				LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+				LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+				ValueSetFormatter formatter = new ValueSetFormatter(lbSvc, vsd_service);
+				rvs_tbl = formatter.get_rvs_tbl(vsd_uri);
+			}
+
+			if (rvs_tbl != null) {
+			%>	
+			   <%=rvs_tbl%>
+			<%   
+			} else {
+                        %>
                               <table class="datatable_960" summary="Data Table" cellpadding="3" cellspacing="0" border="0" width="100%">
                                  <th class="dataTableHeader" scope="col" align="left">Code</th>
                                  <th class="dataTableHeader" scope="col" align="left">Name</th>
                                  <th class="dataTableHeader" scope="col" align="left">Vocabulary</th>
                                  <th class="dataTableHeader" scope="col" align="left">Namespace</th>
                                  <%
+                                 
                                  	Vector concept_vec = new Vector();
                                  				List list = iteratorBean.getData(istart, iend);
+                                 				
                                  				for (int k = 0; k < list.size(); k++) {
                                  					Object obj = list.get(k);
                                  					ResolvedConceptReference ref = null;
@@ -291,6 +383,7 @@
                                  					concept_vec.add(t);                                 							
  
                                  				}
+                                 				
                                  				for (int i = 0; i < concept_vec.size(); i++) {
                                  					String concept_str = (String) concept_vec
                                  							.elementAt(i);
@@ -337,6 +430,11 @@
                                  %>
                                  </tr>
                               </table>
+
+			     <%
+				}
+			     %>
+
                            </td>
                         </tr>
                      </table>

@@ -130,7 +130,7 @@ public class TestViewHierarchyUtils extends ServiceTestCase {
 							ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(j);
 							w.add(rcr.getEntityDescription().getContent() + " (" + rcr.getConceptCode() + ")");
 						}
-						w = SortUtils.quickSort(w);
+						w = new SortUtils().quickSort(w);
 						for (int j=0; j<w.size(); j++) {
 							String s = (String) w.elementAt(j);
 							System.out.println("\t" + s);

@@ -52,6 +52,7 @@ String vocabulary_version = HTTPUtils.cleanXSS((String) request.getParameter("ve
 if (vocabulary_version != null) {
 	request.setAttribute("version", vocabulary_version);
 }
+
 %>
 <f:view>
   <!-- Begin Skip Top Navigation -->

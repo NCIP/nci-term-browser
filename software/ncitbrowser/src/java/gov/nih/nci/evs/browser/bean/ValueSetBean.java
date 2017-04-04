@@ -1,5 +1,6 @@
 package gov.nih.nci.evs.browser.bean;
 
+import gov.nih.nci.evs.browser.utils.*;
 
 import java.util.*;
 import java.net.URI;
@@ -41,6 +42,9 @@ import org.LexGrid.concepts.Definition;
 import org.LexGrid.commonTypes.PropertyQualifier;
 import org.LexGrid.commonTypes.Property;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -99,7 +103,7 @@ public class ValueSetBean {
 	private String selectedConceptDomain = null;
 	private List conceptDomainList = null;
 	private Vector<String> conceptDomainListData = null;
-
+	//public static final String XML_DECLARATION = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 
     public void ValueSetBean() {
 
@@ -112,7 +116,6 @@ public class ValueSetBean {
         valueSetSearchUtils.setServiceUrl(serviceURL);
         return valueSetSearchUtils;
 	}
-
 
 	public String getSelectedConceptDomain() {
 		return this.selectedConceptDomain;
@@ -185,7 +188,7 @@ public class ValueSetBean {
 			v.add(codingSchemeName);
 		}
 
-		v = SortUtils.quickSort(v);
+		v = new SortUtils().quickSort(v);
 
 		String display_name = "ALL";
 		ontologyList.add(new SelectItem(display_name));
@@ -1003,7 +1006,7 @@ public class ValueSetBean {
 					ex.printStackTrace();
 				}
             } else {
-				System.out.println("(*) Dynamicnally resolve value set.");
+				System.out.println("(*) Dynamically resolve value set.");
 				try {
 					LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 
@@ -1420,7 +1423,181 @@ public class ValueSetBean {
 		}
 
 		FacesContext.getCurrentInstance().responseComplete();
+	}
 
+
+	public void exportValuesToCSVAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+		String vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
+		/*
+		String metadata = DataUtils
+				.getValueSetDefinitionMetadata(DataUtils
+						.findValueSetDefinitionByURI(vsd_uri));
+		*/
+		String metadata = DataUtils
+				.getValueSetDefinitionMetadata(vsd_uri);
+		Vector u = StringUtils.parseData(metadata);
+		String name = (String) u.elementAt(0);
+		String valueset_uri = (String) u.elementAt(1);
+		String description = (String) u.elementAt(2);
+		String concept_domain = (String) u.elementAt(3);
+		String sources = (String) u.elementAt(4);
+		String supportedsources = (String) u.elementAt(5);
+		String supportedsource = null;
+		if (supportedsources != null) {
+			Vector u2 = gov.nih.nci.evs.browser.utils.StringUtils.parseData(supportedsources, ";");
+			supportedsource = (String) u2.elementAt(0);
+		}
+
+		String defaultCodingScheme = (String) u.elementAt(6);
+
+		if (!DataUtils.isNCIT(defaultCodingScheme)) {
+			exportToCSVAction();
+			return;
+		}
+
+		boolean reformat = true;
+		boolean use_new_format = true;
+
+		if (supportedsources != null) {
+		    Vector w = gov.nih.nci.evs.browser.utils.StringUtils.parseData(supportedsources, ";");
+		    supportedsource = (String) w.elementAt(0);
+		}
+		//if (supportedsource == null || supportedsource.compareTo("null") == 0) {
+		if (supportedsource == null || supportedsource.compareTo("null") == 0 || supportedsource.compareTo("NCI") == 0) {
+		    reformat = false;
+		}
+
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+		ValueSetFormatter formatter = new ValueSetFormatter(lbSvc, vsd_service);
+        Vector fields = formatter.getDefaultFields(reformat);
+		CodingSchemeDataUtils csdu = new CodingSchemeDataUtils(lbSvc);
+		String version = csdu.getVocabularyVersionByTag(vsd_uri, Constants.PRODUCTION);
+		Vector lines = csdu.resolve(vsd_uri, version);
+		Vector codes = new Vector();
+		for (int i=0; i<lines.size(); i++) {
+			String line = (String) lines.elementAt(i);
+			u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(line, '|');
+			String code = (String) u.elementAt(1);
+			codes.add(code);
+		}
+
+		Vector rvs_tbl = formatter.export(vsd_uri, version, supportedsource, fields, codes);
+	    Vector v = gov.nih.nci.evs.browser.utils.StringUtils.convertDelimited2CSV(rvs_tbl, '|');
+        StringBuffer sb = new StringBuffer();
+        for (int k=0; k<fields.size(); k++) {
+			String field = (String) fields.elementAt(k);
+			sb.append(field);
+			if (k < fields.size()-1) {
+				sb.append(",");
+			}
+		}
+		sb.append("\r\n");
+		for (int k=0; k<v.size(); k++) {
+			String t = (String) v.elementAt(k);
+			sb.append(t);
+			sb.append("\n");
+		}
+		String vsd_name = DataUtils.valueSetDefinitionURI2Name(vsd_uri);
+		vsd_name = vsd_name.replaceAll(" ", "_");
+		vsd_name = "resolved_" + vsd_name + ".csv";
+
+		HttpServletResponse response = (HttpServletResponse) FacesContext
+				.getCurrentInstance().getExternalContext().getResponse();
+		response.setContentType("text/csv");
+		response.setHeader("Content-Disposition", "attachment; filename="
+				+ vsd_name);
+
+		response.setContentLength(sb.length());
+		try {
+			ServletOutputStream ouputStream = response.getOutputStream();
+			ouputStream.write(sb.toString().getBytes("UTF8"), 0, sb.length());
+			ouputStream.flush();
+			ouputStream.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			sb.append("WARNING: Export to CVS action failed.");
+		}
+		FacesContext.getCurrentInstance().responseComplete();
+	}
+
+	public void exportValuesToXMLAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+        String vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
+/*
+		String metadata = DataUtils
+				.getValueSetDefinitionMetadata(DataUtils
+						.findValueSetDefinitionByURI(vsd_uri));
+*/
+		String metadata = DataUtils
+				.getValueSetDefinitionMetadata(vsd_uri);
+
+
+		Vector u = StringUtils.parseData(metadata);
+		String name = (String) u.elementAt(0);
+		String valueset_uri = (String) u.elementAt(1);
+		String description = (String) u.elementAt(2);
+		String concept_domain = (String) u.elementAt(3);
+		String sources = (String) u.elementAt(4);
+		String supportedsources = (String) u.elementAt(5);
+		String supportedsource = null;
+		if (supportedsources != null) {
+			Vector u2 = gov.nih.nci.evs.browser.utils.StringUtils.parseData(supportedsources, ";");
+			supportedsource = (String) u2.elementAt(0);
+		}
+
+		String defaultCodingScheme = (String) u.elementAt(6);
+
+		if (!DataUtils.isNCIT(defaultCodingScheme)) {
+			exportToXMLAction();
+			return;
+		}
+
+		boolean withSource = true;
+		if (supportedsource == null || supportedsource.compareTo("null") == 0 || supportedsource.compareTo("NCI") == 0) {
+			withSource = false;
+		}
+
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		String serviceUrl = RemoteServerUtil.getServiceURL();
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices(serviceUrl);
+        ValueSetFormatter test = new ValueSetFormatter(lbSvc, vsd_service);
+        String version = new CodingSchemeDataUtils(lbSvc).getVocabularyVersionByTag(vsd_uri, Constants.PRODUCTION);
+        long ms = System.currentTimeMillis();
+		ValueSetFormatter formatter = new ValueSetFormatter(lbSvc, vsd_service);
+		Vector fields = formatter.getDefaultFields(withSource);
+		ValueSet vs = formatter.instantiateValueSet(vsd_uri, version, fields);
+		String xml_str = formatter.object2XMLStream(vs);
+		try {
+			HttpServletResponse response = (HttpServletResponse) FacesContext
+					.getCurrentInstance().getExternalContext().getResponse();
+			response.setContentType("text/xml");
+
+			String vsd_name = DataUtils.valueSetDefinitionURI2Name(vsd_uri);
+			vsd_name = vsd_name.replaceAll(" ", "_");
+			vsd_name = vsd_name + ".xml";
+
+		    response.setHeader("Content-Disposition", "attachment; filename="
+					+ vsd_name);
+
+			response.setContentLength(xml_str.length());
+
+			ServletOutputStream ouputStream = response.getOutputStream();
+			ouputStream.write(xml_str.getBytes("UTF8"), 0, xml_str.length());
+			ouputStream.flush();
+			ouputStream.close();
+
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		FacesContext.getCurrentInstance().responseComplete();
 	}
 
 }

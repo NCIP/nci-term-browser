@@ -62,7 +62,7 @@ public class SortUtils {
      *
      * @param list an instance of List
      */
-    public static void quickSort(List list) {
+    public void quickSort(List list) {
         quickSort(list, SORT_BY_NAME);
     }
 
@@ -72,7 +72,7 @@ public class SortUtils {
      * @param list an instance of List
      * @param sort_option, an integer; 1, if sort by name; 2: if sort by code
      */
-    public static void quickSort(List list, int sort_option) {
+    public void quickSort(List list, int sort_option) {
         if (list == null)
             return;
         if (list.size() <= 1)
@@ -91,7 +91,7 @@ public class SortUtils {
      * @param sort_option, an integer; 1, if sort by name; 2: if sort by code
      */
 
-    public static Vector quickSort(Vector v, int sort_option) {
+    public Vector quickSort(Vector v, int sort_option) {
         if (v == null)
             return v;
         if (v.size() <= 1)
@@ -111,12 +111,12 @@ public class SortUtils {
      * @param v an instance of Vector
      */
 
-    public static Vector quickSort(Vector v) {
+    public Vector quickSort(Vector v) {
         return quickSort(v, SORT_BY_NAME);
     }
 
     @SuppressWarnings("unchecked")
-    public static Enumeration<?> sort(Enumeration<?> enumeration) {
+    public Enumeration<?> sort(Enumeration<?> enumeration) {
         if (enumeration == null)
             return enumeration;
 
@@ -125,4 +125,24 @@ public class SortUtils {
         enumeration = Collections.enumeration(keyList);
         return enumeration;
     }
+
+	public Vector caseInsensitiveSort(Vector v) {
+		if (v == null) return null;
+		HashMap hmap = new HashMap();
+		Vector keys = new Vector();
+		Vector values = new Vector();
+		for (int i=0; i<v.size(); i++) {
+			String key = (String) v.elementAt(i);
+			String key_lower_case = key.toLowerCase();
+			keys.add(key_lower_case);
+			hmap.put(key_lower_case, key);
+		}
+		keys = quickSort(keys);
+		for (int i=0; i<keys.size(); i++) {
+			String key = (String) keys.elementAt(i);
+			String value = (String) hmap.get(key);
+			values.add(value);
+		}
+		return values;
+	}
 }
