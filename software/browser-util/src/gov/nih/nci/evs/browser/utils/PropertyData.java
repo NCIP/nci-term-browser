@@ -115,11 +115,13 @@ public class PropertyData
 
     private HashMap relationshipHashMap = null;
     private String owl_role_quantifiers = null;
+    RelationshipTabFormatter formatter = null;//new RelationshipTabFormatter(lbSvc);
 
 
 // Constructor
 	public PropertyData(LexBIGService lbSvc, String dictionary, String version) {
         this.lbSvc = lbSvc;
+        formatter = new RelationshipTabFormatter(lbSvc);
         this.dictionary = dictionary;
         this.version = version;
 
@@ -131,7 +133,8 @@ public class PropertyData
         this.additionalproperties = new Vector();
         this.displayed_properties = new Vector();
 	}
-
+
+
 	public void set_owl_role_quantifiers(String owl_role_quantifiers) {
 		this.owl_role_quantifiers = owl_role_quantifiers;
 	}
@@ -287,7 +290,8 @@ displayLabel2PropertyNameHashMap = addToHashMap(displayLabel2PropertyNameHashMap
 
 		getTermsAndPropertiesData(curr_concept);
 	}
-
+
+
 	public HashMap getDisplayLabel2PropertyNameHashMap() {
 		return this.displayLabel2PropertyNameHashMap;
 	}
@@ -530,7 +534,8 @@ displayLabel2PropertyNameHashMap = addToHashMap(displayLabel2PropertyNameHashMap
 	public HashMap getPropertyName2ValueHashMap() {
 		return this.propertyName2ValueHashMap;
 	}
-
+
+
 
 	public static String getDisplayLink(HashMap<String, String> label2URL,
 		HashMap<String, String> label2Linktext, String label, String value) {
@@ -758,7 +763,7 @@ displayLabel2PropertyNameHashMap = addToHashMap(displayLabel2PropertyNameHashMap
 				prop_name_vec.add(prop_name);
 			}
 		}
-		return SortUtils.quickSort(prop_name_vec);
+		return new SortUtils().quickSort(prop_name_vec);
 	}
 
 	public void add_displayed_property(String property_name) {
@@ -794,14 +799,75 @@ displayLabel2PropertyNameHashMap = addToHashMap(displayLabel2PropertyNameHashMap
     public static final String TYPE_INVERSE_ASSOCIATION = "type_inverse_association";
 */
 
+
+    public static final String NCI_THESAURUS = "NCI Thesaurus";
+    public static final String NCIT_CS_NAME = "NCI_Thesaurus";
+
     public String generateRelationshipTable(String codingScheme, String version, String code, String namespace, String rel_type) {
 		return generateRelationshipTable(codingScheme, version, code, namespace, rel_type, false);
 	}
 
+	public boolean isNCIT(String codingScheme) {
+		if (codingScheme == null) return false;
+		if (codingScheme.compareTo(Constants.NCI_THESAURUS) == 0 ||
+            codingScheme.compareTo(Constants.NCIT_CS_NAME) == 0) {
+			return true;
+		}
+		return false;
+	}
 
-    public String generateRelationshipTable(String codingScheme, String version, String code, String namespace, String rel_type,
-        boolean display_qualifiers) {
-        return generateRelationshipTable(codingScheme, version, code, namespace, rel_type, display_qualifiers, null);
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//[NCITERM-746] Update of the Relationships Display.
+
+    public String generateRelationshipTable(String codingScheme, String version, String code, String namespace, String rel_type, boolean display_qualifiers) {
+        boolean display_equiv_expression = false;
+        String equivalanceClass = null;
+        String retstr = null;
+        if (isNCIT(codingScheme) && rel_type.compareTo(Constants.TYPE_ROLE) == 0) {
+			try {
+				equivalanceClass = new CodingSchemeDataUtils(lbSvc).getEquivalenceExpression(codingScheme, version, code);
+				if (equivalanceClass != null) {
+					display_equiv_expression = true;
+				}
+		    } catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		StringBuffer buf = new StringBuffer();
+		if (display_equiv_expression) {
+			String expression = new ExpressionParser(lbSvc).infixExpression2Text(codingScheme, version, equivalanceClass);
+			expression = new ExpressionFormatter().reformat(expression);
+			buf.append(expression);
+		}
+		if (isNCIT(codingScheme) && rel_type.compareTo(Constants.TYPE_ROLE) == 0) {
+			ArrayList roles = null;
+			String formattedTable = null;
+			if (relationshipHashMap != null) {
+				roles = (ArrayList) relationshipHashMap.get(Constants.TYPE_ROLE);
+				formattedTable = formatter.formatOutboundRoleTable(roles);
+			} else {
+			    formattedTable = formatter.formatOutboundRoleTable(codingScheme, version, code, codingScheme);
+			}
+			buf.append("<p></p>");
+			buf.append(formattedTable);
+			buf.append("<p></p>");
+			return buf.toString();
+		} else if (isNCIT(codingScheme) && rel_type.compareTo(Constants.TYPE_INVERSE_ROLE) == 0) {
+			ArrayList roles = null;
+			String formattedTable = null;
+			if (relationshipHashMap != null) {
+				roles = (ArrayList) relationshipHashMap.get(Constants.TYPE_INVERSE_ROLE);
+				formattedTable = formatter.formatInboundRoleTable(roles);
+			} else {
+			    formattedTable = formatter.formatInboundRoleTable(codingScheme, version, code, codingScheme);
+			}
+			buf.append("<p></p>");
+			buf.append(formattedTable);
+			buf.append("<p></p>");
+			return buf.toString();
+		}
+		return generateRelationshipTable(codingScheme, version, code, namespace, rel_type, display_qualifiers, null);
 	}
 
     public String generateRelationshipTable(String codingScheme, String version, String code, String namespace, String rel_type,
@@ -846,7 +912,6 @@ displayLabel2PropertyNameHashMap = addToHashMap(displayLabel2PropertyNameHashMap
 			firstColumnHeading = "Value (qualifiers indented underneath)";
 		}
 
-
 		if (!display_qualifiers) {
 			qualifierColumn = 0;
 			if (rel_type.startsWith("type_inverse") || rel_type.compareTo("type_subconcept") == 0) {
@@ -871,7 +936,6 @@ displayLabel2PropertyNameHashMap = addToHashMap(displayLabel2PropertyNameHashMap
 
 			return uiUtils.generateHTMLTable(spec, codingScheme, version, rel_type);
 		} catch (Exception ex) {
-			//ex.printStackTrace();
 			System.out.println("Exception: UIUtils.relationshipList2HTMLTableSpec");
 		}
 		return "";

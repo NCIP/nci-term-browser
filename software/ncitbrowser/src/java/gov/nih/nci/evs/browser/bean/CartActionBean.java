@@ -1211,7 +1211,7 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
 				}
 			}
 
-            cart_coding_scheme_ref_vec = SortUtils.quickSort(cart_coding_scheme_ref_vec);
+            cart_coding_scheme_ref_vec = new SortUtils().quickSort(cart_coding_scheme_ref_vec);
 			request.getSession().setAttribute("cart_coding_scheme_ref_vec", cart_coding_scheme_ref_vec);
 			return "cart_version_selection";
 		}
@@ -1259,7 +1259,7 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
 				}
 			}
 		}
-		uri_vec = SortUtils.quickSort(uri_vec);
+		uri_vec = new SortUtils().quickSort(uri_vec);
 
         _messageflag = false;
 

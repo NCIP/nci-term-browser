@@ -153,11 +153,11 @@ public class UIUtils {
 				qualifier_vec.add(t);
 			}
 			keyVec.add(n_v);
-			qualifier_vec = SortUtils.quickSort(qualifier_vec);
+			qualifier_vec = new SortUtils().quickSort(qualifier_vec);
 			qualifierHashMap.put(n_v, qualifier_vec);
 		}
 
-		keyVec = SortUtils.quickSort(keyVec);
+		keyVec = new SortUtils().quickSort(keyVec);
 
 	    HTMLTableSpec spec = new HTMLTableSpec(
 			 description,
@@ -250,7 +250,7 @@ public class UIUtils {
 		return generateHTMLTable(spec, codingScheme, version, null);
 	}
 
-
+/*
     public String generateHTMLTable(HTMLTableSpec spec, String codingScheme, String version, String rel_type) {
 		StringBuffer buf = new StringBuffer();
 		HashMap qualifierHashMap = spec.getQualifierHashMap();
@@ -262,7 +262,7 @@ public class UIUtils {
 				String nv = (String) thisEntry.getKey();
 				nv_vec.add(nv);
 			}
-			nv_vec = SortUtils.quickSort(nv_vec);
+			nv_vec = new SortUtils().quickSort(nv_vec);
 		}
 		String description = spec.getDescription();
 		if (description != null) {
@@ -317,7 +317,7 @@ public class UIUtils {
 				namespace = (String) w.elementAt(3);
 			}
             Vector qualifiers = (Vector) qualifierHashMap.get(n_v);
-            qualifiers = SortUtils.quickSort(qualifiers);
+            qualifiers = new SortUtils().quickSort(qualifiers);
 
 			if ((n++) % 2 == 0) {
 				  buf.append("	<tr class=\"dataRowDark\">").append("\n");
@@ -328,7 +328,7 @@ public class UIUtils {
 			if (qualifierColumn == 0) {
                   if (rel_type == null || !rel_type.startsWith("type_inverse")) {
 					  buf.append("<td class=\"dataCellText\" valign=\"top\">").append("\n");
-					  buf.append("				 " + name).append("\n");
+					  buf.append(Constants.INDENT_HALF + name).append("\n");
 					  buf.append("</td>").append("\n");
 					  if (code != null) {
 						  value = getHyperlink(codingScheme, version, value, code, namespace);
@@ -339,7 +339,7 @@ public class UIUtils {
 						  value = getHyperlink(codingScheme, version, value, code, namespace);
 					  }
 					  buf.append("<td class=\"dataCellText\" valign=\"top\">").append("\n");
-					  buf.append("				 " + value).append("\n");
+					  buf.append(Constants.INDENT_HALF + value).append("\n");
 					  buf.append("</td>").append("\n");
 					  buf.append("<td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + name + "</td>").append("\n");
 				  }
@@ -354,7 +354,7 @@ public class UIUtils {
 					buf.append("		  <table>").append("\n");
 					buf.append("			 <tr>");
 					buf.append("<td class=\"dataCellText\">").append("\n");
-					buf.append("				 " + value).append("\n");
+					buf.append(Constants.INDENT_HALF + value).append("\n");
 					buf.append("			 </td></tr>").append("\n");
 					for (int j = 0; j < qualifiers.size(); j++) {
 						String q = (String) qualifiers.elementAt(j);
@@ -374,7 +374,7 @@ public class UIUtils {
 							String t = qualifier_name + ":" + qualifier_value;
 							if (t.length() > 1) {
 								buf.append("			 <tr>").append("\n");
-								buf.append("			 <td class=\"dataCellText\" >" + indent + t + "</td>").append("\n");
+								buf.append("			 <td class=\"dataCellText\" >" + Constants.INDENT + t + "</td>").append("\n");
 								buf.append("			 </tr>").append("\n");
 							}
 						}
@@ -403,7 +403,8 @@ public class UIUtils {
 					buf.append("		  <table>").append("\n");
 					buf.append("			 <tr>");
 					buf.append("<td class=\"dataCellText\">").append("\n");
-					buf.append("				 " + value).append("\n");
+					//buf.append("				 " + value).append("\n");
+					buf.append(Constants.INDENT_HALF + value).append("\n");
 					buf.append("			 </td></tr>").append("\n");
 					for (int j = 0; j < qualifiers.size(); j++) {
 						String q = (String) qualifiers.elementAt(j);
@@ -423,7 +424,7 @@ public class UIUtils {
 							String t = qualifier_name + ":" + qualifier_value;
 							if (t.length() > 1) {
 								buf.append("			 <tr>").append("\n");
-								buf.append("			 <td class=\"dataCellText\" >" + indent + t + "</td>").append("\n");
+								buf.append("			 <td class=\"dataCellText\" >" + Constants.INDENT + t + "</td>").append("\n");
 								buf.append("			 </tr>").append("\n");
 							}
 						}
@@ -444,20 +445,250 @@ public class UIUtils {
 		buf.append("</table>").append("\n");
         return buf.toString();
 	}
+*/
+
+    public String generateHTMLTable(HTMLTableSpec spec, String codingScheme, String version, String rel_type) {
+		StringBuffer buf = new StringBuffer();
+		HashMap qualifierHashMap = spec.getQualifierHashMap();
+		Vector nv_vec = spec.getKeyVec();
+		if (nv_vec == null) {
+			Iterator entries = qualifierHashMap.entrySet().iterator();
+			while (entries.hasNext()) {
+				Entry thisEntry = (Entry) entries.next();
+				String nv = (String) thisEntry.getKey();
+				nv_vec.add(nv);
+			}
+			nv_vec = new SortUtils().quickSort(nv_vec);
+		}
+		String description = spec.getDescription();
+		if (description != null) {
+			buf.append(description).append("\n");
+		}
+		buf.append("<table class=\"datatable_960\" border=\"0\" width=\"100%\">").append("\n");
+
+	    String firstColumnHeading = spec.getFirstColumnHeading();
+	    String secondColumnHeading = spec.getSecondColumnHeading();
+        if (firstColumnHeading != null && secondColumnHeading != null) {
+			buf.append("<tr>").append("\n");
+			buf.append("   <th class=\"dataCellText\" scope=\"col\" align=\"left\">" + Constants.INDENT_HALF + firstColumnHeading  + "</th>").append("\n");
+			buf.append("   <th class=\"dataCellText\" scope=\"col\" align=\"left\">" + secondColumnHeading + "</th>").append("\n");
+			buf.append("</tr>").append("\n");
+	    }
+        int firstPercentColumnWidth = spec.getFirstPercentColumnWidth();
+        int secondPercentColumnWidth = spec.getSecondPercentColumnWidth();
+
+        if (firstPercentColumnWidth <= 0 || firstPercentColumnWidth <= 0) {
+			buf.append("   <col width=\"50%\">").append("\n");
+			buf.append("   <col width=\"50%\">").append("\n");
+		} else {
+			String w1 = Integer.toString(firstPercentColumnWidth);
+			String w2 = Integer.toString(secondPercentColumnWidth);
+			buf.append("   <col width=\"" + w1 + "%\">").append("\n");
+			buf.append("   <col width=\"" + w2 + "%\">").append("\n");
+	    }
+
+	    int qualifierColumn = spec.getQualifierColumn();
+		int n = 0;
+        for (int i = 0; i < nv_vec.size(); i++) {
+            String n_v = (String) nv_vec.elementAt(i);
+            Vector w = gov.nih.nci.evs.browser.utils.StringUtils.parseData(n_v);
+            String name = "";
+            String value = "";
+
+            if (w.size() > 0) {
+            	name = (String) w.elementAt(0);
+			}
+
+			if (w.size() > 1) {
+            	value = (String) w.elementAt(1);
+			}
+
+            String code = null;
+            String namespace = null;
+
+            if (w.size() > 2) {
+				code = (String) w.elementAt(2);
+			}
+			if (w.size() > 3) {
+				namespace = (String) w.elementAt(3);
+			}
+            Vector qualifiers = (Vector) qualifierHashMap.get(n_v);
+            qualifiers = new SortUtils().quickSort(qualifiers);
+
+			if ((n++) % 2 == 0) {
+				  buf.append("	<tr class=\"dataRowDark\">").append("\n");
+			} else {
+				  buf.append("	<tr class=\"dataRowLight\">").append("\n");
+			}
+			if (qualifierColumn == 0) {
+                  if (rel_type == null || !rel_type.startsWith("type_inverse")) {
+					  buf.append("<td class=\"dataCellText\" valign=\"top\">").append("\n");
+					  buf.append(Constants.INDENT_HALF + name).append("\n");
+					  buf.append("</td>").append("\n");
+					  if (code != null) {
+						  value = getHyperlink(codingScheme, version, value, code, namespace);
+					  }
+					  buf.append("<td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + value + "</td>").append("\n");
+				  } else {
+					  if (code != null) {
+						  value = getHyperlink(codingScheme, version, value, code, namespace);
+					  }
+					  buf.append("<td class=\"dataCellText\" valign=\"top\">").append("\n");
+					  buf.append(Constants.INDENT_HALF + value).append("\n");
+					  buf.append("</td>").append("\n");
+					  buf.append("<td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + name + "</td>").append("\n");
+				  }
+
+			} else if (qualifierColumn == 1) {
+                if (hasQualifiers(qualifiers)) {
+					if (code != null) {
+						value = getHyperlink(codingScheme, version, value, code, namespace);
+					}
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\" valign=\"top\">").append("\n");
+					buf.append("		  <table>").append("\n");
+					buf.append("			 <tr>");
+					buf.append("<td class=\"dataCellText\">").append("\n");
+					buf.append(Constants.INDENT_HALF + value).append("\n");
+					buf.append("			 </td></tr>").append("\n");
+					for (int j = 0; j < qualifiers.size(); j++) {
+						String q = (String) qualifiers.elementAt(j);
+						Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(q);
+
+						String qualifier_name = "";
+						String qualifier_value = "";
+
+						if (u.size() > 0) {
+							qualifier_name = (String) u.elementAt(0);
+						}
+						if (u.size() > 1) {
+							qualifier_value = (String) u.elementAt(1);
+						}
+
+						if (displayQualifier(qualifier_name)) {
+							String t = qualifier_name + ":" + qualifier_value;
+							if (t.length() > 1) {
+								buf.append("			 <tr>").append("\n");
+								buf.append("			 <td class=\"dataCellText\" >" + Constants.INDENT + t + "</td>").append("\n");
+								buf.append("			 </tr>").append("\n");
+							}
+						}
+					}
+
+					buf.append("		  </table>").append("\n");
+					buf.append("	  </td>").append("\n");
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + name + "</td>").append("\n");
+			    } else {
+					if (code != null) {
+						value = getHyperlink(codingScheme, version, value, code, namespace);
+					}
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + value + "</td>").append("\n");
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + name + "</td>").append("\n");
+				}
+			} else if (qualifierColumn == 2) {
+                if (hasQualifiers(qualifiers)) {
+					if (code != null) {
+						value = getHyperlink(codingScheme, version, value, code, namespace);
+					}
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + Constants.INDENT + name + "</td>").append("\n");
+
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\" valign=\"top\">").append("\n");
+					buf.append("		  <table>").append("\n");
+					buf.append("			 <tr>");
+					buf.append("<td class=\"dataCellText\">").append("\n");
+					//buf.append("				 " + value).append("\n");
+					buf.append(Constants.INDENT_HALF + value).append("\n");
+					buf.append("			 </td></tr>").append("\n");
+					for (int j = 0; j < qualifiers.size(); j++) {
+						String q = (String) qualifiers.elementAt(j);
+						Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(q);
+
+						String qualifier_name = "";
+						String qualifier_value = "";
+
+						if (u.size() > 0) {
+							qualifier_name = (String) u.elementAt(0);
+						}
+						if (u.size() > 1) {
+							qualifier_value = (String) u.elementAt(1);
+						}
+
+						if (displayQualifier(qualifier_name)) {
+							String t = qualifier_name + ":" + qualifier_value;
+							if (t.length() > 1) {
+								buf.append("			 <tr>").append("\n");
+								buf.append("			 <td class=\"dataCellText\" >" + Constants.INDENT + t + "</td>").append("\n");
+								buf.append("			 </tr>").append("\n");
+							}
+						}
+					}
+					buf.append("		  </table>").append("\n");
+					buf.append("	  </td>").append("\n");
+
+			    } else {
+					if (code != null) {
+						value = getHyperlink(codingScheme, version, value, code, namespace);
+					}
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + Constants.INDENT + name + "</td>").append("\n");
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + value + "</td>").append("\n");
+				}
+			}
+			buf.append("	</tr>").append("\n");
+		}
+		buf.append("</table>").append("\n");
+        return buf.toString();
+	}
+
+    public String getHyperlink(String name, String code) {
+        return getHyperlink(null, name, code);
+    }
+
+    public String getHyperlink(String version, String name, String code) {
+        return getHyperlink(Constants.NCIT_CS_NAME, version, name, code, Constants.NCIT_CS_NAME);
+    }
 
     public String getHyperlink(String codingScheme, String version, String name, String code, String ns) {
 		if (Arrays.asList(Constants.NON_CONCEPT_TO_CONCEPT_ASSOCIATION).contains(name)) return name;
 
 		StringBuffer buf = new StringBuffer();
-		if (gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(ns)) {
-			buf.append("<a href=\"/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&version=" + version + "&code=" + code + "\">").append("\n");
-		} else {
-			buf.append("<a href=\"/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&version=" + version + "&code=" + code + "&ns=" + ns + "\">").append("\n");
-		}
-		buf.append(name).append("\n");
-		buf.append("</a>").append("\n");
+		if (version != null) {
+			if (gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(ns)) {
+				buf.append("<a href=\"/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&version=" + version + "&code=" + code + "\">");
+			} else {
+				buf.append("<a href=\"/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&version=" + version + "&code=" + code + "&ns=" + ns + "\">");
+			}
+	    } else {
+			if (gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(ns)) {
+				buf.append("<a href=\"/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&code=" + code + "\">");
+			} else {
+				buf.append("<a href=\"/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&code=" + code + "&ns=" + ns + "\">");
+			}
+	    }
+		buf.append(name).append("</a>").append("\n");
 		return buf.toString();
     }
+
+//https://nciterms.nci.nih.gov
+    public String getHyperlink(String host, String codingScheme, String version, String name, String code, String ns) {
+		if (Arrays.asList(Constants.NON_CONCEPT_TO_CONCEPT_ASSOCIATION).contains(name)) return name;
+
+		StringBuffer buf = new StringBuffer();
+		if (version != null) {
+			if (gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(ns)) {
+				buf.append("<a href=\"" + host + "/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&version=" + version + "&code=" + code + "\">");
+			} else {
+				buf.append("<a href=\"" + host + "/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&version=" + version + "&code=" + code + "&ns=" + ns + "\">");
+			}
+	    } else {
+			if (gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(ns)) {
+				buf.append("<a href=\"" + host + "/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&code=" + code + "\">");
+			} else {
+				buf.append("<a href=\"" + host + "/ncitbrowser/ConceptReport.jsp?dictionary=" + codingScheme + "&code=" + code + "&ns=" + ns + "\">");
+			}
+	    }
+		buf.append(name).append("</a>").append("\n");
+		return buf.toString();
+    }
+
 
 	public String getRelationshipTableLabel(String defaultLabel, String type, boolean isEmpty) {
 		String NONE = "<i>(none)</i>";
@@ -479,7 +710,9 @@ public class UIUtils {
 				buf.append(" ").append(NONE).append("\n");
 			} else {
 				buf.append("<br/>").append("\n");
-				buf.append("<i>(True for the current concept.)</i>").append("\n");
+//    public static final String ROLE_DESCRIPTION_LABEL = "(True for the current concept and its descendants, may be inherited from parent(s).)";
+				//buf.append("<i>(True for the current concept.)</i>").append("\n");
+				buf.append("<i>" + Constants.ROLE_DESCRIPTION_LABEL + "</i>").append("\n");
 			}
 
 		} else if (type.compareTo(Constants.TYPE_ASSOCIATION) == 0) {
@@ -499,6 +732,13 @@ public class UIUtils {
 			buf.append("<b>Incoming Associations</b>&nbsp;pointing from other concepts to the current concept:");
 			if (isEmpty) {
 				buf.append(" ").append(NONE).append("\n");
+			}
+		} else if (type.compareTo(Constants.TYPE_LOGICAL_DEFINITION) == 0) {
+			buf.append("<b>Logical Definition</b>,&nbsp;showing the parent concepts and direct role assertions that define this concept:");
+			if (isEmpty) {
+				buf.append(" ").append(NONE).append("\n");
+			} else {
+				buf.append("<br/>").append("\n");
 			}
 		}
 		String label = buf.toString();
@@ -549,11 +789,11 @@ public class UIUtils {
 					qualifier_vec.add(t);
 				}
 				keyVec.add(n_v);
-				qualifier_vec = SortUtils.quickSort(qualifier_vec);
+				qualifier_vec = new SortUtils().quickSort(qualifier_vec);
 				qualifierHashMap.put(n_v, qualifier_vec);
 			}
 		}
-		keyVec = SortUtils.quickSort(keyVec);
+		keyVec = new SortUtils().quickSort(keyVec);
 
 	    HTMLTableSpec spec = new HTMLTableSpec(
 			 description,
@@ -581,7 +821,7 @@ public class UIUtils {
 				String nv = (String) thisEntry.getKey();
 				nv_vec.add(nv);
 			}
-			nv_vec = SortUtils.quickSort(nv_vec);
+			nv_vec = new SortUtils().quickSort(nv_vec);
 		}
 		String description = spec.getDescription();
 		if (description != null) {
@@ -593,7 +833,7 @@ public class UIUtils {
 	    String secondColumnHeading = spec.getSecondColumnHeading();
         if (firstColumnHeading != null && secondColumnHeading != null) {
 			buf.append("<tr>").append("\n");
-			buf.append("   <th class=\"dataCellText\" scope=\"col\" align=\"left\">" + firstColumnHeading  + "</th>").append("\n");
+			buf.append("   <th class=\"dataCellText\" scope=\"col\" align=\"left\">" + Constants.INDENT_HALF + firstColumnHeading  + "</th>").append("\n");
 			buf.append("   <th class=\"dataCellText\" scope=\"col\" align=\"left\">" + secondColumnHeading + "</th>").append("\n");
 			buf.append("</tr>").append("\n");
 	    }
@@ -636,7 +876,7 @@ public class UIUtils {
 				namespace = (String) w.elementAt(3);
 			}
             Vector qualifiers = (Vector) qualifierHashMap.get(n_v);
-            qualifiers = SortUtils.quickSort(qualifiers);
+            qualifiers = new SortUtils().quickSort(qualifiers);
 
 			if ((n++) % 2 == 0) {
 				  buf.append("	<tr class=\"dataRowDark\">").append("\n");
@@ -650,7 +890,8 @@ public class UIUtils {
 					buf.append("		  <table>").append("\n");
 					buf.append("			 <tr>");
 					buf.append("<td class=\"dataCellText\" valign=\"top\">").append("\n");
-					buf.append("				 " + name).append("\n");
+					//buf.append("				 " + name).append("\n");
+					buf.append(Constants.INDENT_HALF + name).append("\n");
 					buf.append("			 </td></tr>").append("\n");
 
 					for (int j = 0; j < qualifiers.size(); j++) {
@@ -703,7 +944,8 @@ public class UIUtils {
 					buf.append("		  <table>").append("\n");
 					buf.append("			 <tr>");
 					buf.append("<td class=\"dataCellText\">").append("\n");
-					buf.append("				 " + value).append("\n");
+					//buf.append("				 " + value).append("\n");
+                    buf.append(Constants.INDENT_HALF + value).append("\n");
 					buf.append("			 </td></tr>").append("\n");
 
 					for (int j = 0; j < qualifiers.size(); j++) {
@@ -755,6 +997,113 @@ public class UIUtils {
 			return false;
 		}
 		return true;
+	}
+
+	public static Boolean isEven(Integer i) {
+		return (i % 2) == 0;
+	}
+
+	public String generateCheckBoxes(Vector labels) {
+        StringBuffer buf = new StringBuffer();
+        buf.append("<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n");
+
+        Boolean is_even = isEven(new Integer(labels.size()));
+        int num_rows = labels.size() / 2;
+        if (!is_even) {
+			num_rows++;
+			labels.add("");
+		}
+
+		String label = null;
+
+		for (int i=0; i<num_rows; i++) {
+			int row_num = i;
+			String label_1 = (String) labels.elementAt(2*row_num);
+			String label_2 = (String) labels.elementAt(2*row_num + 1);
+			buf.append("<tr>\n");
+			buf.append("\t<td class=\"dataCellText\">\n");
+
+			String displayed_label = label_1;
+			int n = displayed_label.indexOf("(*)");
+			if (n != -1) {
+				label = displayed_label.substring(0, n);
+				label = label.trim();
+				displayed_label = label + " (<font size=\"2\" color=\"red\">*</font>)";
+			}
+
+			if (label_1.length() > 0) {
+
+				buf.append("\t<input type=\"checkbox\" id=\"" + label + "\"  name=\"" + label + "\" >" + displayed_label + "</input>\n");
+				buf.append("\t</td>");
+				buf.append("\t<td class=\"dataCellText\">\n");
+		    }
+			displayed_label = label_2;
+			n = displayed_label.indexOf("(*)");
+			if (n != -1) {
+				label = displayed_label.substring(0, n);
+				label = label.trim();
+				displayed_label = label + " (<font size=\"2\" color=\"red\">*</font>)";
+			}
+
+            if (label_2.length() > 0) {
+				buf.append("\t<input type=\"checkbox\" id=\"" + label + "\"  name=\"" + label + "\" >" + displayed_label + "</input>\n");
+				buf.append("\t</td>\n");
+				buf.append("</tr>\n");
+		    }
+		}
+		buf.append("</table>");
+		return buf.toString();
+	}
+
+	public static Vector remoteDuplciateValues(Vector v) {
+		if (v == null) return null;
+		HashSet hset = new HashSet();
+		Vector w = new Vector();
+		for (int i=0; i<v.size(); i++) {
+			String t = (String) v.elementAt(i);
+			if (!hset.contains(t)) {
+				hset.add(t);
+				w.add(t);
+			}
+		}
+		return w;
+	}
+
+	public static String createTable(Vector w) {
+		return createTable(w, true);
+	}
+
+
+	public static String createTable(Vector w, boolean removeDuplicate) {
+		if (w == null) return null;
+		if (removeDuplicate) {
+			w = remoteDuplciateValues(w);
+		}
+        StringBuffer buf = new StringBuffer();
+		buf.append("<table>");
+		for (int i=0; i<w.size(); i++) {
+			int j = i+1;
+			String value = (String) w.elementAt(i);
+			boolean isEven = UIUtils.isEven(i);
+			if (isEven) {
+				buf.append("<tr class=\"dataRowDark\">");
+			} else {
+				buf.append("<tr class=\"dataRowLight\">");
+			}
+			buf.append("<td valign=\"top\">");
+			buf.append(value);
+			buf.append("</td>");
+			buf.append("</tr>");
+		}
+		buf.append("</table>").append("\n");
+		return buf.toString();
+	}
+
+	public static String delimitedString2Table(String line, char c) {
+		String delim = null;
+		delim = "" + c;
+		Vector w = gov.nih.nci.evs.browser.utils.StringUtils.parseData(line, delim);
+		return createTable(w);
 	}
 
 /*

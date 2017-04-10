@@ -190,10 +190,10 @@ public class CacheController {
     }
 
     public String getRemainingSubconceptJSONString(String codingScheme, String version, String parent_code, String parent_ns, String focus_code, boolean from_root) {
-	 if (parent_ns == null || parent_ns.compareTo("null") == 0 || parent_ns.compareTo("undefined") == 0) {
-		 LexBIGService lb_svc = RemoteServerUtil.createLexBIGService();
-		 parent_ns = new ConceptDetails(lb_svc).getNamespaceByCode(codingScheme, version, parent_code);
-	 }
+        LexBIGService lb_svc = RemoteServerUtil.createLexBIGService();
+	    if (parent_ns == null || parent_ns.compareTo("null") == 0 || parent_ns.compareTo("undefined") == 0) {
+		     parent_ns = new ConceptDetails(lb_svc).getNamespaceByCode(codingScheme, version, parent_code);
+	    }
 		long ms = System.currentTimeMillis();
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
         boolean useNamespace = false;
@@ -310,6 +310,7 @@ public class CacheController {
         LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
         ViewInHierarchyUtils util = new ViewInHierarchyUtils(lbSvc);
         // getRemainingSubconcepts
+
 		if (code.indexOf("_dot_") != -1) {
 			parent_code = util.getParentCode(code);
 			focus_code = util.getFocusCode(code);
@@ -337,19 +338,19 @@ public class CacheController {
         if (fromCache) {
             Element element = _cache.get(key);
             if (element != null) {
-                nodeArray = (JSONArray) element.getValue();
+				if (element.getValue() instanceof JSONArray) {
+                	nodeArray = (JSONArray) element.getValue();
+				}
             }
         }
         //KLO, 090215
         if (nodeArray == null) {
             _logger.debug("Not in cache -- calling getSubconcepts " + scheme + " (code: " + code + ")");
             //map = new TreeUtils(lbSvc).getSubconcepts(scheme, version, code, ns);
-            /*
-            map = util.getSubconcepts(scheme, version, code, ns);
-            nodeArray = hashMap2JSONArray(map);
-            */
             try {
-				nodeArray = new JSONArray(getSubconceptJSONString(scheme, version, code, ns));
+				//nodeArray = new JSONArray(getSubconceptJSONString(scheme, version, code, ns));
+
+			    nodeArray = getSubconceptJSONArray(scheme, version, code, ns);
 
 				if (fromCache) {
 					try {
@@ -778,7 +779,7 @@ public class CacheController {
                         newlist.add(node);
                     }
                 }
-                SortUtils.quickSort(newlist);
+                new SortUtils().quickSort(newlist);
 				LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 		        TreeService treeService =
 			        TreeServiceFactory.getInstance().getTreeService(lbSvc);
@@ -1082,7 +1083,7 @@ public class CacheController {
      * private JSONArray getNodesArray(String node_id, TreeItem ti) { JSONArray
      * nodesArray = new JSONArray(); for (String association :
      * ti.assocToChildMap.keySet()) { List<TreeItem> children =
-     * ti.assocToChildMap.get(association); SortUtils.quickSort(children); for
+     * ti.assocToChildMap.get(association); new SortUtils().quickSort(children); for
      * (int i=0; i<children.size(); i++) { TreeItem childItem = (TreeItem)
      * children.get(i); int knt = 0; if (childItem.expandable) { knt = 1; }
      * JSONObject nodeObject = new JSONObject(); try {
@@ -1110,7 +1111,7 @@ public class CacheController {
         JSONArray nodesArray = new JSONArray();
         for (String association : ti._assocToChildMap.keySet()) {
             List<TreeItem> children = ti._assocToChildMap.get(association);
-            SortUtils.quickSort(children);
+            new SortUtils().quickSort(children);
 
             int cut_off = 200;
             int m = cut_off / 2;
@@ -1392,7 +1393,7 @@ public class CacheController {
         JSONArray nodesArray = new JSONArray();
         for (String association : ti._assocToChildMap.keySet()) {
             List<TreeItem> children = ti._assocToChildMap.get(association);
-            SortUtils.quickSort(children);
+            new SortUtils().quickSort(children);
 
 			for (int i = 0; i < children.size(); i++) {
 				TreeItem childItem = (TreeItem) children.get(i);
@@ -1549,7 +1550,7 @@ public class CacheController {
 			w.add(rcr);
 		}
 
-		w = SortUtils.quickSort(w);
+		w = new SortUtils().quickSort(w);
         for (int i=0; i<w.size(); i++) {
 			ResolvedConceptReference rcr = (ResolvedConceptReference) w.elementAt(i);
 			String cs_name = rcr.getCodingSchemeName();
@@ -1583,6 +1584,92 @@ public class CacheController {
 		return json;
 	}
 
+//    public static JSONObject TreeItem2JSONObject(TreeItem ti) {
+
+    public JSONArray treeItemList2JSONArray(List list) {
+		JSONArray nodesArray = new JSONArray();
+		for (int i=0; i<list.size(); i++) {
+			TreeItem ti = (TreeItem) list.get(i);
+			JSONObject obj = (JSONObject) treeItem2JSONObject(ti);
+			nodesArray.put(obj);
+		}
+		return nodesArray;
+	}
+
+
+    public JSONArray getSubconceptJSONArray(String codingScheme, String version, String code, String ns) {
+
+        String key = codingScheme + "$" + version + "$" + code + "$" + ns;
+		Element element = _cache.get(key);
+		if (element != null) {
+			JSONArray jsonArray = (JSONArray) element.getValue();
+			return jsonArray;
+		}
+
+		long ms = System.currentTimeMillis();
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+
+        boolean useNamespace = false;
+        if (ns == null) {
+			ns = new ConceptDetails(lbSvc).getNamespaceByCode(codingScheme, version, code);
+			if (ns != null) {
+				useNamespace = true;
+			}
+		}
+
+		TreeService treeService =
+			TreeServiceFactory.getInstance().getTreeService(lbSvc);
+
+		TreeItem root = new TreeItem("Root", "<Root>");
+		if (code.compareTo("<Root>") == 0) {
+			return null;
+		}
+        RelationshipUtils relUtils = new RelationshipUtils(lbSvc);
+
+        List options = relUtils.createOptionList(false, true, false, false, false, false);
+
+        HashMap relMap = relUtils.getRelationshipHashMap(codingScheme, version, code, ns, useNamespace, options);
+        List list = (ArrayList) relMap.get("type_subconcept");
+
+        Vector w = new Vector();
+        for (int i=0; i<list.size(); i++) {
+			String t = (String) list.get(i);
+			w.add(t);
+		}
+		w = new SortUtils().quickSort(w);
+
+		List treeItem_list = new ArrayList();
+
+        for (int i=0; i<w.size(); i++) {
+		    String t = (String) w.elementAt(i);
+			Vector u = StringUtils.parseData(t);
+			String child_name = (String) u.elementAt(0);
+			String child_code = (String) u.elementAt(1);
+			String child_ns = (String) u.elementAt(2);
+            boolean is_expandable = isExpandable(treeService, codingScheme, version, child_code, child_ns);
+			TreeItem child = new TreeItem(child_code, child_name, child_ns, null);
+			child._expandable = is_expandable;
+			treeItem_list.add(child);
+		}
+
+		ms = System.currentTimeMillis();
+		//String json = JSON2TreeItem.treeItem2Json(root);
+
+		//treeItem_list = new SortUtils().quickSort(treeItem_list);
+
+		JSONArray nodeArray = treeItemList2JSONArray(treeItem_list);
+        /*
+		try {
+			element = new Element(key, json);
+			_cache.put(element);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		*/
+		return nodeArray;
+	}
+
+
 
     public String getSubconceptJSONString(String codingScheme, String version, String code, String ns) {
 
@@ -1607,7 +1694,6 @@ public class CacheController {
 		TreeService treeService =
 			TreeServiceFactory.getInstance().getTreeService(lbSvc);
 
-
 		TreeItem root = new TreeItem("Root", "<Root>");
 		if (code.compareTo("<Root>") == 0) {
 			return null;
@@ -1615,20 +1701,16 @@ public class CacheController {
         RelationshipUtils relUtils = new RelationshipUtils(lbSvc);
 
         List options = relUtils.createOptionList(false, true, false, false, false, false);
-        //options.add(RelationshipUtils.SUBCONCEPT_OPTION);
 
         HashMap relMap = relUtils.getRelationshipHashMap(codingScheme, version, code, ns, useNamespace, options);
         List list = (ArrayList) relMap.get("type_subconcept");
-
-             //System.out.println("getSubconcepts run time (milliseconds): "
-             //   + (System.currentTimeMillis() - ms));
 
         Vector w = new Vector();
         for (int i=0; i<list.size(); i++) {
 			String t = (String) list.get(i);
 			w.add(t);
 		}
-		w = SortUtils.quickSort(w);
+		w = new SortUtils().quickSort(w);
         for (int i=0; i<w.size(); i++) {
 		    String t = (String) w.elementAt(i);
 			Vector u = StringUtils.parseData(t);
@@ -1641,14 +1723,8 @@ public class CacheController {
 			root.addChild("has_child", child);
 		}
 
-            //System.out.println("TreeItem run time (milliseconds): "
-            //    + (System.currentTimeMillis() - ms));
-
 		ms = System.currentTimeMillis();
 		String json = JSON2TreeItem.treeItem2Json(root);
-
-            //System.out.println("treeItem2Json run time (milliseconds): "
-            //    + (System.currentTimeMillis() - ms));
 
 		try {
 			element = new Element(key, json);
@@ -1656,9 +1732,36 @@ public class CacheController {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
-		//json = "{\"nodes\":" + json + "}";
 		return json;
 	}
 
+
+    public JSONObject treeItem2JSONObject(TreeItem ti) {
+		JSONObject json_object = new JSONObject();
+		try {
+			json_object.put(Constants.ONTOLOGY_NODE_NAME, ti._text);
+			json_object.put(Constants.ONTOLOGY_NODE_ID, ti._code);
+			json_object.put(Constants.ONTOLOGY_NODE_NS, ti._ns);
+			json_object.put(Constants.ASSOCIATION, ti._auis);
+			if (ti._expandable) {
+				json_object.put(Constants.ONTOLOGY_NODE_CHILD_COUNT, "1");
+			} else {
+				json_object.put(Constants.ONTOLOGY_NODE_CHILD_COUNT, "0");
+			}
+			JSONArray list = new JSONArray();
+			for (String association : ti._assocToChildMap.keySet()) {
+				List<TreeItem> children = ti._assocToChildMap.get(association);
+				new SortUtils().quickSort(children);
+				for (int i=0; i<children.size(); i++) {
+					TreeItem childItem = (TreeItem) children.get(i);
+					JSONObject child_obj = treeItem2JSONObject(childItem);
+					list.put(child_obj);
+				}
+			}
+			json_object.put(Constants.CHILDREN_NODES, list);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return json_object;
+	}
 }

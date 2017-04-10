@@ -159,8 +159,23 @@ public class ConceptDetails {
 	    } catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
 		return cns;
+	}
+
+    public CodedNodeSet getNodeSet(String scheme, String version, String[] types) throws Exception {
+		if (types == null) {
+			return getNodeSet(scheme, version);
+		}
+		CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+		if (version != null) {
+			versionOrTag.setVersion(version);
+		}
+		LocalNameList entityTypes = new LocalNameList();
+		for (int i=0; i<types.length; i++) {
+			String entityType = types[i];
+		    entityTypes.addEntry(entityType);
+	    }
+		return lbSvc.getNodeSet(scheme, versionOrTag, entityTypes);
 	}
 
     public Entity getConceptByCode(String codingSchemeName, String vers, String code, String ns, boolean use_ns) {
@@ -339,7 +354,7 @@ public class ConceptDetails {
             String t = name + "$" + value + "$" + isPreferred;
             v.add(t);
         }
-        return SortUtils.quickSort(v);
+        return new SortUtils().quickSort(v);
     }
 
 
@@ -678,7 +693,7 @@ public class ConceptDetails {
 				 v.add(sp.getLocalId());
 			 }
 		}
-        return SortUtils.quickSort(v);
+        return new SortUtils().quickSort(v);
 	}
 
 
@@ -691,7 +706,7 @@ public class ConceptDetails {
 		     SupportedProperty sp = (SupportedProperty) w.elementAt(i);
 		     v.add(sp.getUri() + "|" + sp.getLocalId() + "|" + sp.getContent() + "|" + sp.getPropertyType());
 		}
-        return SortUtils.quickSort(v);
+        return new SortUtils().quickSort(v);
 	}
 
     public HashMap getPropertyName2TypeHashMap(CodingScheme cs) {
@@ -981,7 +996,7 @@ public class ConceptDetails {
                         }
                     }
                 }
-                SortUtils.quickSort(v);
+                new SortUtils().quickSort(v);
             }
 
         } catch (Exception ex) {
@@ -1042,7 +1057,7 @@ public class ConceptDetails {
                     + term_source_code + "|" +  term_subsource);
             }
         }
-        SortUtils.quickSort(v);
+        new SortUtils().quickSort(v);
         return v;
     }
 
@@ -1085,7 +1100,7 @@ public class ConceptDetails {
 			v.add(term_name + "|" + term_type + "|" + term_source + "|"
 				+ term_source_code + "|" +  term_subsource);
         }
-        SortUtils.quickSort(v);
+        new SortUtils().quickSort(v);
         return v;
     }
 
@@ -1523,14 +1538,14 @@ public class ConceptDetails {
 			 w.add(buf.toString());
 		}
 
-		w = SortUtils.quickSort(w);
+		w = new SortUtils().quickSort(w);
         return w;
     }
 
 	public String sortPropertyQualifiers(String qualifiers) {
 		if (qualifiers == null) return null;
 		Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(qualifiers, "$");
-		u = SortUtils.quickSort(u);
+		u = new SortUtils().quickSort(u);
 		StringBuffer buf = new StringBuffer();
 		for (int i=0; i<u.size(); i++) {
 			String t = (String) u.elementAt(i);
@@ -1593,7 +1608,7 @@ public class ConceptDetails {
 				}
 		    }
 		}
-		w = SortUtils.quickSort(w);
+		w = new SortUtils().quickSort(w);
 		return w;
 	}
 
@@ -1611,7 +1626,7 @@ public class ConceptDetails {
 				}
 		    }
 		}
-		w = SortUtils.quickSort(w);
+		w = new SortUtils().quickSort(w);
 		return w;
 	}
 

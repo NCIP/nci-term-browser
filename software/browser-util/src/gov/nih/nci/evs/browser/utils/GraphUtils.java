@@ -59,7 +59,7 @@ public class GraphUtils {
 			return NO_DATA_AVAILABLE;
 		}
 
-		node_label_vec = SortUtils.quickSort(node_label_vec);
+		node_label_vec = new SortUtils().quickSort(node_label_vec);
 		int knt = 0;
 		HashMap label2IdMap = new HashMap();
 		for (int k=0; k<node_label_vec.size(); k++) {
@@ -158,7 +158,7 @@ public class GraphUtils {
 			return v;
 		}
 
-		node_label_vec = SortUtils.quickSort(node_label_vec);
+		node_label_vec = new SortUtils().quickSort(node_label_vec);
 		int knt = 0;
 		HashMap label2IdMap = new HashMap();
 		for (int k=0; k<node_label_vec.size(); k++) {

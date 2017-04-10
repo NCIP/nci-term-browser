@@ -53,7 +53,7 @@ public class PropertyFileUtil {
 
 
 		}
-		u = SortUtils.quickSort(u);
+		u = new SortUtils().quickSort(u);
 		for (int k=0; k<u.size(); k++) {
 			String t = (String) u.elementAt(k);
 			System.out.println(t);

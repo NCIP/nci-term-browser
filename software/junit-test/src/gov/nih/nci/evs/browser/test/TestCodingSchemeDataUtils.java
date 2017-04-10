@@ -131,7 +131,7 @@ public class TestCodingSchemeDataUtils extends ServiceTestCase {
 			if (v.size() == 0) {
 				m++;
 			} else {
-				v = SortUtils.quickSort(v);
+				v = new SortUtils().quickSort(v);
 				int k = 0;
 				for (int j=0; j<v.size(); j++) {
 					String s = (String) v.elementAt(j);

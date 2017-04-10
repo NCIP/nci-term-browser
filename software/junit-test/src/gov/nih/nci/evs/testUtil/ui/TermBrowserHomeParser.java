@@ -132,7 +132,7 @@ public class TermBrowserHomeParser {
 
    public Vector getTerminologyDisplayLabels(String url) {
 	   Vector w = getTerminologyDisplayLabelsUnsorted(url);
-	   w = SortUtils.quickSort(w);
+	   w = new SortUtils().quickSort(w);
 	   return w;
     }
 

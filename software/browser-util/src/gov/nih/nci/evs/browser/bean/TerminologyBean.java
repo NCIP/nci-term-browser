@@ -101,7 +101,8 @@ public class TerminologyBean
 	public String getCodingSchemeVersion() {
 		return this.codingSchemeVersion;
 	}
-
+
+
 	public String toString() {
          StringBuffer buf = new StringBuffer();
          buf.append(displayLabel);

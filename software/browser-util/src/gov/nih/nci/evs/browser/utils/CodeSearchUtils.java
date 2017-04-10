@@ -314,14 +314,9 @@ import org.apache.commons.codec.language.*;
         return matchIterator;
     }
 
-     public ResolvedConceptReferencesIteratorWrapper searchByCode(String scheme,
+    public ResolvedConceptReferencesIteratorWrapper searchByCode(String scheme,
          String version, String matchText, String source, String matchAlgorithm,
          boolean ranking, int maxToReturn) {
-/*
-		 if (searchAllSources(source)) {
-			 return SimpleSearchUtils.search(scheme, version, matchText, SimpleSearchUtils.BY_CODE, null);
-		 }
-*/
          ResolvedConceptReferencesIterator iterator = null;
          iterator = matchConceptCode(scheme, version, matchText, source, "LuceneQuery");
          try {
@@ -620,4 +615,48 @@ if (hasSourceCodeQualifier(scheme)) {
 		}
 		return false;
     }
+
+
+    public String code2Name(String scheme, String version, String code) {
+		String[] codes = new String[1];
+		codes[0] = code;
+		HashMap hmap = codes2Names(scheme, version, codes);
+		if (hmap == null) return null;
+		return (String) hmap.get(code);
+	}
+
+    public HashMap codes2Names(String scheme, String version, String[] codes) {
+        ResolvedConceptReferencesIterator iterator = null;
+        CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+        if (version != null)
+            versionOrTag.setVersion(version);
+        CodedNodeSet cns = null;
+        SortOptionList sortOptions = null;
+        LocalNameList filterOptions = null;
+        LocalNameList propertyNames = null;
+        CodedNodeSet.PropertyType[] propertyTypes = null;
+        boolean resolveObjects = false;
+        int maxToReturn = -1;
+        HashMap hmap = new HashMap();
+
+        try {
+            cns = getNodeSet(scheme, versionOrTag);
+            if (cns == null) return null;
+            ConceptReferenceList crefs = createConceptReferenceList(
+                    codes, scheme);
+            cns = cns.restrictToCodes(crefs);
+
+            ResolvedConceptReferenceList list = cns.resolveToList(sortOptions, filterOptions, propertyNames, propertyTypes, resolveObjects, maxToReturn);
+            for (int i=0; i<list.getResolvedConceptReferenceCount(); i++) {
+				ResolvedConceptReference rcr = (ResolvedConceptReference) list.getResolvedConceptReference(i);
+				String code = rcr.getCode();
+				String name = rcr.getEntityDescription().getContent();
+				hmap.put(code, name);
+			}
+
+        } catch (Exception ex) {
+            _logger.error("WARNING: searchByCode throws exception.");
+        }
+        return hmap;
+	}
 }

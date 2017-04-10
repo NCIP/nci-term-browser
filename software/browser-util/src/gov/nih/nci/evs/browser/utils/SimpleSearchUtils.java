@@ -281,8 +281,8 @@ public class SimpleSearchUtils {
 
 		ResolvedConceptReferencesIterator iterator = null;
 		try {
-			iterator = searchExtension.search(matchText, includes, converToMatchAlgorithm(searchOption, algorithm));
-			//iterator = searchExtension.search(matchText, includes, null, converToMatchAlgorithm(searchOption, algorithm), false, true);
+			iterator = searchExtension.search(matchText, includes, convertToMatchAlgorithm(searchOption, algorithm));
+			//iterator = searchExtension.search(matchText, includes, null, convertToMatchAlgorithm(searchOption, algorithm), false, true);
 			//printNumberOfMatches(iterator);
 
 		} catch (Exception ex) {
@@ -322,7 +322,7 @@ public class SimpleSearchUtils {
     }
 
 
-	public SearchExtension.MatchAlgorithm converToMatchAlgorithm(int searchOption, String algorithm) {
+	public SearchExtension.MatchAlgorithm convertToMatchAlgorithm(int searchOption, String algorithm) {
 		if (algorithm == null) return null;
 	    if (searchOption != BY_CODE && searchOption != BY_NAME) return null;
 	    if (searchOption == BY_NAME) {

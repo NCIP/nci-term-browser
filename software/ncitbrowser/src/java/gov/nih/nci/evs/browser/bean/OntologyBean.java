@@ -321,7 +321,7 @@ public class OntologyBean {
             ex.printStackTrace();
         }
         hset.clear();
-        return SortUtils.quickSort(v);
+        return new SortUtils().quickSort(v);
     }
 
     // /////////////////////
@@ -364,7 +364,7 @@ public class OntologyBean {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return SortUtils.quickSort(v);
+        return new SortUtils().quickSort(v);
     }
 
     private static Vector getSupportedPropertyQualifier(CodingScheme cs) {
@@ -380,7 +380,7 @@ public class OntologyBean {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return SortUtils.quickSort(v);
+        return new SortUtils().quickSort(v);
     }
 
     public static Vector getSupportedSources(String codingSchemeName) {
@@ -410,7 +410,7 @@ public class OntologyBean {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return SortUtils.quickSort(v);
+        return new SortUtils().quickSort(v);
     }
 
     private static Vector getSupportedPropertyTypes() {
@@ -419,7 +419,7 @@ public class OntologyBean {
         v.add("DEFINITION");
         v.add("COMMENT");
         v.add("GENERIC");
-        return v;// SortUtils.quickSort(v);
+        return v;// new SortUtils().quickSort(v);
     }
 
     public static Vector<SupportedProperty> getSupportedProperties(
@@ -433,7 +433,7 @@ public class OntologyBean {
             SupportedProperty sp = (SupportedProperty) properties[i];
             v.add(sp);
         }
-        return SortUtils.quickSort(v);
+        return new SortUtils().quickSort(v);
     }
 
 /*
@@ -449,7 +449,7 @@ public class OntologyBean {
             SupportedProperty sp = (SupportedProperty) w.elementAt(i);
             v.add(sp.getLocalId());
         }
-        return SortUtils.quickSort(v);
+        return new SortUtils().quickSort(v);
     }
 */
 	public static boolean isAnnotationPropertyPCode(String t) {
@@ -478,7 +478,7 @@ public class OntologyBean {
 				 v.add(sp.getLocalId());
 			 }
 		}
-        return SortUtils.quickSort(v);
+        return new SortUtils().quickSort(v);
 	}
 
 
@@ -518,7 +518,7 @@ public class OntologyBean {
         } catch (Exception e) {
             return null;
         }
-        return SortUtils.quickSort(v);
+        return new SortUtils().quickSort(v);
     }
 
     public static Vector<String> getSupportedAssociationNames(
@@ -547,7 +547,7 @@ public class OntologyBean {
         }
 
 
-        return SortUtils.quickSort(v);
+        return new SortUtils().quickSort(v);
     }
 
     public static Vector getAssociationCodesByNames(String codingScheme,
@@ -581,7 +581,7 @@ public class OntologyBean {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return SortUtils.quickSort(w);
+        return new SortUtils().quickSort(w);
     }
 
 
@@ -650,7 +650,7 @@ public class OntologyBean {
 				_association_name_vec.add(name);
 
 			}
-			_association_name_vec = SortUtils.quickSort(_association_name_vec);
+			_association_name_vec = new SortUtils().quickSort(_association_name_vec);
 			return _association_name_vec;
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -689,7 +689,7 @@ public class OntologyBean {
 				}
 
 			}
-			_association_name_vec = SortUtils.quickSort(_association_name_vec);
+			_association_name_vec = new SortUtils().quickSort(_association_name_vec);
 			return _association_name_vec;
 		} catch (Exception ex) {
 			ex.printStackTrace();

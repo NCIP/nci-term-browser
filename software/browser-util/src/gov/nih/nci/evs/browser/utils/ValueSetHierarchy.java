@@ -569,7 +569,7 @@ public class ValueSetHierarchy {
 			populateChildrenNodes(scheme, version, children_node, visited_nodes);
 			children.add(children_node);
 		}
-		SortUtils.quickSort(children);
+		new SortUtils().quickSort(children);
 		ti.addAll(INVERSE_IS_A, children);
 	}
 
@@ -780,7 +780,7 @@ public class ValueSetHierarchy {
 		} finally {
 			//System.out.println("Total run time (ms): " + (System.currentTimeMillis() - ms));
 		}
-		return SortUtils.quickSort(v);
+		return new SortUtils().quickSort(v);
    }
 
    public Vector getCodingSchemeURNsInValueSetDefinition(LexEVSValueSetDefinitionServices vsd_service, String uri) {
@@ -800,7 +800,7 @@ public class ValueSetHierarchy {
 		} finally {
 			//System.out.println("Total run time (ms): " + (System.currentTimeMillis() - ms));
 		}
-		return SortUtils.quickSort(v);
+		return new SortUtils().quickSort(v);
    }
 
 
@@ -824,7 +824,7 @@ public class ValueSetHierarchy {
 				root._expandable = true;
 			}
 	    }
-	    SortUtils.quickSort(children);
+	    new SortUtils().quickSort(children);
 		root.addAll(INVERSE_IS_A, children);
 		HashMap hmap = new HashMap();
 		hmap.put("<Root>", root);
@@ -1005,7 +1005,7 @@ public class ValueSetHierarchy {
 			}
 		}
 		root._expandable = false;
-		SortUtils.quickSort(children);
+		new SortUtils().quickSort(children);
 		root.addAll(INVERSE_IS_A, children);
 
 		HashMap hmap = new HashMap();
@@ -1101,13 +1101,13 @@ public class ValueSetHierarchy {
 			String formalName = getFormalName(cs);
 			root_cs_vec.add(formalName);
 		}
-		root_cs_vec = SortUtils.quickSort(root_cs_vec);
+		root_cs_vec = new SortUtils().quickSort(root_cs_vec);
 		TreeItem root = new TreeItem("<Root>", "Root node");
 
         List <TreeItem> children = new ArrayList();
 if (root_cs_vec != null) {
 
-        root_cs_vec = SortUtils.quickSort(root_cs_vec);
+        root_cs_vec = new SortUtils().quickSort(root_cs_vec);
         Vector sorted_root_cs_vec = new Vector();
         for (int i=0; i<root_cs_vec.size(); i++) {
 			String cs = (String) root_cs_vec.elementAt(i);
@@ -1134,7 +1134,7 @@ if (root_cs_vec != null) {
 			ti._expandable = true;
 			children.add(ti);
 		}
-        //SortUtils.quickSort(children);
+        //new SortUtils().quickSort(children);
 		root.addAll(INVERSE_IS_A, children);
 
 		HashMap hmap = new HashMap();
@@ -1322,7 +1322,7 @@ if (root_cs_vec != null) {
 		if (sub_vsd_uri_hset.size() > 0) {
 			root._expandable = true;
 		}
-		SortUtils.quickSort(children);
+		new SortUtils().quickSort(children);
 		root.addAll(INVERSE_IS_A, children);
 
 		HashMap hmap = new HashMap();
@@ -1493,7 +1493,7 @@ if (root_cs_vec != null) {
 			ti._expandable = containsValueSets(src);
 			children.add(ti);
 		}
-		SortUtils.quickSort(children);
+		new SortUtils().quickSort(children);
 		root.addAll(INVERSE_IS_A, children);
 
 		HashMap hmap = new HashMap();
@@ -1532,7 +1532,7 @@ if (root_cs_vec != null) {
 				}
 			}
 		}
-		SortUtils.quickSort(children);
+		new SortUtils().quickSort(children);
 		root.addAll(INVERSE_IS_A, children);
 		HashMap hmap = new HashMap();
 		hmap.put("<Root>", root);
@@ -1675,7 +1675,7 @@ if (root_cs_vec != null) {
 					}
 				}
 			}
-			return SortUtils.quickSort(vsd_in_sub_src_vec);
+			return new SortUtils().quickSort(vsd_in_sub_src_vec);
 		}
 	}
 
@@ -1712,7 +1712,7 @@ if (root_cs_vec != null) {
 			}
 		}
 		hset.clear();
-		return SortUtils.quickSort(vsd_in_sub_src_vec);
+		return new SortUtils().quickSort(vsd_in_sub_src_vec);
 	}
 
 
@@ -1764,7 +1764,7 @@ if (root_cs_vec != null) {
 				}
 			}
 		}
-		SortUtils.quickSort(children);
+		new SortUtils().quickSort(children);
 		root.addAll(INVERSE_IS_A, children);
 		hmap.put("<Root>", root);
 		hset.clear();
@@ -1810,7 +1810,7 @@ if (root_cs_vec != null) {
 				 ti._expandable = true;
 		    }
 		}
-	    SortUtils.quickSort(children);
+	    new SortUtils().quickSort(children);
 	    ti.addAll(INVERSE_IS_A, children);
 	    return ti;
 	}
@@ -1855,7 +1855,7 @@ if (root_cs_vec != null) {
 					 }
 				 }
 
-				 SortUtils.quickSort(top_branch);
+				 new SortUtils().quickSort(top_branch);
 				 top_node.addAll(INVERSE_IS_A, top_branch);
 
 				 branch.add(top_node);
@@ -1865,7 +1865,7 @@ if (root_cs_vec != null) {
 			 }
 		}
 
-		SortUtils.quickSort(branch);
+		new SortUtils().quickSort(branch);
 		super_root.addAll(INVERSE_IS_A, branch);
 		HashMap hmap = new HashMap();
 		hmap.put("<Root>", super_root);
@@ -2111,7 +2111,7 @@ if (root_cs_vec != null) {
 		}
 
 		root._expandable = false;
-		SortUtils.quickSort(children);
+		new SortUtils().quickSort(children);
 
 		try {
 			root.addAll(INVERSE_IS_A, children);
@@ -2166,14 +2166,14 @@ if (root_cs_vec != null) {
 				   ex.printStackTrace();
 				 }
 
-				 SortUtils.quickSort(cs_vs_root_children);
+				 new SortUtils().quickSort(cs_vs_root_children);
 				 cs_vs_root.addAll(INVERSE_IS_A, cs_vs_root_children);
 
 				 branch.add(cs_vs_root);
 				 super_root._expandable = true;
 			}
 		}
-		SortUtils.quickSort(branch);
+		new SortUtils().quickSort(branch);
 		// bubble NCI Thesaurus node to the top
 
 		if (branch.size() > 1) {
@@ -2209,7 +2209,7 @@ if (root_cs_vec != null) {
 				}
 			}
 		}
-	    SortUtils.quickSort(children);
+	    new SortUtils().quickSort(children);
 	    ti.addAll(INVERSE_IS_A, children);
 	    return ti;
 	}
@@ -2380,7 +2380,7 @@ if (root_cs_vec != null) {
 			root._expandable = true;
 		}
 
-		SortUtils.quickSort(children);
+		new SortUtils().quickSort(children);
 
 		root.addAll(INVERSE_IS_A, children);
 

@@ -274,7 +274,7 @@ public class ValueSetDefinitionConfig {
 				}
 			}
 		}
-		w = SortUtils.quickSort(w);
+		w = new SortUtils().quickSort(w);
         System.out.println("\nExtractionRules:");
 		for (int i=0; i<w.size(); i++) {
 			String t = (String) w.elementAt(i);
@@ -299,7 +299,7 @@ public class ValueSetDefinitionConfig {
 				}
 			}
 		}
-		w = SortUtils.quickSort(w);
+		w = new SortUtils().quickSort(w);
         System.out.println("\nTop node reports:");
 		for (int i=0; i<w.size(); i++) {
 			String t = (String) w.elementAt(i);

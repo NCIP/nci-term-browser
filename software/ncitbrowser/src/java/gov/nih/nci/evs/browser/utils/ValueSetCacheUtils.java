@@ -143,7 +143,7 @@ public class ValueSetCacheUtils {
 			List<TreeItem> children = root._assocToChildMap.get(association);
 
 			// Collections.sort(children);
-			SortUtils.quickSort(children);
+			new SortUtils().quickSort(children);
 
 			//children = Move_NCIt_to_Top(children);
 
@@ -160,7 +160,7 @@ public class ValueSetCacheUtils {
 		for (String association : ti._assocToChildMap.keySet()) {
 			List<TreeItem> children = ti._assocToChildMap.get(association);
 			// Collections.sort(children);
-			SortUtils.quickSort(children);
+			new SortUtils().quickSort(children);
 			for (TreeItem childItem : children) {
 				String child_node_id = generateID(childItem);
 				printTree(out, childItem, child_node_id, ti, node_id, depth+1);
@@ -175,7 +175,7 @@ public class ValueSetCacheUtils {
 		for (String association : ti._assocToChildMap.keySet()) {
 			List<TreeItem> children = ti._assocToChildMap.get(association);
 			// Collections.sort(children);
-			SortUtils.quickSort(children);
+			new SortUtils().quickSort(children);
 			for (TreeItem childItem : children) {
 				String child_node_id = generateID(childItem);
 				printTree(out, childItem, child_node_id, ti, node_id, depth+1, dictionary);
@@ -311,7 +311,7 @@ public class ValueSetCacheUtils {
 
 		for (String association : root._assocToChildMap.keySet()) {
 			List<TreeItem> children = root._assocToChildMap.get(association);
-			SortUtils.quickSort(children);
+			new SortUtils().quickSort(children);
 			for (TreeItem childItem : children) {
 				String scheme = childItem._text;
 				if (scheme.compareTo(dictionary) == 0) {
@@ -357,7 +357,7 @@ public class ValueSetCacheUtils {
 		for (String association : root._assocToChildMap.keySet()) {
 			List<TreeItem> children = root._assocToChildMap.get(association);
 			// Collections.sort(children);
-			SortUtils.quickSort(children);
+			new SortUtils().quickSort(children);
 
 			if (view == Constants.TERMINOLOGY_VIEW) {
 				children = Move_NCIt_to_Top(children);
@@ -384,7 +384,7 @@ public class ValueSetCacheUtils {
 		for (String association : ti._assocToChildMap.keySet()) {
 			List<TreeItem> children = ti._assocToChildMap.get(association);
 			// Collections.sort(children);
-			SortUtils.quickSort(children);
+			new SortUtils().quickSort(children);
 			for (TreeItem childItem : children) {
 				String child_node_id = generateID(childItem);
 				printTree(out, childItem, child_node_id, ti, node_id, depth+1);
@@ -399,7 +399,7 @@ public class ValueSetCacheUtils {
 		for (String association : ti._assocToChildMap.keySet()) {
 			List<TreeItem> children = ti._assocToChildMap.get(association);
 			// Collections.sort(children);
-			SortUtils.quickSort(children);
+			new SortUtils().quickSort(children);
 			for (TreeItem childItem : children) {
 				String child_node_id = generateID(childItem);
 				printTree(out, childItem, child_node_id, ti, node_id, depth+1);

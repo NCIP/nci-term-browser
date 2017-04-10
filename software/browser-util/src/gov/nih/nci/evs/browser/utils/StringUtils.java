@@ -1,15 +1,31 @@
 package gov.nih.nci.evs.browser.utils;
 
-
 import java.io.*;
 import java.net.URI;
-
 import java.text.*;
 import java.util.*;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
 public class StringUtils {
+	static char DOUBLE_QUOTE = '"';
+
+    public static Vector parseData(String line, char delimiter) {
+		if(line == null) return null;
+		Vector w = new Vector();
+		StringBuffer buf = new StringBuffer();
+		for (int i=0; i<line.length(); i++) {
+			char c = line.charAt(i);
+			if (c == delimiter) {
+				w.add(buf.toString());
+				buf = new StringBuffer();
+			} else {
+				buf.append(c);
+			}
+		}
+		w.add(buf.toString());
+		return w;
+	}
 
     public static Vector<String> parseData(String line) {
 		if (line == null) return null;
@@ -270,4 +286,46 @@ public class StringUtils {
 		SimpleDateFormat sdf = new SimpleDateFormat(format);
 		return sdf.format(date);
 	}
+
+    public static String convertDelimited2CSV(String line, char delimiter) {
+		if(line == null) return null;
+		Vector w = parseData(line, delimiter);
+		StringBuffer buf = new StringBuffer();
+		for (int i=0; i<w.size(); i++) {
+			String t = (String) w.elementAt(i);
+			//double quote by double double quote
+			StringBuffer buf2 = new StringBuffer();
+			for (int j=0; j<t.length(); j++) {
+				char c = t.charAt(j);
+				buf2.append(c);
+				if (c == DOUBLE_QUOTE) {
+					buf2.append(c);
+				}
+			}
+			buf.append(DOUBLE_QUOTE).append(buf2.toString()).append(DOUBLE_QUOTE);
+			if (i < w.size()-1) {
+				buf.append(',');
+			}
+		}
+		return buf.toString();
+	}
+
+	public static Vector convertDelimited2CSV(Vector v, char delimiter) {
+		if (v == null) return null;
+		Vector w = new Vector();
+		for (int i=0; i<v.size(); i++) {
+			String t = (String) v.elementAt(i);
+			String s = convertDelimited2CSV(t, delimiter);
+			w.add(s);
+		}
+		return w;
+	}
+
+
+	public static void convertDelimited2CSV(String inputfile, String outputfile, char delimiter) {
+        Vector v = Utils.readFile(inputfile);
+        Vector w = convertDelimited2CSV(v, delimiter);
+        Utils.saveToFile(outputfile, w);
+	}
+
 }

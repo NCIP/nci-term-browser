@@ -225,7 +225,7 @@ public class TestUtils {
 			String label = (String) it.next();
 			mappingDisplayLabels.add(label);
 		}
-		return SortUtils.quickSort(mappingDisplayLabels);
+		return new SortUtils().quickSort(mappingDisplayLabels);
 	}
 
     public HashMap createDisplayLabel2TerminologyBeanHashMap() {

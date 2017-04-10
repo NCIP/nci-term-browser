@@ -1,54 +1,55 @@
 package gov.nih.nci.evs.browser.utils;
 
 import gov.nih.nci.evs.browser.common.*;
-
-import java.io.*;
-import java.util.*;
-import java.text.*;
-
-import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeRenderingList;
-import org.LexGrid.LexBIG.DataModel.Collections.ModuleDescriptionList;
-import org.LexGrid.LexBIG.DataModel.InterfaceElements.CodingSchemeRendering;
-import org.LexGrid.LexBIG.DataModel.InterfaceElements.ModuleDescription;
-import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
-import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
-
-import org.LexGrid.codingSchemes.CodingScheme;
-import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
-import org.LexGrid.LexBIG.Exceptions.LBException;
-
 import gov.nih.nci.evs.security.SecurityToken;
 import gov.nih.nci.system.client.ApplicationServiceProvider;
-
-import org.LexGrid.LexBIG.Utility.Constructors;
-import org.LexGrid.LexBIG.caCore.interfaces.LexEVSDistributed;
-
-import org.LexGrid.codingSchemes.CodingScheme;
-import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
+import java.io.*;
+import java.text.*;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.Map;
+import org.LexGrid.LexBIG.DataModel.Collections.*;
+import org.LexGrid.LexBIG.DataModel.Collections.AbsoluteCodingSchemeVersionReferenceList;
+import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeRenderingList;
+import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeTagList;
+import org.LexGrid.LexBIG.DataModel.Collections.LocalNameList;
+import org.LexGrid.LexBIG.DataModel.Collections.ModuleDescriptionList;
 import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
-import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods.*;
-import org.LexGrid.LexBIG.Extensions.Generic.*;
-import org.LexGrid.naming.*;
+import org.LexGrid.LexBIG.DataModel.Collections.SortOptionList;
+import org.LexGrid.LexBIG.DataModel.Core.*;
+import org.LexGrid.LexBIG.DataModel.Core.AbsoluteCodingSchemeVersionReference;
+import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeSummary;
+import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
+import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
+import org.LexGrid.LexBIG.DataModel.Core.types.CodingSchemeVersionStatus;
+import org.LexGrid.LexBIG.DataModel.InterfaceElements.CodingSchemeRendering;
+import org.LexGrid.LexBIG.DataModel.InterfaceElements.ModuleDescription;
+import org.LexGrid.LexBIG.DataModel.InterfaceElements.RenderingDetail;
 import org.LexGrid.LexBIG.Exceptions.*;
+import org.LexGrid.LexBIG.Exceptions.LBException;
 import org.LexGrid.LexBIG.Extensions.Generic.*;
+import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods.*;
+import org.LexGrid.LexBIG.Extensions.Generic.SupplementExtension;
+import org.LexGrid.LexBIG.Impl.LexBIGServiceImpl;
+import org.LexGrid.LexBIG.LexBIGService.*;
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.*;
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
+import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
+import org.LexGrid.LexBIG.Utility.*;
+import org.LexGrid.LexBIG.Utility.Constructors;
+import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
+import org.LexGrid.LexBIG.caCore.interfaces.LexEVSDistributed;
+import org.LexGrid.codingSchemes.*;
+import org.LexGrid.codingSchemes.CodingScheme;
+import org.LexGrid.commonTypes.*;
+import org.LexGrid.concepts.*;
+import org.LexGrid.concepts.Entity;
+import org.LexGrid.naming.*;
+import org.LexGrid.relations.Relations;
 import org.lexgrid.resolvedvalueset.LexEVSResolvedValueSetService;
 import org.lexgrid.resolvedvalueset.impl.LexEVSResolvedValueSetServiceImpl;
-import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeSummary;
-import org.LexGrid.LexBIG.DataModel.Core.types.CodingSchemeVersionStatus;
 
-import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
-import org.LexGrid.LexBIG.Impl.LexBIGServiceImpl;
 
-import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeTagList;
-import org.LexGrid.LexBIG.DataModel.InterfaceElements.RenderingDetail;
-import org.LexGrid.LexBIG.DataModel.Collections.LocalNameList;
-import org.LexGrid.LexBIG.DataModel.Collections.SortOptionList;
-
-import org.LexGrid.LexBIG.Extensions.Generic.SupplementExtension;
-import org.LexGrid.relations.Relations;
-import org.LexGrid.LexBIG.DataModel.Collections.AbsoluteCodingSchemeVersionReferenceList;
-import org.LexGrid.LexBIG.DataModel.Core.AbsoluteCodingSchemeVersionReference;
-import org.LexGrid.concepts.Entity;
 
 /**
  * @author EVS Team
@@ -66,20 +67,31 @@ import org.LexGrid.concepts.Entity;
 
 public class CodingSchemeDataUtils {
 	static final String PRODUCTION = "PRODUCTION";
+	private static LocalNameList _noopList = new LocalNameList();
 
     HashMap resovedValueSetHashMap = null;
 
 	LexBIGService lbSvc = null;
+	private LexBIGServiceConvenienceMethods lbscm = null;
 
 
 	public CodingSchemeDataUtils(LexBIGService lbSvc) {
 		this.lbSvc = lbSvc;
+		try {
+			this.lbscm = (LexBIGServiceConvenienceMethods) lbSvc.getGenericExtension("LexBIGServiceConvenienceMethods");
+	    } catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 
 	public void setLexBIGService(LexBIGService lbSvc) {
 		this.lbSvc = lbSvc;
-	}
+		try {
+			this.lbscm = (LexBIGServiceConvenienceMethods) lbSvc.getGenericExtension("LexBIGServiceConvenienceMethods");
+	    } catch (Exception ex) {
+			ex.printStackTrace();
+		}	}
 
     public void dumpVector(String label, Vector v) {
 		System.out.println("\n" + label + ":");
@@ -127,7 +139,7 @@ public class CodingSchemeDataUtils {
 	    } catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		v = SortUtils.quickSort(v);
+		v = new SortUtils().quickSort(v);
 		return v;
 	}
 
@@ -192,7 +204,7 @@ public class CodingSchemeDataUtils {
 				 v.add(sp.getLocalId());
 			 }
 		}
-        return SortUtils.quickSort(v);
+        return new SortUtils().quickSort(v);
 	}
 
 
@@ -205,7 +217,7 @@ public class CodingSchemeDataUtils {
 		     SupportedProperty sp = (SupportedProperty) w.elementAt(i);
 		     v.add(sp.getUri() + "|" + sp.getLocalId() + "|" + sp.getContent() + "|" + sp.getPropertyType());
 		}
-        return SortUtils.quickSort(v);
+        return new SortUtils().quickSort(v);
 	}
 
     public HashMap getPropertyName2TypeHashMap(CodingScheme cs) {
@@ -436,7 +448,7 @@ public class CodingSchemeDataUtils {
          } catch (Exception e) {
              e.printStackTrace();
          }
- 	     w = SortUtils.quickSort(w);
+ 	     w = new SortUtils().quickSort(w);
  	     return w;
     }
 
@@ -496,7 +508,7 @@ public class CodingSchemeDataUtils {
          } catch (Exception e) {
              e.printStackTrace();
          }
- 	     w = SortUtils.quickSort(w);
+ 	     w = new SortUtils().quickSort(w);
  	     return w;
     }
 
@@ -657,7 +669,7 @@ public class CodingSchemeDataUtils {
 			v.add(rcr);
 		}
 
-		v = SortUtils.quickSort(v);
+		v = new SortUtils().quickSort(v);
 		return v;
     }
 
@@ -715,7 +727,9 @@ public class CodingSchemeDataUtils {
 				vt.setVersion(version);
 			}
 			CodingScheme cs = lbSvc.resolveCodingScheme(cs_uri, vt);
-			String cs_name = cs.getCodingSchemeName();
+			// [NCITERM-747] Value sets with same name, but different URIs should have values.
+			//String cs_name = cs.getCodingSchemeName();
+			String cs_name = cs.getCodingSchemeURI();
 			CodedNodeSet cns = null;
 			try {
 				try {
@@ -1053,7 +1067,7 @@ public class CodingSchemeDataUtils {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		conceptDomainName_vec = SortUtils.quickSort(conceptDomainName_vec);
+		conceptDomainName_vec = new SortUtils().quickSort(conceptDomainName_vec);
 		return conceptDomainName_vec;
 	}
 
@@ -1197,4 +1211,390 @@ public class CodingSchemeDataUtils {
 		return hmap;
 	}
 
+    public boolean isBlank(String str) {
+        if ((str == null) || str.matches("^\\s*$")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    protected  String getDirectionalLabel(
+        LexBIGServiceConvenienceMethods lbscm, String scheme,
+        CodingSchemeVersionOrTag csvt, Association assoc, boolean navigatedFwd)
+            throws LBException {
+
+        String assocLabel =
+            navigatedFwd ? lbscm.getAssociationForwardName(assoc
+                .getAssociationName(), scheme, csvt) : lbscm
+                .getAssociationReverseName(assoc.getAssociationName(), scheme,
+                    csvt);
+        // if (StringUtils.isBlank(assocLabel))
+        if (isBlank(assocLabel))
+            assocLabel =
+                (navigatedFwd ? "" : "[Inverse]") + assoc.getAssociationName();
+        return assocLabel;
+    }
+
+    public Vector getRoleData(String scheme, String version) {
+		Vector w = new Vector();
+        CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+        if (version != null) {
+            versionOrTag.setVersion(version);
+		}
+		java.lang.String relationContainerName = null;
+        NameAndValueList association = null;
+        NameAndValueList associationQualifiers = null;
+        Boolean restrictToAnonymous = Boolean.FALSE;
+
+        String[] associationsToNavigate = new String[2];
+        associationsToNavigate[0] = "Role_Has_Domain";
+        associationsToNavigate[1] = "Role_Has_Range";
+        boolean associationsNavigatedFwd = true;
+        LocalNameList _noopList = new LocalNameList();
+
+        try {
+			CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, versionOrTag, null);
+			cng = cng.restrictToAnonymous(restrictToAnonymous);
+			cng = cng.restrictToAssociations(Constructors
+					.createNameAndValueList(associationsToNavigate), null);
+			ConceptReference focus = null;
+			ResolvedConceptReferenceList branch = null;
+            try {
+                branch =
+                    cng.resolveAsList(focus,
+                        associationsNavigatedFwd,
+                        !associationsNavigatedFwd, -1, 1, _noopList, null,
+                        null, null, -1, false);
+
+            } catch (Exception e) {
+				e.printStackTrace();
+                return null;
+            }
+			System.out.println(branch.getResolvedConceptReferenceCount());
+            for (Iterator<? extends ResolvedConceptReference> nodes =
+                branch.iterateResolvedConceptReference(); nodes.hasNext();) {
+                ResolvedConceptReference node = nodes.next();
+                AssociationList childAssociationList = null;
+                if (associationsNavigatedFwd) {
+                    childAssociationList = node.getSourceOf();
+                } else {
+                    childAssociationList = node.getTargetOf();
+                }
+
+                StringBuffer buf = new StringBuffer();
+                buf.append(node.getEntityDescription().getContent()).append("|");
+
+                if (childAssociationList != null) {
+                    for (Iterator<? extends Association> pathsToChildren =
+                        childAssociationList.iterateAssociation(); pathsToChildren
+                        .hasNext();) {
+                        Association child = pathsToChildren.next();
+
+                        String childNavText =
+                            getDirectionalLabel(lbscm, scheme, versionOrTag, child,
+                                associationsNavigatedFwd);
+                        buf.append(childNavText).append("|");
+                        AssociatedConceptList branchItemList =
+                            child.getAssociatedConcepts();
+
+                        List child_list = new ArrayList();
+                        for (Iterator<? extends AssociatedConcept> branchNodes =
+                            branchItemList.iterateAssociatedConcept(); branchNodes
+                            .hasNext();) {
+                            AssociatedConcept branchItemNode =
+                                branchNodes.next();
+                            child_list.add(branchItemNode);
+                        }
+
+                        new SortUtils().quickSort(child_list);
+
+                        for (int i = 0; i < child_list.size(); i++) {
+                            AssociatedConcept branchItemNode =
+                                (AssociatedConcept) child_list.get(i);
+                            String branchItemCode =
+                                branchItemNode.getConceptCode();
+                            String branchItemText =  branchItemNode.getEntityDescription().getContent();
+                            buf.append(branchItemText).append("|");
+                        }
+                        //System.out.println(role_data);
+                    }
+					String role_data = buf.toString();
+					role_data = role_data.substring(0, role_data.length()-1);
+                    w.add(role_data);
+                }
+            }
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return w;
+	}
+
+    public String getEquivalenceExpression(String scheme, String version, String code)
+            throws LBException {
+		String expression = null;
+		CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+		if (version != null) {
+			csvt.setVersion(version);
+		}
+
+        ResolvedConceptReferenceList matches = lbSvc.getNodeGraph(scheme, csvt, null).resolveAsList(
+                ConvenienceMethods.createConceptReference(code, scheme), true, false, 1, 1, new LocalNameList(), null,
+                null, -1);
+
+        // Analyze the result ...
+        if (matches.getResolvedConceptReferenceCount() > 0) {
+            Enumeration<? extends ResolvedConceptReference> refEnum = matches.enumerateResolvedConceptReference();
+
+            while (refEnum.hasMoreElements()) {
+                ResolvedConceptReference ref = refEnum.nextElement();
+                AssociationList sourceof = ref.getSourceOf();
+                Association[] associations = sourceof.getAssociation();
+
+                for (int i = 0; i < associations.length; i++) {
+                    Association assoc = associations[i];
+                    String assoName = assoc.getAssociationName();
+                    if (assoName.compareTo("equivalentClass") == 0) {
+						AssociatedConcept[] acl = assoc.getAssociatedConcepts().getAssociatedConcept();
+						for (int j = 0; j < acl.length; j++) {
+							AssociatedConcept ac = acl[j];
+							String rela = replaceAssociationNameByRela(ac, assoc.getAssociationName());
+							EntityDescription ed = ac.getEntityDescription();
+							//expression = code + " --> (" + rela + ") --> " + ac.getConceptCode() + " " + ed.getContent();
+							expression = ed.getContent();
+                            break;
+						}
+					}
+                }
+            }
+        }
+        return expression;
+    }
+
+    private String replaceAssociationNameByRela(AssociatedConcept ac, String associationName) {
+		if (ac.getAssociationQualifiers() == null) return associationName;
+		if (ac.getAssociationQualifiers().getNameAndValue() == null) return associationName;
+
+		for(NameAndValue qual : ac.getAssociationQualifiers().getNameAndValue()){
+			String qualifier_name = qual.getName();
+			String qualifier_value = qual.getContent();
+			if (qualifier_name.compareToIgnoreCase("rela") == 0) {
+				return qualifier_value; // replace associationName by Rela value
+			}
+		}
+		return associationName;
+	}
+
+
+    public Vector resolveIterator(ResolvedConceptReferencesIterator iterator, int maxToReturn) {
+        Vector v = new Vector();
+        if (iterator == null) {
+            return v;
+        }
+        try {
+            int iteration = 0;
+            while (iterator.hasNext()) {
+                iteration++;
+                iterator = iterator.scroll(maxToReturn);
+                ResolvedConceptReferenceList rcrl = iterator.getNext();
+                ResolvedConceptReference[] rcra =
+                    rcrl.getResolvedConceptReference();
+                for (int i = 0; i < rcra.length; i++) {
+                    ResolvedConceptReference rcr = rcra[i];
+				    String t = rcr.getEntityDescription().getContent() + "|"+ rcr.getCode() + "|"+ rcr.getCodingSchemeName()
+					+ "|" + rcr.getCodeNamespace();
+                    v.add(t);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return v;
+    }
+
+    public Vector resolve(String scheme, String version) {
+		if (version == null) {
+			version = getVocabularyVersionByTag(scheme, Constants.PRODUCTION);
+		}
+		return resolve(scheme, version, 250);
+	}
+
+    public Vector resolve(String scheme, String version, int maxToReturn) {
+		boolean resolveObjects = false;
+		ResolvedConceptReferencesIterator iterator = resolveCodingScheme(scheme, version, resolveObjects);
+        return resolveIterator(iterator, maxToReturn);
+    }
+
+    public Vector getCodesInCodingScheme(String scheme, String version) {
+		Vector data_vec = resolve(scheme, version);
+		Vector codes = new Vector();
+		for (int i=0; i<data_vec.size(); i++) {
+			String line = (String) data_vec.elementAt(i);
+			Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(line);
+			String code = (String) u.elementAt(1);
+			codes.add(code);
+		}
+		return codes;
+	}
+
+	 public String getPropertyValues(Entity node) {
+		//long ms = System.currentTimeMillis();
+        if (node == null) return null;
+        String line = "";
+        String qualifier_name = null;
+        String qualifier_value = null;
+        line = line + node.getEntityCode() + "|";
+        line = line + node.getEntityCodeNamespace() + "|";
+		Presentation[] prsentations = node.getPresentation();
+		for (int i = 0; i < prsentations.length; i++) {
+			StringBuffer buf = new StringBuffer();
+			Presentation presentation = prsentations[i];
+			String name = presentation.getPropertyName();
+			String value = presentation.getValue().getContent();
+			String representationalForm = presentation.getRepresentationalForm();
+            buf.append("name").append("$");
+            buf.append(name).append("$");
+            buf.append(value).append("$");
+            buf.append("form=").append(representationalForm).append("$");
+            PropertyQualifier[] qualifiers = presentation.getPropertyQualifier();
+			if (qualifiers != null) {
+				for (int j = 0; j < qualifiers.length; j++) {
+					PropertyQualifier q = qualifiers[j];
+					qualifier_name = q.getPropertyQualifierName();
+					qualifier_value = q.getValue().getContent();
+					buf.append(qualifier_name).append("=").append(qualifier_value).append("$");
+				}
+			}
+			Source[] sources = presentation.getSource();
+			String src = null;
+			for (int k=0; k<sources.length; k++) {
+				src =  sources[k].getContent().toString();
+				buf.append("source").append("=").append(src).append("$");
+		    }
+		    String t = buf.toString();
+		    if (t.length() > 0) {
+				t = t.substring(0, t.length()-1);
+			}
+		    line = line + t + "|";
+		}
+		Definition[] definitions = node.getDefinition();
+		for (int i = 0; i < definitions.length; i++) {
+			Definition definition = definitions[i];
+			StringBuffer buf = new StringBuffer();
+			String name = definition.getPropertyName();
+			String value = definition.getValue().getContent();
+            buf.append("definition").append("$");
+            buf.append(name).append("$");
+            buf.append(value).append("$");
+            PropertyQualifier[] qualifiers = definition.getPropertyQualifier();
+			if (qualifiers != null) {
+				for (int j = 0; j < qualifiers.length; j++) {
+					PropertyQualifier q = qualifiers[j];
+					qualifier_name = q.getPropertyQualifierName();
+					qualifier_value = q.getValue().getContent();
+					buf.append(qualifier_name).append("=").append(qualifier_value).append("$");
+				}
+			}
+			Source[] sources = definition.getSource();
+			String src = null;
+			for (int k=0; k<sources.length; k++) {
+				src =  sources[k].getContent().toString();
+				buf.append("source").append("=").append(src).append("$");
+		    }
+		    String t = buf.toString();
+		    if (t.length() > 0) {
+				t = t.substring(0, t.length()-1);
+			}
+		    line = line + t + "|";
+		}
+
+		Comment[] comments = node.getComment();
+		for (int i = 0; i < comments.length; i++) {
+			Comment comment = comments[i];
+			StringBuffer buf = new StringBuffer();
+			String name = comment.getPropertyName();
+			String value = comment.getValue().getContent();
+            buf.append("comment").append("$");
+            buf.append(name).append("$");
+            buf.append(value).append("$");
+            PropertyQualifier[] qualifiers = comment.getPropertyQualifier();
+			if (qualifiers != null) {
+				for (int j = 0; j < qualifiers.length; j++) {
+					PropertyQualifier q = qualifiers[j];
+					qualifier_name = q.getPropertyQualifierName();
+					qualifier_value = q.getValue().getContent();
+					buf.append(qualifier_name).append("=").append(qualifier_value).append("$");
+				}
+			}
+			Source[] sources = comment.getSource();
+			String src = null;
+			for (int k=0; k<sources.length; k++) {
+				src =  sources[k].getContent().toString();
+				buf.append("source").append("=").append(src).append("$");
+		    }
+		    String t = buf.toString();
+		    if (t.length() > 0) {
+				t = t.substring(0, t.length()-1);
+			}
+		    line = line + t + "|";
+		}
+
+
+		Property[] properties = node.getProperty();
+		for (int i = 0; i < properties.length; i++) {
+			Property property = properties[i];
+			StringBuffer buf = new StringBuffer();
+			String prop_name = property.getPropertyName();
+			String prop_value = property.getValue().getContent();
+            buf.append("property").append("$");
+            buf.append(prop_name).append("$");
+            buf.append(prop_value).append("$");
+            PropertyQualifier[] qualifiers = property.getPropertyQualifier();
+			if (qualifiers != null) {
+				for (int j = 0; j < qualifiers.length; j++) {
+					PropertyQualifier q = qualifiers[j];
+					qualifier_name = q.getPropertyQualifierName();
+					qualifier_value = q.getValue().getContent();
+					buf.append(qualifier_name).append("=").append(qualifier_value).append("$");
+				}
+			}
+			Source[] sources = property.getSource();
+			String src = null;
+			for (int k=0; k<sources.length; k++) {
+				src =  sources[k].getContent().toString();
+				buf.append("source").append("=").append(src).append("$");
+		    }
+		    String t = buf.toString();
+		    if (t.length() > 0) {
+				t = t.substring(0, t.length()-1);
+			}
+		    line = line + t + "|";
+		}
+		if (line.length() > 0) {
+        	line = line.substring(0, line.length()-1);
+		}
+		//System.out.println("Total getPropertyValues run time (ms): " + (System.currentTimeMillis() - ms));
+		return line;
+	 }
+
+    public Vector getMappingCodingSchemesEntityParticipatesIn(String code, String namespace) {
+        Vector v = new Vector();
+        try {
+			MappingExtension mappingExtension =
+				(MappingExtension) lbSvc.getGenericExtension("MappingExtension");
+
+			AbsoluteCodingSchemeVersionReferenceList mappingSchemes =
+				mappingExtension.getMappingCodingSchemesEntityParticipatesIn(code, namespace);
+
+			//output is all of the mapping ontologies that this code participates in.
+			for(AbsoluteCodingSchemeVersionReference ref : mappingSchemes.getAbsoluteCodingSchemeVersionReference()){
+				v.add(ref.getCodingSchemeURN() + "|" + ref.getCodingSchemeVersion());
+			}
+
+		} catch (Exception ex) {
+            ex.printStackTrace();
+        }
+		return v;
+	}
 }

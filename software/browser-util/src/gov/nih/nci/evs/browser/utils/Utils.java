@@ -1,5 +1,6 @@
 package gov.nih.nci.evs.browser.utils;
 
+import java.io.*;
 import java.text.*;
 import java.util.*;
 
@@ -296,4 +297,50 @@ public class Utils {
         }
         str = debugJSONLine(indentLevel, i++, str);
     }
+
+	 public static void saveToFile(String outputfile, String t) {
+		 Vector v = new Vector();
+		 v.add(t);
+		 saveToFile(outputfile, v);
+	 }
+
+	 public static void saveToFile(String outputfile, Vector v) {
+		PrintWriter pw = null;
+		try {
+			pw = new PrintWriter(outputfile, "UTF-8");
+			if (v != null && v.size() > 0) {
+				for (int i=0; i<v.size(); i++) {
+					String t = (String) v.elementAt(i);
+					pw.println(t);
+				}
+		    }
+		} catch (Exception ex) {
+
+		} finally {
+			try {
+				pw.close();
+				System.out.println("Output file " + outputfile + " generated.");
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+	 }
+
+	public static Vector readFile(String filename)
+	{
+		Vector v = new Vector();
+		try {
+			BufferedReader in = new BufferedReader(
+			   new InputStreamReader(
+						  new FileInputStream(filename), "UTF8"));
+			String str;
+			while ((str = in.readLine()) != null) {
+				v.add(str);
+			}
+            in.close();
+		} catch (Exception ex) {
+            ex.printStackTrace();
+		}
+		return v;
+	}
 }
